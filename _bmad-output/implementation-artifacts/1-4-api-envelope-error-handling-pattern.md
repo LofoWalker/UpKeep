@@ -1,6 +1,6 @@
 # Story 1.4: API Envelope & Error Handling Pattern
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -337,17 +337,65 @@ com.upkeep/
 
 ### Agent Model Used
 
-_To be filled by dev agent_
+GitHub Copilot (2026-01-15)
 
 ### Completion Notes List
 
-_To be filled during implementation_
+- ✅ Created API response models (ApiResponse, ApiMeta, ApiError) in infrastructure layer
+- ✅ Created complete exception hierarchy (7 exception classes)
+  - Base ApiException with HTTP status code and error code
+  - ValidationException (400) with field-level error support
+  - UnauthorizedException (401)
+  - ForbiddenException (403)
+  - NotFoundException (404)
+  - ConflictException (409)
+  - DomainRuleException (422)
+- ✅ Implemented GlobalExceptionMapper with proper logging and traceId generation
+- ✅ Updated HealthController to use standardized ApiResponse format
+- ✅ Created comprehensive demo endpoint (ApiDemoController) demonstrating all HTTP status codes
+- ✅ Implemented full test coverage with 10 integration tests (all passing)
+- ✅ Created detailed README documentation
 
 ### Change Log
 
-_To be filled during implementation_
+**2026-01-15**
+- Created `ApiResponse<T>`, `ApiMeta`, and `ApiError` record classes with builder methods
+- Implemented complete exception hierarchy extending from `ApiException` base class
+- Developed `GlobalExceptionMapper` with special handling for ValidationException
+- Added traceId to all error responses for request tracing
+- Updated existing HealthController to use new envelope format
+- Created ApiDemoController with 9 demo endpoints covering all error scenarios
+- Wrote comprehensive integration tests verifying all acceptance criteria
+- All 10 tests passing successfully
+- Generated README-API-ENVELOPE.md with usage examples and implementation details
 
 ### File List
 
-_To be filled after implementation_
+**Domain Layer - Exceptions:**
+- `apps/api/src/main/java/com/upkeep/domain/exception/ApiException.java`
+- `apps/api/src/main/java/com/upkeep/domain/exception/ValidationException.java`
+- `apps/api/src/main/java/com/upkeep/domain/exception/UnauthorizedException.java`
+- `apps/api/src/main/java/com/upkeep/domain/exception/ForbiddenException.java`
+- `apps/api/src/main/java/com/upkeep/domain/exception/NotFoundException.java`
+- `apps/api/src/main/java/com/upkeep/domain/exception/ConflictException.java`
+- `apps/api/src/main/java/com/upkeep/domain/exception/DomainRuleException.java`
+
+**Infrastructure Layer - Response Models:**
+- `apps/api/src/main/java/com/upkeep/infrastructure/adapter/in/rest/response/ApiResponse.java`
+- `apps/api/src/main/java/com/upkeep/infrastructure/adapter/in/rest/response/ApiMeta.java`
+- `apps/api/src/main/java/com/upkeep/infrastructure/adapter/in/rest/response/ApiError.java`
+
+**Infrastructure Layer - Exception Handling:**
+- `apps/api/src/main/java/com/upkeep/infrastructure/adapter/in/rest/exception/GlobalExceptionMapper.java`
+
+**Controllers:**
+- `apps/api/src/main/java/com/upkeep/infrastructure/adapter/in/rest/HealthController.java` (updated)
+- `apps/api/src/main/java/com/upkeep/infrastructure/adapter/in/rest/ApiDemoController.java` (new)
+
+**Tests:**
+- `apps/api/src/test/java/com/upkeep/infrastructure/adapter/in/rest/HealthControllerTest.java`
+- `apps/api/src/test/java/com/upkeep/infrastructure/adapter/in/rest/ApiDemoControllerTest.java`
+
+**Documentation:**
+- `apps/api/README-API-ENVELOPE.md`
 
