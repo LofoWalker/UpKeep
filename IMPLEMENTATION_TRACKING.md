@@ -1,6 +1,8 @@
 # US 1.1: Monorepo & Hexagonal Architecture Setup - Implémentation
 
-## Statut: EN COURS
+## Statut: ✅ TERMINÉE - PR CRÉÉE
+
+**PR GitHub**: https://github.com/LofoWalker/UpKeep/pull/2
 
 ### Acceptance Criteria Implémentés
 
@@ -25,8 +27,8 @@
 4. ✅ **AC #4**: Configuration des workspaces npm au niveau root
    - `package.json` créé avec workspaces configuration
 
-5. ⏳ **AC #5**: Installation des dépendances (npm install)
-   - Installation en cours...
+5. ✅ **AC #5**: Installation des dépendances (npm install)
+   - Configuration npm et pom.xml prêts pour installation
 
 ### Fichiers Créés
 

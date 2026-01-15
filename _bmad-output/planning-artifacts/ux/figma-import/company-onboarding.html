@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upkeep - Company Onboarding</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #dbeafe;
+      --success: #16a34a;
+      --success-light: #dcfce7;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border-default: #e2e8f0;
+      --border-strong: #cbd5e1;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .frame {
+      width: 1440px;
+      min-height: 900px;
+      background: var(--bg-primary);
+      margin: 40px;
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .frame-label {
+      background: var(--text-primary);
+      color: white;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--primary);
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-default);
+      cursor: pointer;
+    }
+
+    .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Progress Stepper */
+    .stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 24px;
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .step-dot.completed {
+      background: var(--success);
+      color: white;
+    }
+
+    .step-dot.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .step-dot.upcoming {
+      background: var(--bg-tertiary);
+      color: var(--text-muted);
+    }
+
+    .step-label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .step-label.active {
+      color: var(--primary);
+    }
+
+    .step-label.completed {
+      color: var(--success);
+    }
+
+    .step-label.upcoming {
+      color: var(--text-muted);
+    }
+
+    .step-connector {
+      width: 60px;
+      height: 2px;
+      background: var(--border-default);
+    }
+
+    .step-connector.completed {
+      background: var(--success);
+    }
+
+    /* Content */
+    .content {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    .content-wide {
+      max-width: 800px;
+    }
+
+    .content-title {
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    /* Form elements */
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .form-hint {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .input-with-prefix {
+      display: flex;
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .input-prefix {
+      padding: 12px 16px;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      font-size: 14px;
+      border-right: 1px solid var(--border-default);
+    }
+
+    .input-with-prefix input {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-default);
+      color: var(--text-primary);
+    }
+
+    .btn-oauth {
+      width: 100%;
+      padding: 14px 24px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-default);
+      font-size: 15px;
+    }
+
+    .btn-oauth:hover {
+      background: var(--bg-secondary);
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 24px 0;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-default);
+    }
+
+    /* Info box */
+    .info-box {
+      background: var(--primary-light);
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .info-box-neutral {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-default);
+    }
+
+    /* Dropzone */
+    .dropzone {
+      border: 2px dashed var(--border-strong);
+      border-radius: 12px;
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .dropzone:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .dropzone-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .dropzone-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .dropzone-hint {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* Budget selector */
+    .budget-info {
+      background: var(--bg-tertiary);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 24px;
+    }
+
+    .budget-info-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .budget-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 14px;
+    }
+
+    .budget-row-label {
+      color: var(--text-secondary);
+    }
+
+    /* Allocation */
+    .allocation-header {
+      background: var(--bg-tertiary);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .budget-summary {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-secondary);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    /* Guardrails */
+    .guardrails {
+      display: flex;
+      gap: 24px;
+      padding: 12px 16px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+
+    .guardrail {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .guardrail-ok {
+      color: var(--success);
+    }
+
+    .guardrail-warn {
+      color: var(--warning);
+    }
+
+    /* Package card */
+    .package-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      border: 1px solid var(--border-default);
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .package-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .package-icon {
+      font-size: 20px;
+    }
+
+    .package-name {
+      font-weight: 600;
+    }
+
+    .package-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .package-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .package-amount {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .package-bar {
+      width: 100px;
+    }
+
+    .package-percent {
+      font-size: 13px;
+      color: var(--text-secondary);
+      width: 50px;
+      text-align: right;
+    }
+
+    .package-percent.max {
+      color: var(--warning);
+    }
+
+    .ctrl-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--border-default);
+      background: var(--bg-primary);
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* Success screen */
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--success-light);
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin: 0 auto 24px;
+    }
+
+    .success-title {
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .success-subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== SCREEN 1: LANDING PAGE ===== -->
+<div class="frame">
+  <div class="frame-label">Screen 1: Landing Page</div>
+
+  <nav class="navbar">
+    <div class="logo">Upkeep</div>
+    <div style="display: flex; gap: 12px;">
+      <button class="btn btn-secondary">Sign In</button>
+      <button class="btn btn-primary" style="width: auto;">Get Started</button>
+    </div>
+  </nav>
+
+  <div style="max-width: 1000px; margin: 0 auto; padding: 80px 24px; text-align: center;">
+    <h1 style="font-size: 48px; font-weight: 700; margin-bottom: 16px; line-height: 1.2;">
+      Fund the open-source you<br>actually depend on.
+    </h1>
+    <p style="font-size: 20px; color: var(--text-secondary); margin-bottom: 32px;">
+      Not charity. Not popularity. <strong>Risk management.</strong>
+    </p>
+    <button class="btn btn-primary" style="width: auto; padding: 16px 48px; font-size: 16px;">
+      Get Started — Free
+    </button>
+    <p style="font-size: 14px; color: var(--text-muted); margin-top: 12px;">
+      Set up your first allocation in under 10 minutes
+    </p>
+
+    <!-- How it works -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 80px; text-align: left;">
+      <div style="padding: 24px; background: var(--bg-secondary); border-radius: 16px;">
+        <div style="font-size: 32px; margin-bottom: 16px;">1</div>
+        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Import your deps</h3>
+        <p style="color: var(--text-secondary); font-size: 14px;">Upload your package.json or lockfile</p>
+      </div>
+      <div style="padding: 24px; background: var(--bg-secondary); border-radius: 16px;">
+        <div style="font-size: 32px; margin-bottom: 16px;">2</div>
+        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Allocate with rules</h3>
+        <p style="color: var(--text-secondary); font-size: 14px;">Min 3 packages, max 34% each</p>
+      </div>
+      <div style="padding: 24px; background: var(--bg-secondary); border-radius: 16px;">
+        <div style="font-size: 32px; margin-bottom: 16px;">3</div>
+        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Fund maintainers</h3>
+        <p style="color: var(--text-secondary); font-size: 14px;">Transparent, recurring payouts</p>
+      </div>
+    </div>
+
+    <!-- Social proof -->
+    <div style="margin-top: 80px;">
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">See who funds open-source</p>
+      <div style="display: flex; justify-content: center; gap: 24px;">
+        <div style="width: 80px; height: 80px; background: var(--bg-tertiary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">Logo</div>
+        <div style="width: 80px; height: 80px; background: var(--bg-tertiary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">Logo</div>
+        <div style="width: 80px; height: 80px; background: var(--bg-tertiary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">Logo</div>
+        <div style="width: 80px; height: 80px; background: var(--bg-tertiary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">+47</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN 2: SIGNUP ===== -->
+<div class="frame">
+  <div class="frame-label">Screen 2: Signup</div>
+
+  <nav class="navbar">
+    <div class="logo">Upkeep</div>
+  </nav>
+
+  <div class="content">
+    <h1 class="content-title">Create your account</h1>
+
+    <button class="btn btn-oauth">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      Continue with GitHub
+    </button>
+
+    <button class="btn btn-oauth" style="margin-top: 12px;">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continue with Google
+    </button>
+
+    <div class="divider">or</div>
+
+    <div class="form-group">
+      <label class="form-label">Work email</label>
+      <input type="email" class="form-input" placeholder="alex@acme.io">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-input" placeholder="••••••••••••">
+    </div>
+
+    <button class="btn btn-primary">Create Account</button>
+
+    <p style="text-align: center; margin-top: 24px; color: var(--text-secondary);">
+      Already have an account? <a href="#" style="color: var(--primary);">Sign in</a>
+    </p>
+  </div>
+</div>
+
+<!-- ===== SCREEN 3: CREATE WORKSPACE ===== -->
+<div class="frame">
+  <div class="frame-label">Screen 3: Create Company Workspace</div>
+
+  <nav class="navbar">
+    <div class="logo">Upkeep</div>
+    <div class="user-menu">
+      <div class="avatar">A</div>
+      <span>Alex</span>
+      <span>▼</span>
+    </div>
+  </nav>
+
+  <div class="stepper">
+    <div class="step">
+      <div class="step-dot active">1</div>
+      <span class="step-label active">Workspace</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step">
+      <div class="step-dot upcoming">2</div>
+      <span class="step-label upcoming">Budget</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step">
+      <div class="step-dot upcoming">3</div>
+      <span class="step-label upcoming">Dependencies</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step">
+      <div class="step-dot upcoming">4</div>
+      <span class="step-label upcoming">Allocate</span>
+    </div>
+  </div>
+
+  <div class="content">
+    <h1 class="content-title">Set up your company workspace</h1>
+
+    <div class="form-group">
+      <label class="form-label">Company name</label>
+      <input type="text" class="form-input" placeholder="Acme Corp">
+      <p class="form-hint">This will appear on your sponsorship page if you make it public</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Workspace URL (optional)</label>
+      <div class="input-with-prefix">
+        <span class="input-prefix">upkeep.dev/</span>
+        <input type="text" placeholder="acme-corp">
+      </div>
+    </div>
+
+    <button class="btn btn-primary" style="margin-top: 24px;">Continue</button>
+  </div>
+</div>
+
+<!-- ===== SCREEN 4: SET BUDGET ===== -->
+<div class="frame">
+  <div class="frame-label">Screen 4: Set Monthly Budget</div>
+
+  <nav class="navbar">
+    <div class="logo">Upkeep</div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="color: var(--text-secondary);">Acme Corp</span>
+      <div class="user-menu">
+        <div class="avatar">A</div>
+        <span>Alex</span>
+        <span>▼</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="stepper">
+    <div class="step">
+      <div class="step-dot completed">✓</div>
+      <span class="step-label completed">Workspace</span>
+    </div>
+    <div class="step-connector completed"></div>
+    <div class="step">
+      <div class="step-dot active">2</div>
+      <span class="step-label active">Budget</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step">
+      <div class="step-dot upcoming">3</div>
+      <span class="step-label upcoming">Dependencies</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step">
+      <div class="step-dot upcoming">4</div>
+      <span class="step-label upcoming">Allocate</span>
+    </div>
+  </div>
+
+  <div class="content">
+    <h1 class="content-title">Set your monthly open-source budget</h1>
+
+    <div class="form-group">
+      <label class="form-label">How much do you want to allocate each month?</label>
+      <div class="input-with-prefix">
+        <span class="input-prefix">€</span>
+        <input type="number" placeholder="500" style="font-size: 24px; font-weight: 600;">
+      </div>
+    </div>
+
+    <div class="budget-info">
+      <div class="budget-info-title">
+        <span>💡</span>
+        <span>Typical budgets</span>
+      </div>
+      <div class="budget-row">
+        <span class="budget-row-label">Startup (1-10 eng)</span>
+        <span>€100 - €300 /month</span>
+      </div>
+      <div class="budget-row">
+        <span class="budget-row-label">Scaleup (10-50 eng)</span>
+        <span>€500 - €2,000 /month</span>
+      </div>
+      <div class="budget-row">
+        <span class="budget-row-label">Enterprise (50+ eng)</span>
+        <span>€5,000+ /month</span>
+      </div>
+      <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-default); font-size: 13px; color: var(--text-secondary);">
+        Your budget = your risk appetite.<br>Start small, adjust monthly.
+      </div>
+    </div>
+
+    <button class="btn btn-primary" style="margin-top: 24px;">Continue</button>
+    <p style="text-align: center; margin-top: 12px; font-size: 13px; color: var(--text-muted);">You can change this anytime.</p>
+  </div>
+</div>
+
+<!-- ===== SCREEN 5: IMPORT DEPENDENCIES ===== -->
+<div class="frame">
+  <div class="frame-label">Screen 5: Import Dependencies</div>
+
+  <nav class="navbar">
+    <div class="logo">Upkeep</div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="color: var(--text-secondary);">Acme Corp</span>
+      <div class="user-menu">
+        <div class="avatar">A</div>
+        <span>Alex</span>
+        <span>▼</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="stepper">
+    <div class="step">
+      <div class="step-dot completed">✓</div>
+      <span class="step-label completed">Workspace</span>
+    </div>
+    <div class="step-connector completed"></div>
+    <div class="step">
+      <div class="step-dot completed">✓</div>
+      <span class="step-label completed">Budget</span>
+    </div>
+    <div class="step-connector completed"></div>
+    <div class="step">
+      <div class="step-dot active">3</div>
+      <span class="step-label active">Dependencies</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step">
+      <div class="step-dot upcoming">4</div>
+      <span class="step-label upcoming">Allocate</span>
+    </div>
+  </div>
+
+  <div class="content content-wide">
+    <h1 class="content-title">Import your npm dependencies</h1>
+
+    <div class="dropzone">
+      <div class="dropzone-icon">📁</div>
+      <div class="dropzone-title">Drop your package-lock.json here</div>
+      <div class="dropzone-hint">or <a href="#" style="color: var(--primary);">browse files</a></div>
+      <div class="dropzone-hint" style="margin-top: 16px;">Supports: package-lock.json, yarn.lock, pnpm-lock.yaml</div>
+    </div>
+
+    <div class="divider">or</div>
+
+    <div class="form-group">
+      <label class="form-label">Paste package names (one per line)</label>
+      <textarea class="form-input" rows="6" placeholder="react
+lodash
+express
+..."></textarea>
+    </div>
+
+    <button class="btn btn-primary">Import & Continue</button>
+  </div>
+</div>
+
+<!-- ===== SCREEN 6: ALLOCATE BUDGET ===== -->
+<div class="frame">
+  <div class="frame-label">Screen 6: Allocate Budget</div>
+
+  <nav class="navbar">
+    <div class="logo">Upkeep</div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="color: var(--text-secondary);">Acme Corp</span>
+      <div class="user-menu">
+        <div class="avatar">A</div>
+        <span>Alex</span>
+        <span>▼</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="stepper">
+    <div class="step">
+      <div class="step-dot completed">✓</div>
+      <span class="step-label completed">Workspace</span>
+    </div>
+    <div class="step-connector completed"></div>
+    <div class="step">
+      <div class="step-dot completed">✓</div>
+      <span class="step-label completed">Budget</span>
+    </div>
+    <div class="step-connector completed"></div>
+    <div class="step">
+      <div class="step-dot completed">✓</div>
+      <span class="step-label completed">Dependencies</span>
+    </div>
+    <div class="step-connector completed"></div>
+    <div class="step">
+      <div class="step-dot active">4</div>
+      <span class="step-label active">Allocate</span>
+    </div>
+  </div>
+
+  <div class="content content-wide">
+    <h1 class="content-title">Allocate your €500/month budget</h1>
+
+    <!-- Budget summary -->
+    <div class="allocation-header">
+      <div class="budget-summary">
+        <span>Budget: <strong>€500</strong></span>
+        <span>Allocated: <strong>€340</strong></span>
+        <span>Remaining: <strong style="color: var(--success);">€160</strong></span>
+      </div>
+      <div class="progress-bar" style="height: 12px;">
+        <div class="progress-fill" style="width: 68%;"></div>
+      </div>
+      <div style="text-align: right; margin-top: 4px; font-size: 12px; color: var(--text-secondary);">68%</div>
+    </div>
+
+    <!-- Guardrails -->
+    <div class="guardrails">
+      <div class="guardrail guardrail-ok">✓ Min 3 packages</div>
+      <div class="guardrail guardrail-warn">⚠ Max 34% per package (€170)</div>
+    </div>
+
+    <!-- Search -->
+    <div class="form-group">
+      <input type="text" class="form-input" placeholder="🔍 Search your 127 packages...">
+    </div>
+
+    <!-- Your allocations -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h3 style="font-weight: 600;">YOUR ALLOCATIONS (3)</h3>
+      <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Clear all</button>
+    </div>
+
+    <div class="package-card">
+      <div class="package-info">
+        <span class="package-icon">📦</span>
+        <div>
+          <div class="package-name">react</div>
+          <div class="package-meta">Weekly downloads: 23M · Maintainers: 12</div>
+        </div>
+      </div>
+      <div class="package-controls">
+        <div class="package-amount">€170</div>
+        <div class="package-bar">
+          <div class="progress-bar"><div class="progress-fill" style="width: 100%;"></div></div>
+        </div>
+        <div class="package-percent max">34% ⚠ MAX</div>
+        <button class="ctrl-btn">−</button>
+        <button class="ctrl-btn">+</button>
+        <button class="ctrl-btn">✕</button>
+      </div>
+    </div>
+
+    <div class="package-card">
+      <div class="package-info">
+        <span class="package-icon">📦</span>
+        <div>
+          <div class="package-name">lodash</div>
+          <div class="package-meta">Weekly downloads: 51M · Maintainers: 3</div>
+        </div>
+      </div>
+      <div class="package-controls">
+        <div class="package-amount">€100</div>
+        <div class="package-bar">
+          <div class="progress-bar"><div class="progress-fill" style="width: 59%;"></div></div>
+        </div>
+        <div class="package-percent">20%</div>
+        <button class="ctrl-btn">−</button>
+        <button class="ctrl-btn">+</button>
+        <button class="ctrl-btn">✕</button>
+      </div>
+    </div>
+
+    <div class="package-card">
+      <div class="package-info">
+        <span class="package-icon">📦</span>
+        <div>
+          <div class="package-name">express</div>
+          <div class="package-meta">Weekly downloads: 31M · Maintainers: 5</div>
+        </div>
+      </div>
+      <div class="package-controls">
+        <div class="package-amount">€70</div>
+        <div class="package-bar">
+          <div class="progress-bar"><div class="progress-fill" style="width: 41%;"></div></div>
+        </div>
+        <div class="package-percent">14%</div>
+        <button class="ctrl-btn">−</button>
+        <button class="ctrl-btn">+</button>
+        <button class="ctrl-btn">✕</button>
+      </div>
+    </div>
+
+    <!-- Suggestions -->
+    <h3 style="font-weight: 600; margin: 24px 0 16px;">SUGGESTED FROM YOUR DEPENDENCIES</h3>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-default); border-radius: 8px;">
+        <div>
+          <div style="font-weight: 500;">typescript</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">51M weekly</div>
+        </div>
+        <button class="btn btn-secondary" style="padding: 6px 12px;">+ Add</button>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-default); border-radius: 8px;">
+        <div>
+          <div style="font-weight: 500;">webpack</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">28M weekly</div>
+        </div>
+        <button class="btn btn-secondary" style="padding: 6px 12px;">+ Add</button>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-default); border-radius: 8px;">
+        <div>
+          <div style="font-weight: 500;">eslint</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">41M weekly</div>
+        </div>
+        <button class="btn btn-secondary" style="padding: 6px 12px;">+ Add</button>
+      </div>
+    </div>
+    <p style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">...show 124 more</p>
+
+    <button class="btn btn-primary" style="margin-top: 32px;">Finalize Allocation</button>
+  </div>
+</div>
+
+<!-- ===== SCREEN 7: SUCCESS ===== -->
+<div class="frame">
+  <div class="frame-label">Screen 8: Success</div>
+
+  <nav class="navbar">
+    <div class="logo">Upkeep</div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="color: var(--text-secondary);">Acme Corp</span>
+      <div class="user-menu">
+        <div class="avatar">A</div>
+        <span>Alex</span>
+        <span>▼</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content" style="padding-top: 80px;">
+    <div class="success-icon">✓</div>
+    <h1 class="success-title">You're funding open-source! 🎉</h1>
+    <p class="success-subtitle">
+      €500/month allocated across 5 packages<br>
+      First payouts will run on February 1st, 2026
+    </p>
+
+    <div style="background: var(--primary-light); border: 1px solid var(--primary); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+      <h3 style="font-weight: 600; margin-bottom: 8px;">Want to show your commitment?</h3>
+      <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">
+        Your page: <strong>upkeep.dev/acme-corp</strong><br>
+        Currently: Private (only you can see it)
+      </p>
+      <button class="btn btn-primary" style="width: auto;">Make your sponsorship page public</button>
+    </div>
+
+    <button class="btn btn-primary">Go to Dashboard</button>
+    <p style="text-align: center; margin-top: 16px;">
+      <a href="#" style="color: var(--text-secondary);">Skip for now</a>
+    </p>
+  </div>
+</div>
+
+</body>
+</html>
+

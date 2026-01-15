@@ -1,0 +1,23 @@
+{
+  "name": "upkeep",
+  "version": "1.0.0",
+  "description": "Open-source fund allocation platform for npm package maintainers",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w web",
+    "dev:web": "npm run dev -w web",
+    "dev:api": "cd apps/api && ./mvnw quarkus:dev",
+    "build": "npm run build -w web",
+    "test": "npm test -w web",
+    "lint": "npm run lint -w web"
+  },
+  "engines": {
+    "node": "20.x",
+    "npm": "10.x"
+  }
+}
+

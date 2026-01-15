@@ -1,0 +1,154 @@
+# generated: 2026-01-10
+# project: Upkeep
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-01-10
+project: Upkeep
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # EPIC 1: Project Foundation & Authentication
+  # Goal: Users can create an account, authenticate, and the system is ready
+  #       for development with hexagonal architecture and
+  #       core infrastructure.
+  # FRs: FR1 (partial - account creation)
+  # ═══════════════════════════════════════════════════════════════════════════
+  epic-1: in-progress
+  1-1-monorepo-hexagonal-architecture-setup: ready-for-dev
+  1-4-api-envelope-error-handling-pattern: ready-for-dev
+  1-5-user-registration-with-email: ready-for-dev
+  1-6-user-login-with-email-password: ready-for-dev
+  1-7-oauth-authentication-github: ready-for-dev
+  1-8-design-system-base-components: ready-for-dev
+  1-9-base-layouts-implementation: ready-for-dev
+  epic-1-retrospective: optional
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # EPIC 2: Company Workspace & Team Management
+  # Goal: A company can create its workspace, invite members, and manage roles
+  #       with full tenant isolation.
+  # FRs: FR2, FR3, FR4, FR5, FR6, FR7
+  # ═══════════════════════════════════════════════════════════════════════════
+  epic-2: backlog
+  2-1-create-company-workspace: ready-for-dev
+  2-2-company-dashboard-shell: ready-for-dev
+  2-3-invite-user-to-company: ready-for-dev
+  2-4-accept-company-invitation: ready-for-dev
+  2-5-manage-team-roles: ready-for-dev
+  2-6-workspace-switcher: ready-for-dev
+  2-7-tenant-data-isolation: ready-for-dev
+  epic-2-retrospective: optional
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # EPIC 3: Budget & Dependency Import
+  # Goal: A company can set its monthly budget and import its npm dependency list.
+  # FRs: FR8, FR9, FR10, FR11
+  # ═══════════════════════════════════════════════════════════════════════════
+  epic-3: backlog
+  3-1-set-monthly-budget: ready-for-dev
+  3-2-update-monthly-budget: ready-for-dev
+  3-3-import-npm-dependencies-via-file-upload: ready-for-dev
+  3-4-import-npm-dependencies-via-paste: ready-for-dev
+  3-5-view-package-list: ready-for-dev
+  epic-3-retrospective: optional
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # EPIC 4: Allocation Workflow
+  # Goal: A company can allocate its monthly budget to packages with anti-capture
+  #       guardrails.
+  # FRs: FR12, FR13, FR14, FR15, FR16, FR37, FR38
+  # ═══════════════════════════════════════════════════════════════════════════
+  epic-4: backlog
+  4-1-create-allocation-draft: ready-for-dev
+  4-2-edit-allocation-with-realtime-guardrails: ready-for-dev
+  4-3-finalize-allocation: ready-for-dev
+  4-4-view-allocation-history: ready-for-dev
+  4-5-export-allocations: ready-for-dev
+  epic-4-retrospective: optional
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # EPIC 5: Company Sponsorship Transparency
+  # Goal: A company can publish its sponsorship page and showcase its
+  #       open-source commitment.
+  # FRs: FR17, FR18, FR19, FR20
+  # ═══════════════════════════════════════════════════════════════════════════
+  epic-5: backlog
+  5-1-toggle-public-sponsorship-page: ready-for-dev
+  5-2-public-sponsorship-page-view: ready-for-dev
+  5-3-private-sponsorship-view: ready-for-dev
+  epic-5-retrospective: optional
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # EPIC 6: Maintainer Onboarding & Package Claiming
+  # Goal: A maintainer can sign up, claim their packages, and verify ownership.
+  # FRs: FR21, FR22, FR23, FR24, FR25, FR26
+  # ═══════════════════════════════════════════════════════════════════════════
+  epic-6: backlog
+  6-1-maintainer-account-creation: ready-for-dev
+  6-2-maintainer-profile-setup: ready-for-dev
+  6-3-initiate-package-claim: ready-for-dev
+  6-4-package-ownership-verification: ready-for-dev
+  6-5-maintainer-dashboard-with-claimed-packages: ready-for-dev
+  6-6-package-eligibility-status: ready-for-dev
+  epic-6-retrospective: optional
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # EPIC 7: Payout System
+  # Goal: The system calculates and executes monthly payments to maintainers.
+  # FRs: FR27, FR28, FR29, FR30, FR31, FR32, FR39
+  # ═══════════════════════════════════════════════════════════════════════════
+  epic-7: backlog
+  7-1-connect-payout-method: ready-for-dev
+  7-2-calculate-payout-distributions: ready-for-dev
+  7-3-execute-payout-run: ready-for-dev
+  7-4-payout-outcome-states: ready-for-dev
+  7-5-company-view-payout-outcomes: ready-for-dev
+  7-6-maintainer-payout-history: ready-for-dev
+  epic-7-retrospective: optional
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # EPIC 8: Admin & Support Operations
+  # Goal: Internal team can monitor, investigate, and resolve payout issues.
+  # FRs: FR33, FR34, FR35, FR36, FR40, FR41
+  # ═══════════════════════════════════════════════════════════════════════════
+  epic-8: backlog
+  8-1-admin-payout-run-dashboard: ready-for-dev
+  8-2-retry-failed-payouts: ready-for-dev
+  8-3-search-by-company-or-package: ready-for-dev
+  8-4-investigation-timeline: ready-for-dev
+  8-5-held-unclaimed-funds-explanation: ready-for-dev
+  8-6-export-csv-report-admin: ready-for-dev
+  epic-8-retrospective: optional
+
