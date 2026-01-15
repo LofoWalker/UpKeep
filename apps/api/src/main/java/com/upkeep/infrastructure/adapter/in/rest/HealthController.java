@@ -1,31 +1,15 @@
 package com.upkeep.infrastructure.adapter.in.rest;
-
+import com.upkeep.infrastructure.adapter.in.rest.response.ApiResponse;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-
-/**
- * Health check REST endpoint.
- * Simple driving adapter to verify API is running.
- */
 @Path("/health")
+@Produces(MediaType.APPLICATION_JSON)
 public class HealthController {
-
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public HealthResponse getHealth() {
-        return new HealthResponse("UP", "Upkeep API is running");
+    public ApiResponse<HealthData> getHealth() {
+        return ApiResponse.success(new HealthData("UP", "Upkeep API is running"));
     }
-
-    public static class HealthResponse {
-        public String status;
-        public String message;
-
-        public HealthResponse(String status, String message) {
-            this.status = status;
-            this.message = message;
-        }
-    }
+    public record HealthData(String status, String message) {}
 }
-

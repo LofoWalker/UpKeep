@@ -1,29 +1,22 @@
 package com.upkeep.infrastructure.adapter.in.rest;
-
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
-
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-
-/**
- * Test for health check endpoint.
- * Verifies the API is running correctly.
- */
+import static org.hamcrest.Matchers.*;
 @QuarkusTest
 class HealthControllerTest {
-
     @Test
     void testHealthEndpoint() {
         given()
-            .when()
-            .get("/health")
+            .when().get("/health")
             .then()
             .statusCode(200)
             .contentType(ContentType.JSON)
-            .body("status", equalTo("UP"))
-            .body("message", equalTo("Upkeep API is running"));
+            .body("data.status", equalTo("UP"))
+            .body("data.message", equalTo("Upkeep API is running"))
+            .body("meta.timestamp", notNullValue())
+            .body("meta.traceId", notNullValue())
+            .body("error", nullValue());
     }
 }
-
