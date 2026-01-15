@@ -1,81 +1,40 @@
-# IDE & Editors
-.idea/
-.vscode/
-*.iml
-*.swp
-*.swo
-*~
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# MCP & Agent configs (local tooling)
-.mcp.json
-.agentvibes/
-.claude/
-
-# BMAD generated outputs (artifacts)
-_bmad-output/
-
-# Node.js
+# Dependencies
 node_modules/
-.pnpm-store/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
-package-lock.json
-yarn.lock
+pnpm-debug.log*
 
-# Build outputs
+# Build artifacts
 dist/
 build/
-out/
 .next/
-.nuxt/
-.output/
-coverage/
-*.tsbuildinfo
+out/
 
-# Environment files
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
 .env
 .env.local
 .env.*.local
-.env.development
-.env.test
-.env.production
 
-# Logs
-logs/
-*.log
+# OS
+Thumbs.db
+.DS_Store
 
-# Temporary files
-tmp/
-temp/
-.cache/
-.parcel-cache/
-
-# Docker
-.docker/
-
-# Test artifacts
-.nyc_output/
-
-# Java / Maven
-target/
+# Backend
+apps/api/target/
+apps/api/.quarkus/
 *.class
-*.jar
-*.war
-!.mvn/wrapper/maven-wrapper.jar
-.mvn/wrapper/maven-wrapper.jar.sha256
-.m2/
-.jdk/
 
-# Quarkus
-.quarkus/
+# Frontend
+apps/web/dist/
+apps/web/.vite/
+
