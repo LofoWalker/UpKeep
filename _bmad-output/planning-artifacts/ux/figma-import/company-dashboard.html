@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upkeep - Company Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --success: #16a34a;
+      --success-light: #dcfce7;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --error: #dc2626;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border-default: #e2e8f0;
+      --border-strong: #cbd5e1;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ===== FRAME CONTAINER ===== */
+    .frame {
+      width: 1440px;
+      min-height: 900px;
+      background: var(--bg-secondary);
+      margin: 40px;
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .frame-label {
+      background: var(--text-primary);
+      color: white;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--primary);
+    }
+
+    .workspace-name {
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid var(--border-default);
+      background: var(--bg-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-default);
+      background: var(--bg-primary);
+      cursor: pointer;
+    }
+
+    .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ===== TABS ===== */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      padding: 0 24px;
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    .tab {
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+    }
+
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* ===== CONTENT ===== */
+    .content {
+      padding: 24px;
+    }
+
+    /* ===== MONTH NAVIGATOR ===== */
+    .month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .month-title {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .month-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .month-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-default);
+      background: var(--bg-primary);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    /* ===== STATS GRID ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-default);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .stat-icon {
+      font-size: 16px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .stat-trend {
+      font-size: 12px;
+      color: var(--success);
+    }
+
+    .stat-trend.neutral {
+      color: var(--text-muted);
+    }
+
+    /* ===== ALERT BANNER ===== */
+    .alert-banner {
+      background: var(--warning-light);
+      border: 1px solid var(--warning);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .alert-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .alert-icon {
+      color: var(--warning);
+    }
+
+    .alert-text {
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .alert-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-default);
+      color: var(--text-primary);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+    }
+
+    /* ===== SECTION ===== */
+    .section {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-default);
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .section-content {
+      padding: 20px;
+    }
+
+    /* ===== ALLOCATION TABLE ===== */
+    .allocation-row {
+      display: grid;
+      grid-template-columns: 200px 100px 1fr 80px 100px;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    .allocation-row:last-child {
+      border-bottom: none;
+    }
+
+    .package-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .package-icon {
+      font-size: 16px;
+    }
+
+    .amount {
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    .percentage {
+      color: var(--text-secondary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-paid {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .status-held {
+      background: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .status-pending {
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+    }
+
+    /* ===== TOTAL ROW ===== */
+    .total-row {
+      display: grid;
+      grid-template-columns: 200px 100px 1fr 80px 100px;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 0 0;
+      margin-top: 8px;
+      border-top: 2px solid var(--border-strong);
+      font-weight: 600;
+    }
+
+    /* ===== SPONSORSHIP CARD ===== */
+    .sponsorship-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sponsorship-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lock-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .sponsorship-status {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .sponsorship-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .sponsorship-actions {
+      display: flex;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== SCREEN 1: DASHBOARD OVERVIEW ===== -->
+<div class="frame">
+  <div class="frame-label">Screen 1: Dashboard Overview</div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <div class="logo">Upkeep</div>
+      <div class="workspace-name">Acme Corp</div>
+    </div>
+    <div class="navbar-right">
+      <div class="icon-btn">?</div>
+      <div class="icon-btn">⚙</div>
+      <div class="user-menu">
+        <div class="avatar">A</div>
+        <span>Alex</span>
+        <span>▼</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active">Dashboard</div>
+    <div class="tab">Allocation</div>
+    <div class="tab">Packages</div>
+    <div class="tab">Payouts</div>
+    <div class="tab">Team</div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Month Navigator -->
+    <div class="month-nav">
+      <h1 class="month-title">January 2026</h1>
+      <div class="month-controls">
+        <button class="month-btn">← Prev</button>
+        <button class="month-btn">Next →</button>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-icon">💰</span>
+          <span class="stat-label">Monthly Budget</span>
+        </div>
+        <div class="stat-value">€500</div>
+        <div class="stat-trend neutral">✓ Fully allocated</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-icon">📦</span>
+          <span class="stat-label">Packages Funded</span>
+        </div>
+        <div class="stat-value">5</div>
+        <div class="stat-trend">↑ 2 vs last month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-icon">👤</span>
+          <span class="stat-label">Maintainers Reached</span>
+        </div>
+        <div class="stat-value">4 / 5</div>
+        <div class="stat-trend neutral">1 unclaimed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-icon">🎯</span>
+          <span class="stat-label">Payout Status</span>
+        </div>
+        <div class="stat-value">3</div>
+        <div class="stat-trend neutral">paid · 1 held · 1 pending</div>
+      </div>
+    </div>
+
+    <!-- Alert Banner -->
+    <div class="alert-banner">
+      <div class="alert-header">
+        <span class="alert-icon">⚠️</span>
+        <span>1 package has no claimed maintainer</span>
+      </div>
+      <div class="alert-text">
+        <strong>typescript</strong> — €80/mo allocated but funds are held. The maintainer hasn't claimed this package yet.
+      </div>
+      <div class="alert-actions">
+        <button class="btn btn-secondary">Keep Allocated</button>
+        <button class="btn btn-primary">Reallocate for February</button>
+      </div>
+    </div>
+
+    <!-- Allocation Section -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">This Month's Allocation</h2>
+        <button class="btn btn-secondary">Edit →</button>
+      </div>
+      <div class="section-content">
+        <div class="allocation-row">
+          <div class="package-name"><span class="package-icon">📦</span> react</div>
+          <div class="amount">€170</div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 100%"></div></div>
+          <div class="percentage">34%</div>
+          <div><span class="status-badge status-paid">✓ Paid</span></div>
+        </div>
+        <div class="allocation-row">
+          <div class="package-name"><span class="package-icon">📦</span> lodash</div>
+          <div class="amount">€100</div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 59%"></div></div>
+          <div class="percentage">20%</div>
+          <div><span class="status-badge status-paid">✓ Paid</span></div>
+        </div>
+        <div class="allocation-row">
+          <div class="package-name"><span class="package-icon">📦</span> express</div>
+          <div class="amount">€70</div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 41%"></div></div>
+          <div class="percentage">14%</div>
+          <div><span class="status-badge status-paid">✓ Paid</span></div>
+        </div>
+        <div class="allocation-row">
+          <div class="package-name"><span class="package-icon">📦</span> webpack</div>
+          <div class="amount">€80</div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 47%"></div></div>
+          <div class="percentage">16%</div>
+          <div><span class="status-badge status-held">⏸ Held</span></div>
+        </div>
+        <div class="allocation-row">
+          <div class="package-name"><span class="package-icon">📦</span> typescript</div>
+          <div class="amount">€80</div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 47%"></div></div>
+          <div class="percentage">16%</div>
+          <div><span class="status-badge status-pending">◠ Pending</span></div>
+        </div>
+        <div class="total-row">
+          <div>Total</div>
+          <div class="amount">€500</div>
+          <div></div>
+          <div class="percentage">100%</div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sponsorship Section -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Sponsorship Page</h2>
+      </div>
+      <div class="section-content">
+        <div class="sponsorship-card">
+          <div class="sponsorship-info">
+            <div class="lock-icon">🔒</div>
+            <div>
+              <div class="sponsorship-status">Private</div>
+              <div class="sponsorship-desc">Only you and your team can see your sponsorship page.</div>
+            </div>
+          </div>
+          <div class="sponsorship-actions">
+            <button class="btn btn-primary">Make Public</button>
+            <button class="btn btn-secondary">Preview Page</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN 2: EDIT ALLOCATION ===== -->
+<div class="frame">
+  <div class="frame-label">Screen 2: Edit Monthly Allocation</div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <div class="logo">Upkeep</div>
+      <div class="workspace-name">Acme Corp</div>
+    </div>
+    <div class="navbar-right">
+      <div class="user-menu">
+        <div class="avatar">A</div>
+        <span>Alex</span>
+        <span>▼</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Back nav -->
+  <div class="tabs">
+    <div class="tab">← Back to Dashboard</div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <h1 class="month-title" style="margin-bottom: 24px;">Edit allocation for February 2026</h1>
+
+    <!-- Budget Bar -->
+    <div class="section" style="margin-bottom: 16px;">
+      <div class="section-content" style="padding: 16px 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+          <div><strong>Monthly Budget: €500</strong> <button class="btn btn-ghost" style="padding: 4px 8px; font-size: 12px;">[Change Budget]</button></div>
+          <div style="color: var(--text-secondary);">Allocated: <strong>€420</strong> · Remaining: <strong style="color: var(--success);">€80</strong></div>
+        </div>
+        <div class="progress-bar" style="height: 12px;">
+          <div class="progress-fill" style="width: 84%;"></div>
+        </div>
+        <div style="text-align: right; margin-top: 4px; font-size: 12px; color: var(--text-secondary);">84%</div>
+      </div>
+    </div>
+
+    <!-- Guardrails -->
+    <div style="display: flex; gap: 16px; margin-bottom: 24px; padding: 12px 16px; background: var(--bg-primary); border: 1px solid var(--border-default); border-radius: 8px;">
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <span style="color: var(--success);">✓</span>
+        <span style="font-size: 13px;">Min 3 packages</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <span style="color: var(--success);">✓</span>
+        <span style="font-size: 13px;">Max 34% per package (€170)</span>
+      </div>
+    </div>
+
+    <!-- Info banner -->
+    <div style="background: #dbeafe; border: 1px solid var(--primary); border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 8px;">
+      <span>💡</span>
+      <span style="font-size: 13px;">Starting from January's allocation. Make your changes below or <a href="#" style="color: var(--primary);">Start Fresh</a>.</span>
+    </div>
+
+    <!-- Current Draft -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Current Draft</h2>
+        <button class="btn btn-ghost" style="color: var(--error);">Clear all</button>
+      </div>
+      <div class="section-content">
+        <div class="allocation-row">
+          <div class="package-name"><span class="package-icon">📦</span> react</div>
+          <div class="amount">€170</div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 100%"></div></div>
+          <div class="percentage" style="color: var(--warning);">34% ⚠ MAX</div>
+          <div style="display: flex; gap: 4px;">
+            <button class="icon-btn" style="width: 28px; height: 28px;">−</button>
+            <button class="icon-btn" style="width: 28px; height: 28px;">+</button>
+            <button class="icon-btn" style="width: 28px; height: 28px;">✕</button>
+          </div>
+        </div>
+        <div class="allocation-row">
+          <div class="package-name"><span class="package-icon">📦</span> lodash</div>
+          <div class="amount">€100</div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 59%"></div></div>
+          <div class="percentage">20%</div>
+          <div style="display: flex; gap: 4px;">
+            <button class="icon-btn" style="width: 28px; height: 28px;">−</button>
+            <button class="icon-btn" style="width: 28px; height: 28px;">+</button>
+            <button class="icon-btn" style="width: 28px; height: 28px;">✕</button>
+          </div>
+        </div>
+        <div class="allocation-row">
+          <div class="package-name"><span class="package-icon">📦</span> express</div>
+          <div class="amount">€70</div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 41%"></div></div>
+          <div class="percentage">14%</div>
+          <div style="display: flex; gap: 4px;">
+            <button class="icon-btn" style="width: 28px; height: 28px;">−</button>
+            <button class="icon-btn" style="width: 28px; height: 28px;">+</button>
+            <button class="icon-btn" style="width: 28px; height: 28px;">✕</button>
+          </div>
+        </div>
+        <div class="allocation-row" style="background: var(--warning-light); margin: 0 -20px; padding: 12px 20px;">
+          <div class="package-name"><span class="package-icon">📦</span> webpack</div>
+          <div class="amount">€80</div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 47%"></div></div>
+          <div class="percentage">16% <span class="status-badge status-held" style="margin-left: 8px;">⏸ held</span></div>
+          <div style="display: flex; gap: 4px;">
+            <button class="icon-btn" style="width: 28px; height: 28px;">−</button>
+            <button class="icon-btn" style="width: 28px; height: 28px;">+</button>
+            <button class="icon-btn" style="width: 28px; height: 28px;">✕</button>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: var(--text-secondary); padding: 8px 0 0 28px;">
+          └─ Maintainer unclaimed. Keep or reallocate?
+        </div>
+      </div>
+    </div>
+
+    <!-- Add from dependencies -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Add from your dependencies</h2>
+      </div>
+      <div class="section-content">
+        <!-- Search -->
+        <div style="margin-bottom: 16px;">
+          <input type="text" placeholder="🔍 Search 122 remaining packages..." style="width: 100%; padding: 12px 16px; border: 1px solid var(--border-default); border-radius: 8px; font-size: 14px;">
+        </div>
+        <!-- Suggestions -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-default); border-radius: 8px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span>📦</span>
+              <div>
+                <div style="font-weight: 500;">eslint</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">41M weekly</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span class="status-badge status-paid">✓ claimed</span>
+              <button class="btn btn-secondary">+ Add</button>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-default); border-radius: 8px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span>📦</span>
+              <div>
+                <div style="font-weight: 500;">prettier</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">38M weekly</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span class="status-badge status-paid">✓ claimed</span>
+              <button class="btn btn-secondary">+ Add</button>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-default); border-radius: 8px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span>📦</span>
+              <div>
+                <div style="font-weight: 500;">jest</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">29M weekly</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span class="status-badge status-held">⏸ unclaimed</span>
+              <button class="btn btn-secondary">+ Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+      <div style="display: flex; gap: 12px;">
+        <button class="btn btn-secondary">Cancel</button>
+        <button class="btn btn-secondary">Save Draft</button>
+      </div>
+      <div>
+        <button class="btn btn-primary" style="padding: 14px 32px;">Finalize for February</button>
+        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px; text-align: right;">Only Owners can finalize. This will lock the allocation.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN 3: PUBLIC SPONSORSHIP PAGE ===== -->
+<div class="frame">
+  <div class="frame-label">Screen 5: Public Sponsorship Page</div>
+
+  <!-- Navbar (public) -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <div class="logo">Upkeep</div>
+    </div>
+    <div class="navbar-right">
+      <button class="btn btn-ghost">Sign In</button>
+      <button class="btn btn-primary">Get Started</button>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="content" style="max-width: 900px; margin: 0 auto;">
+    <!-- Company Header -->
+    <div style="display: flex; align-items: center; gap: 24px; margin-bottom: 32px;">
+      <div style="width: 100px; height: 100px; background: var(--bg-tertiary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: var(--text-secondary);">
+        ACME<br>CORP
+      </div>
+      <div>
+        <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 8px;">Acme Corp</h1>
+        <p style="color: var(--text-secondary); font-size: 16px;">Funding open-source since October 2025</p>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 32px;">
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-icon">💰</span>
+          <span class="stat-label">Monthly contribution</span>
+        </div>
+        <div class="stat-value">€500</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-icon">📦</span>
+          <span class="stat-label">Packages funded</span>
+        </div>
+        <div class="stat-value">5</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-icon">📅</span>
+          <span class="stat-label">Months active</span>
+        </div>
+        <div class="stat-value">4</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-icon">👥</span>
+          <span class="stat-label">Maintainers supported</span>
+        </div>
+        <div class="stat-value">4</div>
+      </div>
+    </div>
+
+    <!-- Packages List -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Packages We Fund</h2>
+      </div>
+      <div class="section-content">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="padding: 16px; border: 1px solid var(--border-default); border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <span>📦</span>
+              <span style="font-weight: 600;">react</span>
+            </div>
+            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">A JavaScript library for building user interfaces</div>
+            <div class="progress-bar" style="height: 8px; margin-bottom: 4px;">
+              <div class="progress-fill" style="width: 100%;"></div>
+            </div>
+            <div style="font-size: 12px; color: var(--text-secondary); text-align: right;">34%</div>
+          </div>
+          <div style="padding: 16px; border: 1px solid var(--border-default); border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <span>📦</span>
+              <span style="font-weight: 600;">lodash</span>
+            </div>
+            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">A modern JavaScript utility library</div>
+            <div class="progress-bar" style="height: 8px; margin-bottom: 4px;">
+              <div class="progress-fill" style="width: 59%;"></div>
+            </div>
+            <div style="font-size: 12px; color: var(--text-secondary); text-align: right;">20%</div>
+          </div>
+          <div style="padding: 16px; border: 1px solid var(--border-default); border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <span>📦</span>
+              <span style="font-weight: 600;">webpack</span>
+            </div>
+            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">A bundler for javascript and friends</div>
+            <div class="progress-bar" style="height: 8px; margin-bottom: 4px;">
+              <div class="progress-fill" style="width: 47%;"></div>
+            </div>
+            <div style="font-size: 12px; color: var(--text-secondary); text-align: right;">16%</div>
+          </div>
+          <div style="padding: 16px; border: 1px solid var(--border-default); border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <span>📦</span>
+              <span style="font-weight: 600;">typescript</span>
+            </div>
+            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">TypeScript is a language for application-scale JavaScript</div>
+            <div class="progress-bar" style="height: 8px; margin-bottom: 4px;">
+              <div class="progress-fill" style="width: 47%;"></div>
+            </div>
+            <div style="font-size: 12px; color: var(--text-secondary); text-align: right;">16%</div>
+          </div>
+          <div style="padding: 16px; border: 1px solid var(--border-default); border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <span>📦</span>
+              <span style="font-weight: 600;">express</span>
+            </div>
+            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Fast, unopinionated, minimalist web framework</div>
+            <div class="progress-bar" style="height: 8px; margin-bottom: 4px;">
+              <div class="progress-fill" style="width: 41%;"></div>
+            </div>
+            <div style="font-size: 12px; color: var(--text-secondary); text-align: right;">14%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA for maintainers -->
+    <div style="background: #dbeafe; border: 1px solid var(--primary); border-radius: 12px; padding: 20px; margin-bottom: 32px; display: flex; align-items: center; justify-content: space-between;">
+      <div>
+        <div style="font-weight: 600; margin-bottom: 4px;">🔧 Maintain a package Acme Corp depends on?</div>
+        <div style="font-size: 13px; color: var(--text-secondary);">Claim your package to receive payouts.</div>
+      </div>
+      <button class="btn btn-primary">Claim Your Package</button>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align: center; padding: 24px 0; border-top: 1px solid var(--border-default); color: var(--text-secondary); font-size: 13px;">
+      Powered by <strong>Upkeep</strong> · Fund the open-source you depend on<br>
+      <a href="#" style="color: var(--primary); margin-top: 8px; display: inline-block;">Start funding your dependencies →</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+

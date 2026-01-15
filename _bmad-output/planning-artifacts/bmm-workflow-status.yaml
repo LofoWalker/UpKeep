@@ -1,0 +1,12 @@
+# Workflow Status
+# Auto-generated during PRD completion
+
+generated: "2026-01-08T00:00:00Z"
+project: "Upkeep"
+project_type: "greenfield"
+selected_track: "bmm"
+field_type: "general"
+workflow_path: ""
+workflow_status:
+  prd: "_bmad-output/planning-artifacts/prd.md"
+
