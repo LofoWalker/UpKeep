@@ -25,13 +25,13 @@ _bmad-output/
 
 # Node.js
 node_modules/
+.pnpm-store/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 package-lock.json
 yarn.lock
-pnpm-lock.yaml
 
 # Build outputs
 dist/
