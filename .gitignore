@@ -37,3 +37,9 @@ apps/api/.quarkus/
 apps/web/dist/
 apps/web/.vite/
 
+# BMAD Framework
+_bmad/
+_bmad-output/
+.github/agents/
+.github/copilot-instructions.md
+
