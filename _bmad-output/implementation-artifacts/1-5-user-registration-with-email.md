@@ -1,6 +1,6 @@
 # Story 1.5: User Registration with Email
 
-Status: ready-for-dev
+Status: ✅ completed
 
 ## Story
 
@@ -31,58 +31,58 @@ so that I can access Upkeep.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create User domain model (AC: #1)
-  - [ ] 1.1: Create `User` entity in domain layer
-  - [ ] 1.2: Create `UserId` value object
-  - [ ] 1.3: Create `Email` value object with validation
-  - [ ] 1.4: Create `Password` value object with hashing
+- [x] Task 1: Create Customer domain model (AC: #1)
+  - [x] 1.1: Create `Customer` entity in domain layer
+  - [x] 1.2: Create `CustomerId` value object
+  - [x] 1.3: Create `Email` value object with validation
+  - [x] 1.4: Create `Password` value object with hashing
 
-- [ ] Task 2: Create registration use case (AC: #1, #2)
-  - [ ] 2.1: Create `RegisterUserUseCase` port interface
-  - [ ] 2.2: Implement `RegisterUserUseCaseImpl`
-  - [ ] 2.3: Create `UserRepository` port interface
-  - [ ] 2.4: Create `PasswordHasher` port interface
+- [x] Task 2: Create registration use case (AC: #1, #2)
+  - [x] 2.1: Create `RegisterCustomerUseCase` port interface
+  - [x] 2.2: Implement `RegisterCustomerUseCaseImpl`
+  - [x] 2.3: Create `CustomerRepository` port interface
+  - [x] 2.4: Create `PasswordHasher` port interface
 
-- [ ] Task 3: Create infrastructure adapters (AC: #1, #2)
-  - [ ] 3.1: Implement `UserJpaRepository` adapter
-  - [ ] 3.2: Implement `BcryptPasswordHasher` adapter
-  - [ ] 3.3: Create database migration for users table
-  - [ ] 3.4: Create `RegistrationResource` REST endpoint
+- [x] Task 3: Create infrastructure adapters (AC: #1, #2)
+  - [x] 3.1: Implement `CustomerJpaRepository` adapter
+  - [x] 3.2: Implement `BcryptPasswordHasher` adapter
+  - [x] 3.3: Create database migration for customers table
+  - [x] 3.4: Create `RegistrationResource` REST endpoint
 
-- [ ] Task 4: Create frontend registration (AC: #1, #2, #3, #4)
-  - [ ] 4.1: Create registration page component
-  - [ ] 4.2: Create registration form with validation
-  - [ ] 4.3: Implement API client for registration
-  - [ ] 4.4: Add client-side password validation
-  - [ ] 4.5: Handle success/error states
+- [x] Task 4: Create frontend registration (AC: #1, #2, #3, #4)
+  - [x] 4.1: Create registration page component
+  - [x] 4.2: Create registration form with validation
+  - [x] 4.3: Implement API client for registration
+  - [x] 4.4: Add client-side password validation
+  - [x] 4.5: Handle success/error states
 
-- [ ] Task 5: Email notification (AC: #1)
-  - [ ] 5.1: Create `EmailService` port interface
-  - [ ] 5.2: Create welcome email template
-  - [ ] 5.3: Implement email adapter (can be mock for MVP)
+- [x] Task 5: Email notification (AC: #1)
+  - [x] 5.1: Create `EmailService` port interface
+  - [x] 5.2: Create welcome email template
+  - [x] 5.3: Implement email adapter (can be mock for MVP)
 
 ## Dev Notes
 
 ### Domain Model
 
-**User Entity:**
+**Customer Entity:**
 ```java
-package com.upkeep.domain.model.user;
+package com.upkeep.domain.model.customer;
 
 import java.time.Instant;
 import java.util.UUID;
 
-public class User {
-    private final UserId id;
+public class Customer {
+    private final CustomerId id;
     private final Email email;
     private final PasswordHash passwordHash;
     private final AccountType accountType;
     private final Instant createdAt;
     private Instant updatedAt;
 
-    public static User create(Email email, PasswordHash passwordHash, AccountType accountType) {
-        return new User(
-            UserId.generate(),
+    public static Customer create(Email email, PasswordHash passwordHash, AccountType accountType) {
+        return new Customer(
+            CustomerId.generate(),
             email,
             passwordHash,
             accountType,
@@ -92,12 +92,12 @@ public class User {
     }
 }
 
-public record UserId(UUID value) {
-    public static UserId generate() {
-        return new UserId(UUID.randomUUID());
+public record CustomerId(UUID value) {
+    public static CustomerId generate() {
+        return new CustomerId(UUID.randomUUID());
     }
-    public static UserId from(String value) {
-        return new UserId(UUID.fromString(value));
+    public static CustomerId from(String value) {
+        return new CustomerId(UUID.fromString(value));
     }
 }
 
@@ -146,7 +146,7 @@ public record Password(String value) {
 ```java
 package com.upkeep.application.port.in;
 
-public interface RegisterUserUseCase {
+public interface RegisterCustomerUseCase {
     RegisterResult execute(RegisterCommand command);
 
     record RegisterCommand(
@@ -156,16 +156,16 @@ public interface RegisterUserUseCase {
         AccountType accountType
     ) {}
 
-    record RegisterResult(String userId, String email) {}
+    record RegisterResult(String customerId, String email, AccountType accountType) {}
 }
 
 // Implementation
 package com.upkeep.application.usecase;
 
 @ApplicationScoped
-public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
+public class RegisterCustomerUseCaseImpl implements RegisterCustomerUseCase {
     
-    private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
     private final PasswordHasher passwordHasher;
     private final EmailService emailService;
 
@@ -179,19 +179,19 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
 
         // Validate email uniqueness
         Email email = new Email(command.email());
-        if (userRepository.existsByEmail(email)) {
+        if (customerRepository.existsByEmail(email)) {
             throw new ConflictException("An account with this email already exists");
         }
 
-        // Create user
+        // Create customer
         Password password = new Password(command.password());
         PasswordHash hash = passwordHasher.hash(password);
-        User user = User.create(email, hash, command.accountType());
+        Customer customer = Customer.create(email, hash, command.accountType());
 
-        userRepository.save(user);
+        customerRepository.save(customer);
         emailService.sendWelcomeEmail(email);
 
-        return new RegisterResult(user.getId().value().toString(), email.value());
+        return new RegisterResult(customer.getId().value().toString(), email.value(), customer.getAccountType());
     }
 }
 ```
@@ -206,12 +206,12 @@ package com.upkeep.infrastructure.adapter.in.rest;
 @Consumes(MediaType.APPLICATION_JSON)
 public class AuthResource {
 
-    private final RegisterUserUseCase registerUserUseCase;
+    private final RegisterCustomerUseCase registerCustomerUseCase;
 
     @POST
     @Path("/register")
     public Response register(@Valid RegisterRequest request) {
-        RegisterResult result = registerUserUseCase.execute(
+        RegisterResult result = registerCustomerUseCase.execute(
             new RegisterCommand(
                 request.email(),
                 request.password(),
@@ -236,8 +236,8 @@ public record RegisterRequest(
 ### Database Schema
 
 ```sql
--- V1__create_users_table.sql
-CREATE TABLE users (
+-- V1__create_customers_table.sql
+CREATE TABLE customers (
     id UUID PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
@@ -246,7 +246,7 @@ CREATE TABLE users (
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_users__email ON users(email);
+CREATE INDEX idx_customers__email ON customers(email);
 ```
 
 ### Frontend Registration Form

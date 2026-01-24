@@ -10,7 +10,6 @@ pnpm-debug.log*
 dist/
 build/
 .next/
-out/
 
 # IDE
 .idea/

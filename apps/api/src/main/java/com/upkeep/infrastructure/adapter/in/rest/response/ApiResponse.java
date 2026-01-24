@@ -9,9 +9,6 @@ public record ApiResponse<T>(
     public static <T> ApiResponse<T> success(T data) {
         return new ApiResponse<>(data, ApiMeta.now(), null);
     }
-    public static <T> ApiResponse<T> success(T data, ApiMeta meta) {
-        return new ApiResponse<>(data, meta, null);
-    }
     public static <T> ApiResponse<T> error(ApiError error) {
         return new ApiResponse<>(null, null, error);
     }
