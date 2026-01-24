@@ -29,7 +29,7 @@ They may remove, edit, or reject contributions that aren’t aligned with this c
 
 If you experience or witness unacceptable behavior, please report it to:
 
-- conduct@upkeep.example
+- conduct@upkeep.org
 
 ### Scope
 

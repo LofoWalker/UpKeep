@@ -8,7 +8,7 @@ on:
 
 jobs:
   web-lint-test:
-    name: Web - Lint & Build
+    name: Web - Lint & Test
     runs-on: self-hosted
     defaults:
       run:
@@ -21,14 +21,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: apps/web/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Lint
         run: npm run lint
+
 
       - name: Build
         run: npm run build
@@ -58,3 +57,4 @@ jobs:
 
       - name: Build
         run: ./mvnw package -DskipTests
+

@@ -11,7 +11,7 @@ Please do not open public issues for security vulnerabilities.
 
 To report a vulnerability, email:
 
-- security@upkeep.example
+- security@upkeep.org
 
 Include:
 

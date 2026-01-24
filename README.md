@@ -60,7 +60,7 @@ Upkeep bridges this gap with a **structured, rational funding mechanism** that c
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/upkeep.git
+git clone https://github.com/LofoWalker/upkeep.git
 cd upkeep
 
 # Install all dependencies
@@ -126,15 +126,7 @@ Upkeep follows **Hexagonal Architecture** (Ports & Adapters) for the backend:
 
 The frontend uses a **Feature-First Organization** for scalable development.
 
-See [Architecture Documentation](./docs/ARCHITECTURE.md) for details.
-
-## Contributing
-
-We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md) to get started.
-
-- 🐛 [Report a Bug](./.github/ISSUE_TEMPLATE/bug_report.md)
-- ✨ [Request a Feature](./.github/ISSUE_TEMPLATE/feature_request.md)
-- 📖 [Read the Code of Conduct](./CODE_OF_CONDUCT.md)
+See [Architecture Documentation](./_bmad-output/planning-artifacts/architecture.md) for details.
 
 ## Security
 
