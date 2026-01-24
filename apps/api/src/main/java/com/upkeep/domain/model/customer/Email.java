@@ -21,6 +21,6 @@ public record Email(String value) {
             ));
         }
 
-        this.value = normalizedValue;
+        value = normalizedValue;
     }
 }
