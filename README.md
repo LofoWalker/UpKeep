@@ -1,132 +1,157 @@
-# Upkeep Monorepo
+<p align="center">
+  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT">
+  <img src="https://img.shields.io/badge/Java-21-orange.svg" alt="Java 21">
+  <img src="https://img.shields.io/badge/Node.js-20%20LTS-brightgreen.svg" alt="Node.js 20 LTS">
+  <img src="https://img.shields.io/badge/React-18.x-blue.svg" alt="React 18">
+  <img src="https://img.shields.io/badge/Quarkus-3.x-red.svg" alt="Quarkus 3.x">
+</p>
 
-Open-source fund allocation platform for npm package maintainers.
+# Upkeep
+
+**Open-source fund allocation platform for package maintainers.**
+
+Upkeep enables companies to sustainably fund the open-source maintainers they depend on, through a structured voting and allocation mechanism based on real usage and risk.
+
+> Transform open-source dependency into sustainable funding for maintainers, based on actual risk and usage.
+
+## Why Upkeep?
+
+Open-source is a critical pillar of modern software. Millions of companies use open-source libraries daily to power high-value products. Yet:
+
+- Most projects are maintained by **one or two people**
+- Funding relies on volunteering, sporadic sponsors, or indirect models
+- There's a **massive gap** between economic usage and maintainer sustainability
+
+Upkeep bridges this gap with a **structured, rational funding mechanism** that companies can justify internally.
+
+## Key Features
+
+- 🏢 **Company Workspaces** - Manage your open-source budget and track dependencies
+- 📦 **Package Import** - Import npm dependencies via file upload or paste
+- 💰 **Budget Allocation** - Set monthly budgets and allocate funds to critical packages
+- 🗳️ **Structured Voting** - Allocate points to packages that represent real risk
+- 👤 **Maintainer Profiles** - Opt-in system for maintainers to receive funding
+- 🔐 **Package Claims** - Verify ownership and eligibility for packages
+- 💸 **Payout System** - Transparent distribution based on company allocations
+- 📊 **Admin Dashboard** - Monitor payout runs and handle failures
+
+## Tech Stack
+
+| Layer | Technology | Version |
+|-------|------------|---------|
+| **Frontend** | React + TypeScript | 18.x / 5.x |
+| **Build Tool** | Vite | 5.x |
+| **Styling** | TailwindCSS + shadcn/ui | 3.4.x |
+| **Backend** | Quarkus (Java) | 3.x |
+| **Runtime** | Java | 21 LTS |
+| **Package Manager** | npm | 10.x |
+| **Node.js** | Node.js | 20 LTS |
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js 20 LTS
+- npm 10.x
+- Java 21 LTS
+- Maven 3.8.x
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/your-org/upkeep.git
+cd upkeep
+
+# Install all dependencies
+npm install
+```
+
+### Development
+
+```bash
+# Start frontend (React + Vite)
+npm run dev:web
+
+# Start backend (Quarkus)
+npm run dev:api
+# Or alternatively
+cd apps/api && ./mvnw quarkus:dev
+```
+
+The frontend runs at `http://localhost:5173` and the API at `http://localhost:8080`.
+
+### Build
+
+```bash
+# Build all apps
+npm run build
+```
 
 ## Project Structure
 
 ```
 upkeep/
 ├── apps/
-│   ├── web/                 # React + Vite + TypeScript frontend
+│   ├── web/                    # React + Vite frontend
 │   │   ├── src/
-│   │   │   ├── features/    # Feature-first organization
-│   │   │   ├── components/  # Reusable UI components
-│   │   │   ├── hooks/       # Custom React hooks
-│   │   │   ├── lib/         # Utilities and helpers
-│   │   │   └── pages/       # Route-level components
-│   │   ├── index.html
-│   │   ├── vite.config.ts
-│   │   ├── tailwind.config.ts
+│   │   │   ├── features/       # Feature modules
+│   │   │   │   ├── auth/       # Authentication
+│   │   │   │   ├── company/    # Company management
+│   │   │   │   ├── allocation/ # Fund allocation
+│   │   │   │   ├── maintainer/ # Maintainer profiles
+│   │   │   │   └── admin/      # Admin dashboard
+│   │   │   ├── components/     # Reusable UI components
+│   │   │   ├── hooks/          # Custom React hooks
+│   │   │   └── lib/            # Utilities and API client
 │   │   └── package.json
 │   │
-│   └── api/                 # Quarkus + Java backend
-│       ├── src/main/java/com/upkeep/
-│       │   ├── domain/      # Core business logic (no framework deps)
-│       │   │   ├── model/   # Entities and value objects
-│       │   │   ├── service/ # Domain services
-│       │   │   └── exception/
-│       │   ├── application/ # Use cases and ports
-│       │   │   ├── port/in/  # Driving ports (use case interfaces)
-│       │   │   ├── port/out/ # Driven ports (repository/service interfaces)
-│       │   │   └── usecase/  # Use case implementations
-│       │   └── infrastructure/ # Framework-specific adapters
-│       │       └── adapter/
-│       │           ├── in/rest/    # REST controllers
-│       │           └── out/        # Persistence and external service adapters
-│       ├── src/main/resources/
-│       │   └── application.properties
-│       └── pom.xml
+│   └── api/                    # Quarkus backend
+│       └── src/main/java/com/upkeep/
+│           ├── domain/         # Core business logic
+│           ├── application/    # Use cases and ports
+│           └── infrastructure/ # REST adapters, persistence
 │
-└── package.json            # npm workspace configuration
+├── docs/                       # Documentation
+└── package.json                # Workspace configuration
 ```
 
-## Tech Stack
+## Architecture
 
-| Component | Technology | Version |
-|-----------|-----------|---------|
-| Frontend | React | 18.x |
-| Build Tool | Vite | 5.x |
-| Language | TypeScript | 5.x |
-| Styling | TailwindCSS | 3.4.x |
-| Components | shadcn/ui | latest |
-| Backend | Quarkus | 3.x |
-| Runtime | Java | 21 LTS |
-| Package Manager | npm | 10.x |
-| Node.js | Node.js | 20 LTS |
-
-## Getting Started
-
-### Prerequisites
-- Node.js 20 LTS (use `.nvmrc`)
-- npm 10.x
-- Java 21 LTS
-- Maven 3.8.x (for building Quarkus backend)
-
-### Installation
-
-```bash
-# Install all dependencies (frontend and backend)
-npm install
-```
-
-### Development
-
-**Frontend:**
-```bash
-npm run dev
-# or specifically
-npm run dev:web
-```
-
-**Backend:**
-```bash
-npm run dev:api
-# or
-cd apps/api
-./mvnw quarkus:dev
-```
-
-### Building
-
-```bash
-npm run build
-```
-
-## Architecture Principles
-
-### Hexagonal Architecture (Backend)
-
-The backend follows **hexagonal (ports & adapters)** architecture:
+Upkeep follows **Hexagonal Architecture** (Ports & Adapters) for the backend:
 
 - **Domain Layer**: Core business logic with zero framework dependencies
-- **Application Layer**: Use cases that orchestrate domain logic
-- **Infrastructure Layer**: Framework-specific adapters (REST, persistence, external services)
+- **Application Layer**: Use cases that orchestrate domain logic via ports
+- **Infrastructure Layer**: Framework-specific adapters (REST controllers, persistence)
 
-### Feature-First Organization (Frontend)
+The frontend uses a **Feature-First Organization** for scalable development.
 
-The frontend is organized by features, making it easy to locate and maintain feature-specific code:
+See [Architecture Documentation](./docs/ARCHITECTURE.md) for details.
 
-- **features/**: Feature modules (auth, company, allocation, etc.)
-- **components/**: Reusable UI components
-- **hooks/**: Custom React hooks
-- **lib/**: Shared utilities and API client
+## Contributing
 
-## Development Workflow
+We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md) to get started.
 
-1. Create a feature branch: `git checkout -b feat/feature-name`
-2. Implement the feature
-3. Test locally
-4. Create a pull request
-5. Code review and merge
+- 🐛 [Report a Bug](./.github/ISSUE_TEMPLATE/bug_report.md)
+- ✨ [Request a Feature](./.github/ISSUE_TEMPLATE/feature_request.md)
+- 📖 [Read the Code of Conduct](./CODE_OF_CONDUCT.md)
 
-## Design System
+## Security
 
-TailwindCSS configuration includes design tokens for colors, typography, and spacing.
-All components should follow the design system guidelines.
+Please report security vulnerabilities by following our [Security Policy](./SECURITY.md).
 
-## Next Steps
+## License
 
-- Story 1.2: Database setup and user authentication
-- Story 1.3: Core API endpoints
-- Story 1.4: Frontend routing and layout
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
+## Acknowledgments
+
+- All open-source maintainers who inspire this project
+- The Quarkus and React communities
+- Contributors and early adopters
+
+---
+
+<p align="center">
+  <strong>Built with ❤️ to support open-source sustainability</strong>
+</p>
