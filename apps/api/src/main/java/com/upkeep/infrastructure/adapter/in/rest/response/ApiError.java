@@ -29,6 +29,10 @@ public record ApiError(
     public static ApiError validationFromApiFieldErrors(String message,
                                                         List<FieldError> details,
                                                         String traceId) {
-        return new ApiError("VALIDATION_ERROR", message, details, traceId);
+        List<com.upkeep.domain.exception.FieldError> domainFieldErrors = details.stream()
+            .map(d -> new com.upkeep.domain.exception.FieldError(d.field(), d.message()))
+            .toList();
+
+        return validation(message, domainFieldErrors, traceId);
     }
 }
