@@ -1,7 +1,7 @@
 package com.upkeep.domain.model.customer;
 
+import com.upkeep.domain.exception.FieldError;
 import com.upkeep.domain.exception.ValidationException;
-import com.upkeep.infrastructure.adapter.in.rest.response.ApiError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,19 +13,19 @@ public record Password(String value) {
     private static final Pattern NUMBER = Pattern.compile("[0-9]");
 
     public Password {
-        List<ApiError.FieldError> errors = new ArrayList<>();
+        List<FieldError> errors = new ArrayList<>();
 
         if (value == null || value.isBlank()) {
-            errors.add(new ApiError.FieldError("password", "Password is required"));
+            errors.add(new FieldError("password", "Password is required"));
         } else {
             if (value.length() < MIN_LENGTH) {
-                errors.add(new ApiError.FieldError("password", "Password must be at least 8 characters"));
+                errors.add(new FieldError("password", "Password must be at least 8 characters"));
             }
             if (!UPPERCASE.matcher(value).find()) {
-                errors.add(new ApiError.FieldError("password", "Password must contain at least one uppercase letter"));
+                errors.add(new FieldError("password", "Password must contain at least one uppercase letter"));
             }
             if (!NUMBER.matcher(value).find()) {
-                errors.add(new ApiError.FieldError("password", "Password must contain at least one number"));
+                errors.add(new FieldError("password", "Password must contain at least one number"));
             }
         }
 

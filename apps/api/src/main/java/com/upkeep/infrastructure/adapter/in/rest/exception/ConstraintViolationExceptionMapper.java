@@ -5,6 +5,7 @@ import com.upkeep.infrastructure.adapter.in.rest.response.ApiResponse;
 import jakarta.annotation.Priority;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
@@ -14,8 +15,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Maps Bean Validation constraint violations to structured API error responses.
+ * Priority is set to USER - 1 to ensure this specific mapper handles ConstraintViolationException
+ * before the GlobalExceptionMapper (which uses Priorities.USER) catches it as a generic Throwable.
+ */
 @Provider
-@Priority(1)
+@Priority(Priorities.USER - 1)
 public class ConstraintViolationExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
 
     private static final Logger LOG = Logger.getLogger(ConstraintViolationExceptionMapper.class);
@@ -30,7 +36,7 @@ public class ConstraintViolationExceptionMapper implements ExceptionMapper<Const
         return Response
             .status(400)
             .entity(ApiResponse.error(
-                ApiError.validation("Validation failed", fieldErrors, traceId)
+                ApiError.validationFromApiFieldErrors("Validation failed", fieldErrors, traceId)
             ))
             .build();
     }

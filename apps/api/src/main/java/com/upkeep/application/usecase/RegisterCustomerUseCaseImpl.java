@@ -4,20 +4,23 @@ import com.upkeep.application.port.out.CustomerRepository;
 import com.upkeep.application.port.out.EmailService;
 import com.upkeep.application.port.out.PasswordHasher;
 import com.upkeep.domain.exception.ConflictException;
+import com.upkeep.domain.exception.FieldError;
 import com.upkeep.domain.exception.ValidationException;
 import com.upkeep.domain.model.customer.Customer;
 import com.upkeep.domain.model.customer.Email;
 import com.upkeep.domain.model.customer.Password;
 import com.upkeep.domain.model.customer.PasswordHash;
-import com.upkeep.infrastructure.adapter.in.rest.response.ApiError;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import java.util.List;
+
 @ApplicationScoped
 public class RegisterCustomerUseCaseImpl implements RegisterCustomerUseCase {
+
     private final CustomerRepository customerRepository;
     private final PasswordHasher passwordHasher;
     private final EmailService emailService;
+
     public RegisterCustomerUseCaseImpl(CustomerRepository customerRepository,
                                        PasswordHasher passwordHasher,
                                        EmailService emailService) {
@@ -25,12 +28,13 @@ public class RegisterCustomerUseCaseImpl implements RegisterCustomerUseCase {
         this.passwordHasher = passwordHasher;
         this.emailService = emailService;
     }
+
     @Override
     @Transactional
     public RegisterResult execute(RegisterCommand command) {
         if (!command.password().equals(command.confirmPassword())) {
             throw new ValidationException("Passwords do not match", List.of(
-                new ApiError.FieldError("confirmPassword", "Passwords do not match")
+                new FieldError("confirmPassword", "Passwords do not match")
             ));
         }
         Email email = new Email(command.email());

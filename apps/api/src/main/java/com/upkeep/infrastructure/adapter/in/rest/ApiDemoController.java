@@ -2,19 +2,21 @@ package com.upkeep.infrastructure.adapter.in.rest;
 
 import com.upkeep.domain.exception.ConflictException;
 import com.upkeep.domain.exception.DomainRuleException;
+import com.upkeep.domain.exception.FieldError;
 import com.upkeep.domain.exception.ForbiddenException;
 import com.upkeep.domain.exception.NotFoundException;
 import com.upkeep.domain.exception.UnauthorizedException;
 import com.upkeep.domain.exception.ValidationException;
-import com.upkeep.infrastructure.adapter.in.rest.response.ApiError;
 import com.upkeep.infrastructure.adapter.in.rest.response.ApiResponse;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+
 import java.util.List;
 import java.util.Map;
+
 @Path("/api/demo")
 @Produces(MediaType.APPLICATION_JSON)
 public class ApiDemoController {
@@ -29,8 +31,8 @@ public class ApiDemoController {
         throw new ValidationException(
             "Invalid input provided",
             List.of(
-                new ApiError.FieldError("email", "Invalid email format"),
-                new ApiError.FieldError("age", "Must be at least 18")
+                new FieldError("email", "Invalid email format"),
+                new FieldError("age", "Must be at least 18")
             )
         );
     }

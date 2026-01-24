@@ -34,15 +34,41 @@ export async function apiRequest<T>(
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
 
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers,
+      },
+    });
+  } catch (error) {
+    throw new ApiError(
+      'NETWORK_ERROR',
+      'Unable to connect to the server. Please check your network connection.',
+      error instanceof Error ? error.message : undefined
+    );
+  }
 
-  const data: ApiResponse<T> = await response.json();
+  if (!response.ok && response.status >= 500) {
+    throw new ApiError(
+      'SERVER_ERROR',
+      'The server encountered an error. Please try again later.',
+      `HTTP ${response.status}: ${response.statusText}`
+    );
+  }
+
+  let data: ApiResponse<T>;
+  try {
+    data = await response.json();
+  } catch {
+    throw new ApiError(
+      'PARSE_ERROR',
+      'Received an invalid response from the server.',
+      `Expected JSON but received ${response.headers.get('content-type') || 'unknown'}`
+    );
+  }
 
   if (data.error) {
     throw new ApiError(
