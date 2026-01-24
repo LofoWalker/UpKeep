@@ -1,6 +1,9 @@
 package com.upkeep.infrastructure.adapter.out.persistence;
 
-import com.upkeep.domain.model.customer.*;
+import com.upkeep.domain.model.customer.Customer;
+import com.upkeep.domain.model.customer.CustomerId;
+import com.upkeep.domain.model.customer.Email;
+import com.upkeep.domain.model.customer.PasswordHash;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

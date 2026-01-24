@@ -1,5 +1,11 @@
 package com.upkeep.infrastructure.adapter.in.rest;
-import com.upkeep.domain.exception.*;
+
+import com.upkeep.domain.exception.ConflictException;
+import com.upkeep.domain.exception.DomainRuleException;
+import com.upkeep.domain.exception.ForbiddenException;
+import com.upkeep.domain.exception.NotFoundException;
+import com.upkeep.domain.exception.UnauthorizedException;
+import com.upkeep.domain.exception.ValidationException;
 import com.upkeep.infrastructure.adapter.in.rest.response.ApiError;
 import com.upkeep.infrastructure.adapter.in.rest.response.ApiResponse;
 import jakarta.ws.rs.GET;

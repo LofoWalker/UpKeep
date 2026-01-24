@@ -1,23 +1,29 @@
 # Copilot Processing
 
 ## User Request
-Configure CORS on the Quarkus API to fix CORS errors when frontend calls backend.
+1. Fix CI workflow: replace pnpm with npm for web job
+2. Add Maven wrapper (mvnw) for API job
 
 ## Action Plan
 
-### Phase 1: Configure CORS
-- [x] Add CORS configuration to application.properties
+### Phase 1: Fix Web CI (npm)
+- [x] Replace pnpm setup with npm in ci.yml
+
+### Phase 2: Add Maven Wrapper
+- [x] Generate mvnw files in apps/api
+- [x] Make mvnw executable
 
 ## Tracking
 - Status: Complete
 
 ## Summary
-CORS configuration added to `apps/api/src/main/resources/application.properties`:
+1. **CI Workflow**: Replaced pnpm configuration with npm:
+   - Uses `actions/setup-node@v4` with npm cache
+   - Runs `npm ci`, `npm run lint`, `npm test`, `npm run build`
 
-- **Origins**: `http://localhost:5173`, `http://localhost:3000` (Vite dev server)
-- **Methods**: GET, POST, PUT, PATCH, DELETE, OPTIONS
-- **Allowed Headers**: Content-Type, Authorization, Accept
-- **Exposed Headers**: Location
-- **Preflight Cache**: 24 hours
+2. **Maven Wrapper**: Generated in `apps/api/`:
+   - `mvnw` (Unix script)
+   - `mvnw.cmd` (Windows script)
+   - `.mvn/wrapper/maven-wrapper.properties`
 
-Restart the Quarkus API for changes to take effect.
+Commit these changes and push to trigger the CI.

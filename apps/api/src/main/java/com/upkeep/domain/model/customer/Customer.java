@@ -10,7 +10,12 @@ public class Customer {
     private final Instant createdAt;
     private Instant updatedAt;
 
-    private Customer(CustomerId id, Email email, PasswordHash passwordHash, AccountType accountType, Instant createdAt, Instant updatedAt) {
+    private Customer(CustomerId id,
+                     Email email,
+                     PasswordHash passwordHash,
+                     AccountType accountType,
+                     Instant createdAt,
+                     Instant updatedAt) {
         this.id = id;
         this.email = email;
         this.passwordHash = passwordHash;
@@ -31,7 +36,12 @@ public class Customer {
         );
     }
 
-    public static Customer reconstitute(CustomerId id, Email email, PasswordHash passwordHash, AccountType accountType, Instant createdAt, Instant updatedAt) {
+    public static Customer reconstitute(CustomerId id,
+                                         Email email,
+                                         PasswordHash passwordHash,
+                                         AccountType accountType,
+                                         Instant createdAt,
+                                         Instant updatedAt) {
         return new Customer(id, email, passwordHash, accountType, createdAt, updatedAt);
     }
 
