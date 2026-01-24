@@ -1,15 +1,14 @@
 package com.upkeep.application.usecase;
 
 import com.upkeep.application.port.in.RegisterCustomerUseCase;
+import com.upkeep.application.port.out.CustomerRepository;
 import com.upkeep.application.port.out.EmailService;
 import com.upkeep.application.port.out.PasswordHasher;
-import com.upkeep.application.port.out.CustomerRepository;
-import com.upkeep.domain.exception.ConflictException;
-import com.upkeep.domain.exception.ValidationException;
+import com.upkeep.domain.exception.CustomerAlreadyExistsException;
+import com.upkeep.domain.exception.DomainValidationException;
 import com.upkeep.domain.model.customer.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,13 +37,13 @@ class RegisterCustomerUseCaseImplTest {
 
         when(customerRepository.existsByEmail(any(Email.class))).thenReturn(false);
         when(passwordHasher.hash(any(Password.class)))
-            .thenReturn(new PasswordHash("$2a$12$hashedPassword"));
+                .thenReturn(new PasswordHash("$2a$12$hashedPassword"));
 
         RegisterCustomerUseCase.RegisterCommand command = new RegisterCustomerUseCase.RegisterCommand(
-            email,
-            password,
-            password,
-            accountType
+                email,
+                password,
+                password,
+                accountType
         );
 
         RegisterCustomerUseCase.RegisterResult result = useCase.execute(command);
@@ -61,13 +60,13 @@ class RegisterCustomerUseCaseImplTest {
     @Test
     void shouldThrowExceptionWhenPasswordsDoNotMatch() {
         RegisterCustomerUseCase.RegisterCommand command = new RegisterCustomerUseCase.RegisterCommand(
-            "test@example.com",
-            "Password123",
-            "DifferentPassword123",
-            AccountType.COMPANY
+                "test@example.com",
+                "Password123",
+                "DifferentPassword123",
+                AccountType.COMPANY
         );
 
-        assertThrows(ValidationException.class, () -> useCase.execute(command));
+        assertThrows(DomainValidationException.class, () -> useCase.execute(command));
         verify(customerRepository, never()).save(any(Customer.class));
     }
 
@@ -77,37 +76,37 @@ class RegisterCustomerUseCaseImplTest {
         when(customerRepository.existsByEmail(any(Email.class))).thenReturn(true);
 
         RegisterCustomerUseCase.RegisterCommand command = new RegisterCustomerUseCase.RegisterCommand(
-            email,
-            "Password123",
-            "Password123",
-            AccountType.COMPANY
+                email,
+                "Password123",
+                "Password123",
+                AccountType.COMPANY
         );
 
-        assertThrows(ConflictException.class, () -> useCase.execute(command));
+        assertThrows(CustomerAlreadyExistsException.class, () -> useCase.execute(command));
         verify(customerRepository, never()).save(any(Customer.class));
     }
 
     @Test
     void shouldThrowExceptionForInvalidEmail() {
         RegisterCustomerUseCase.RegisterCommand command = new RegisterCustomerUseCase.RegisterCommand(
-            "invalid-email",
-            "Password123",
-            "Password123",
-            AccountType.COMPANY
+                "invalid-email",
+                "Password123",
+                "Password123",
+                AccountType.COMPANY
         );
 
-        assertThrows(ValidationException.class, () -> useCase.execute(command));
+        assertThrows(DomainValidationException.class, () -> useCase.execute(command));
     }
 
     @Test
     void shouldThrowExceptionForWeakPassword() {
         RegisterCustomerUseCase.RegisterCommand command = new RegisterCustomerUseCase.RegisterCommand(
-            "test@example.com",
-            "weak",
-            "weak",
-            AccountType.COMPANY
+                "test@example.com",
+                "weak",
+                "weak",
+                AccountType.COMPANY
         );
 
-        assertThrows(ValidationException.class, () -> useCase.execute(command));
+        assertThrows(DomainValidationException.class, () -> useCase.execute(command));
     }
 }

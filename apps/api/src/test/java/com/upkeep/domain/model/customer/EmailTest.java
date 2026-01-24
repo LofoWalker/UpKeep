@@ -1,11 +1,11 @@
 package com.upkeep.domain.model.customer;
 
 import com.upkeep.domain.exception.ValidationException;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,12 +23,12 @@ class EmailTest {
     @ParameterizedTest
     @DisplayName("should accept various valid email formats")
     @ValueSource(strings = {
-        "user@example.com",
-        "user.name@example.com",
-        "user-name@example.com",
-        "user_name@example.com",
-        "user123@example.co.uk",
-        "user@sub.domain.com"
+            "user@example.com",
+            "user.name@example.com",
+            "user-name@example.com",
+            "user_name@example.com",
+            "user123@example.co.uk",
+            "user@sub.domain.com"
     })
     void shouldAcceptVariousValidFormats(String validEmail) {
         Email email = new Email(validEmail);
@@ -58,8 +58,8 @@ class EmailTest {
     @ValueSource(strings = {"   ", "\t", "\n"})
     void shouldRejectNullAndBlankEmails(String invalidEmail) {
         ValidationException exception = assertThrows(
-            ValidationException.class,
-            () -> new Email(invalidEmail)
+                ValidationException.class,
+                () -> new Email(invalidEmail)
         );
 
         assertEquals("Email is required", exception.getMessage());
@@ -70,18 +70,18 @@ class EmailTest {
     @ParameterizedTest
     @DisplayName("should reject invalid email formats")
     @ValueSource(strings = {
-        "invalid",
-        "invalid@",
-        "@example.com",
-        "user@.com",
-        "user@example",
-        "user example@test.com",
-        "user@@example.com"
+            "invalid",
+            "invalid@",
+            "@example.com",
+            "user@.com",
+            "user@example",
+            "user example@test.com",
+            "user@@example.com"
     })
     void shouldRejectInvalidFormats(String invalidEmail) {
         ValidationException exception = assertThrows(
-            ValidationException.class,
-            () -> new Email(invalidEmail)
+                ValidationException.class,
+                () -> new Email(invalidEmail)
         );
 
         assertEquals("Invalid email format", exception.getMessage());

@@ -1,7 +1,7 @@
 package com.upkeep.domain.model.customer;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
@@ -41,7 +41,7 @@ class CustomerIdTest {
     @Test
     @DisplayName("from() should throw exception for null value")
     void from_shouldThrowForNullValue() {
-        assertThrows(NullPointerException.class, () -> CustomerId.from(null));
+        assertThrows(NullPointerException.class, () -> CustomerId.from((String) null));
     }
 
     @Test

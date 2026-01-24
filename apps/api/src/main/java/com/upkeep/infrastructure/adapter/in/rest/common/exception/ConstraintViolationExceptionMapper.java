@@ -1,7 +1,7 @@
-package com.upkeep.infrastructure.adapter.in.rest.exception;
+package com.upkeep.infrastructure.adapter.in.rest.common.exception;
 
-import com.upkeep.infrastructure.adapter.in.rest.response.ApiError;
-import com.upkeep.infrastructure.adapter.in.rest.response.ApiResponse;
+import com.upkeep.infrastructure.adapter.in.rest.common.response.ApiError;
+import com.upkeep.infrastructure.adapter.in.rest.common.response.ApiResponse;
 import jakarta.annotation.Priority;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -34,20 +34,20 @@ public class ConstraintViolationExceptionMapper implements ExceptionMapper<Const
         List<ApiError.FieldError> fieldErrors = mapViolationsToFieldErrors(exception.getConstraintViolations());
 
         return Response
-            .status(400)
-            .entity(ApiResponse.error(
-                ApiError.validationFromApiFieldErrors("Validation failed", fieldErrors, traceId)
-            ))
-            .build();
+                .status(400)
+                .entity(ApiResponse.error(
+                        ApiError.validationFromApiFieldErrors("Validation failed", fieldErrors, traceId)
+                ))
+                .build();
     }
 
     private List<ApiError.FieldError> mapViolationsToFieldErrors(Set<ConstraintViolation<?>> violations) {
         return violations.stream()
-            .map(v -> {
-                String path = v.getPropertyPath().toString();
-                String field = path.contains(".") ? path.substring(path.lastIndexOf('.') + 1) : path;
-                return new ApiError.FieldError(field, v.getMessage());
-            })
-            .toList();
+                .map(v -> {
+                    String path = v.getPropertyPath().toString();
+                    String field = path.contains(".") ? path.substring(path.lastIndexOf('.') + 1) : path;
+                    return new ApiError.FieldError(field, v.getMessage());
+                })
+                .toList();
     }
 }

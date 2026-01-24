@@ -11,6 +11,10 @@ public record CustomerId(UUID value) {
         return new CustomerId(UUID.fromString(value));
     }
 
+    public static CustomerId from(UUID value) {
+        return new CustomerId(value);
+    }
+
     @Override
     public String toString() {
         return value.toString();

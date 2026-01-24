@@ -1,12 +1,13 @@
 package com.upkeep.domain.model.customer;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("PasswordHash Value Object")
 class PasswordHashTest {
@@ -27,8 +28,8 @@ class PasswordHashTest {
     @ValueSource(strings = {"   ", "\t", "\n"})
     void shouldRejectNullAndBlankValues(String invalidHash) {
         assertThrows(
-            IllegalArgumentException.class,
-            () -> new PasswordHash(invalidHash)
+                IllegalArgumentException.class,
+                () -> new PasswordHash(invalidHash)
         );
     }
 
@@ -36,8 +37,8 @@ class PasswordHashTest {
     @DisplayName("should throw IllegalArgumentException with descriptive message for null")
     void shouldThrowWithDescriptiveMessageForNull() {
         IllegalArgumentException exception = assertThrows(
-            IllegalArgumentException.class,
-            () -> new PasswordHash(null)
+                IllegalArgumentException.class,
+                () -> new PasswordHash(null)
         );
 
         assertEquals("Password hash cannot be null or empty", exception.getMessage());
@@ -47,8 +48,8 @@ class PasswordHashTest {
     @DisplayName("should throw IllegalArgumentException with descriptive message for empty")
     void shouldThrowWithDescriptiveMessageForEmpty() {
         IllegalArgumentException exception = assertThrows(
-            IllegalArgumentException.class,
-            () -> new PasswordHash("")
+                IllegalArgumentException.class,
+                () -> new PasswordHash("")
         );
 
         assertEquals("Password hash cannot be null or empty", exception.getMessage());

@@ -16,7 +16,7 @@ services:
       - upkeep_db_data:/var/lib/postgresql/data
 
     healthcheck:
-      test: ["CMD", "pg_isready", "-d", "upkeep_db", "-U", "upkeep"]
+      test: [ "CMD", "pg_isready", "-d", "upkeep_db", "-U", "upkeep" ]
       interval: 10s
       timeout: 3s
       retries: 5

@@ -6,15 +6,17 @@ public interface RegisterCustomerUseCase {
     RegisterResult execute(RegisterCommand command);
 
     record RegisterCommand(
-        String email,
-        String password,
-        String confirmPassword,
-        AccountType accountType
-    ) {}
+            String email,
+            String password,
+            String confirmPassword,
+            AccountType accountType
+    ) {
+    }
 
     record RegisterResult(
-        String customerId,
-        String email,
-        AccountType accountType
-    ) {}
+            String customerId,
+            String email,
+            AccountType accountType
+    ) {
+    }
 }

@@ -27,21 +27,21 @@ public class Customer {
     public static Customer create(Email email, PasswordHash passwordHash, AccountType accountType) {
         Instant now = Instant.now();
         return new Customer(
-            CustomerId.generate(),
-            email,
-            passwordHash,
-            accountType,
-            now,
-            now
+                CustomerId.generate(),
+                email,
+                passwordHash,
+                accountType,
+                now,
+                now
         );
     }
 
     public static Customer reconstitute(CustomerId id,
-                                         Email email,
-                                         PasswordHash passwordHash,
-                                         AccountType accountType,
-                                         Instant createdAt,
-                                         Instant updatedAt) {
+                                        Email email,
+                                        PasswordHash passwordHash,
+                                        AccountType accountType,
+                                        Instant createdAt,
+                                        Instant updatedAt) {
         return new Customer(id, email, passwordHash, accountType, createdAt, updatedAt);
     }
 
