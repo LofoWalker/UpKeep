@@ -1,6 +1,6 @@
 # Story 1.5: User Registration with Email
 
-Status: ready-for-dev
+Status: ✅ completed
 
 ## Story
 
@@ -31,35 +31,35 @@ so that I can access Upkeep.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create User domain model (AC: #1)
-  - [ ] 1.1: Create `User` entity in domain layer
-  - [ ] 1.2: Create `UserId` value object
-  - [ ] 1.3: Create `Email` value object with validation
-  - [ ] 1.4: Create `Password` value object with hashing
+- [x] Task 1: Create User domain model (AC: #1)
+  - [x] 1.1: Create `User` entity in domain layer
+  - [x] 1.2: Create `UserId` value object
+  - [x] 1.3: Create `Email` value object with validation
+  - [x] 1.4: Create `Password` value object with hashing
 
-- [ ] Task 2: Create registration use case (AC: #1, #2)
-  - [ ] 2.1: Create `RegisterUserUseCase` port interface
-  - [ ] 2.2: Implement `RegisterUserUseCaseImpl`
-  - [ ] 2.3: Create `UserRepository` port interface
-  - [ ] 2.4: Create `PasswordHasher` port interface
+- [x] Task 2: Create registration use case (AC: #1, #2)
+  - [x] 2.1: Create `RegisterUserUseCase` port interface
+  - [x] 2.2: Implement `RegisterUserUseCaseImpl`
+  - [x] 2.3: Create `UserRepository` port interface
+  - [x] 2.4: Create `PasswordHasher` port interface
 
-- [ ] Task 3: Create infrastructure adapters (AC: #1, #2)
-  - [ ] 3.1: Implement `UserJpaRepository` adapter
-  - [ ] 3.2: Implement `BcryptPasswordHasher` adapter
-  - [ ] 3.3: Create database migration for users table
-  - [ ] 3.4: Create `RegistrationResource` REST endpoint
+- [x] Task 3: Create infrastructure adapters (AC: #1, #2)
+  - [x] 3.1: Implement `UserJpaRepository` adapter
+  - [x] 3.2: Implement `BcryptPasswordHasher` adapter
+  - [x] 3.3: Create database migration for users table
+  - [x] 3.4: Create `RegistrationResource` REST endpoint
 
-- [ ] Task 4: Create frontend registration (AC: #1, #2, #3, #4)
-  - [ ] 4.1: Create registration page component
-  - [ ] 4.2: Create registration form with validation
-  - [ ] 4.3: Implement API client for registration
-  - [ ] 4.4: Add client-side password validation
-  - [ ] 4.5: Handle success/error states
+- [x] Task 4: Create frontend registration (AC: #1, #2, #3, #4)
+  - [x] 4.1: Create registration page component
+  - [x] 4.2: Create registration form with validation
+  - [x] 4.3: Implement API client for registration
+  - [x] 4.4: Add client-side password validation
+  - [x] 4.5: Handle success/error states
 
-- [ ] Task 5: Email notification (AC: #1)
-  - [ ] 5.1: Create `EmailService` port interface
-  - [ ] 5.2: Create welcome email template
-  - [ ] 5.3: Implement email adapter (can be mock for MVP)
+- [x] Task 5: Email notification (AC: #1)
+  - [x] 5.1: Create `EmailService` port interface
+  - [x] 5.2: Create welcome email template
+  - [x] 5.3: Implement email adapter (can be mock for MVP)
 
 ## Dev Notes
 

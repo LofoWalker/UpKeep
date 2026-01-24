@@ -321,6 +321,10 @@ src/
 **Backend layering (Quarkus):**
 - `resource` (HTTP boundary) → `service` (domain logic) → `repository` (persistence).
 - Domain objects are explicit; DTOs are separate.
+- **Entity mapping**: Use MapStruct for converting between domain objects and JPA entities.
+  - Mappers are defined as interfaces annotated with `@Mapper(componentModel = "cdi")`.
+  - MapStruct generates implementations at compile time and registers them as CDI beans.
+  - Complex mappings (e.g., value objects to primitives) use custom mapping methods in the interface.
 
 **Frontend organization (React):**
 - Feature-first (reduces cross-agent conflicts):

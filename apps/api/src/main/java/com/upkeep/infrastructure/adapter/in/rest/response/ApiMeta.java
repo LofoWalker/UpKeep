@@ -17,11 +17,4 @@ public record ApiMeta(
             null, null, null
         );
     }
-    public static ApiMeta paged(int page, int pageSize, long totalItems) {
-        return new ApiMeta(
-            Instant.now(),
-            UUID.randomUUID().toString(),
-            page, pageSize, totalItems
-        );
-    }
 }

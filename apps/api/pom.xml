@@ -18,9 +18,13 @@
     <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkus.platform.version>3.6.3</quarkus.platform.version>
+    <quarkus.platform.version>3.17.0</quarkus.platform.version>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <surefire-maven-plugin.version>3.1.2</surefire-maven-plugin.version>
+    <surefire-maven-plugin.version>3.5.2</surefire-maven-plugin.version>
+    <compiler-plugin.version>3.13.0</compiler-plugin.version>
+    <jbcrypt.version>0.4</jbcrypt.version>
+    <mockito.version>5.21.0</mockito.version>
+    <mapstruct.version>1.6.3</mapstruct.version>
   </properties>
 
   <dependencyManagement>
@@ -39,47 +43,74 @@
     <!-- REST & JSON -->
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
-      <version>3.6.3</version>
+      <artifactId>quarkus-rest-jackson</artifactId>
     </dependency>
 
     <!-- Validation -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-validator</artifactId>
-      <version>3.6.3</version>
     </dependency>
 
     <!-- Database -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-orm-panache</artifactId>
-      <version>3.6.3</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jdbc-postgresql</artifactId>
-      <version>3.6.3</version>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-flyway</artifactId>
+    </dependency>
+
+    <!-- Security -->
+    <dependency>
+      <groupId>org.mindrot</groupId>
+      <artifactId>jbcrypt</artifactId>
+      <version>${jbcrypt.version}</version>
+    </dependency>
+
+    <!-- Mapping -->
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>${mapstruct.version}</version>
     </dependency>
 
     <!-- Logging -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-logging-json</artifactId>
-      <version>3.6.3</version>
     </dependency>
 
     <!-- Testing -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
-      <version>3.6.3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5-mockito</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
-      <version>5.4.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-h2</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -112,11 +143,21 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.11.0</version>
+        <version>${compiler-plugin.version}</version>
         <configuration>
           <source>21</source>
           <target>21</target>
           <release>21</release>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>${mapstruct.version}</version>
+            </path>
+          </annotationProcessorPaths>
+          <compilerArgs>
+            <arg>-Amapstruct.defaultComponentModel=cdi</arg>
+          </compilerArgs>
         </configuration>
       </plugin>
     </plugins>
