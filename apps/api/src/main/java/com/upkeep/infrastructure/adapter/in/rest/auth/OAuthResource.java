@@ -45,6 +45,9 @@ public class OAuthResource {
     @ConfigProperty(name = "app.use-secure-cookies", defaultValue = "true")
     boolean useSecureCookies;
 
+    @ConfigProperty(name = "app.cookie-domain")
+    java.util.Optional<String> cookieDomain;
+
     public OAuthResource(@Named("github") OAuthProviderAdapter githubProvider,
                          OAuthStateService stateService,
                          OAuthLoginUseCase oauthLoginUseCase) {
@@ -121,24 +124,26 @@ public class OAuthResource {
     }
 
     private NewCookie createAccessTokenCookie(String token) {
-        return new NewCookie.Builder(ACCESS_TOKEN_COOKIE)
+        NewCookie.Builder builder = new NewCookie.Builder(ACCESS_TOKEN_COOKIE)
                 .value(token)
                 .path("/")
                 .httpOnly(true)
                 .secure(useSecureCookies)
                 .sameSite(NewCookie.SameSite.LAX)
-                .maxAge(accessTokenExpirySeconds)
-                .build();
+                .maxAge(accessTokenExpirySeconds);
+        cookieDomain.ifPresent(builder::domain);
+        return builder.build();
     }
 
     private NewCookie createRefreshTokenCookie(String token) {
-        return new NewCookie.Builder(REFRESH_TOKEN_COOKIE)
+        NewCookie.Builder builder = new NewCookie.Builder(REFRESH_TOKEN_COOKIE)
                 .value(token)
                 .path("/api/auth")
                 .httpOnly(true)
                 .secure(useSecureCookies)
                 .sameSite(NewCookie.SameSite.LAX)
-                .maxAge(refreshTokenExpirySeconds)
-                .build();
+                .maxAge(refreshTokenExpirySeconds);
+        cookieDomain.ifPresent(builder::domain);
+        return builder.build();
     }
 }

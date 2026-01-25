@@ -6,11 +6,13 @@ import com.upkeep.application.port.in.AuthenticateCustomerUseCase.AuthResult;
 import com.upkeep.application.port.in.RegisterCustomerUseCase;
 import com.upkeep.application.port.out.auth.TokenService;
 import com.upkeep.application.port.out.auth.TokenService.RefreshResult;
+import com.upkeep.application.port.out.auth.TokenService.TokenClaims;
 import com.upkeep.infrastructure.adapter.in.rest.common.response.ApiError;
 import com.upkeep.infrastructure.adapter.in.rest.common.response.ApiResponse;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.CookieParam;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -111,6 +113,28 @@ public class AuthResource {
                 .cookie(expireCookie(ACCESS_TOKEN_COOKIE))
                 .cookie(expireCookie(REFRESH_TOKEN_COOKIE))
                 .build();
+    }
+
+    @GET
+    @Path("/me")
+    public Response getCurrentUser(@CookieParam(ACCESS_TOKEN_COOKIE) String accessToken) {
+        if (accessToken == null || accessToken.isBlank()) {
+            return Response.status(401)
+                    .entity(ApiResponse.error(new ApiError(
+                            "UNAUTHORIZED", "Not authenticated", null, null)))
+                    .build();
+        }
+
+        try {
+            TokenClaims claims = tokenService.validateAccessToken(accessToken);
+            MeResponse response = new MeResponse(claims.userId(), claims.email(), claims.accountType());
+            return Response.ok(ApiResponse.success(response)).build();
+        } catch (Exception e) {
+            return Response.status(401)
+                    .entity(ApiResponse.error(new ApiError(
+                            "INVALID_TOKEN", "Invalid or expired token", null, null)))
+                    .build();
+        }
     }
 
     private NewCookie createAccessTokenCookie(String token) {

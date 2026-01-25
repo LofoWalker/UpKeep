@@ -7,10 +7,13 @@ import com.upkeep.application.port.out.customer.CustomerRepository;
 import com.upkeep.domain.exception.CustomerNotFoundException;
 import com.upkeep.domain.exception.InvalidRefreshTokenException;
 import com.upkeep.domain.model.customer.Customer;
+import io.smallrye.jwt.auth.principal.JWTParser;
+import io.smallrye.jwt.auth.principal.ParseException;
 import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -21,6 +24,7 @@ public class JwtTokenService implements TokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final CustomerRepository customerRepository;
+    private final JWTParser jwtParser;
 
     @ConfigProperty(name = "jwt.access-token-expiry-seconds", defaultValue = "900")
     int accessTokenExpirySeconds;
@@ -29,9 +33,11 @@ public class JwtTokenService implements TokenService {
     int refreshTokenExpirySeconds;
 
     public JwtTokenService(RefreshTokenRepository refreshTokenRepository,
-                           CustomerRepository customerRepository) {
+                           CustomerRepository customerRepository,
+                           JWTParser jwtParser) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.customerRepository = customerRepository;
+        this.jwtParser = jwtParser;
     }
 
     @Override
@@ -62,7 +68,16 @@ public class JwtTokenService implements TokenService {
 
     @Override
     public TokenClaims validateAccessToken(String token) {
-        throw new UnsupportedOperationException("Use Quarkus JWT security for token validation");
+        try {
+            JsonWebToken jwt = jwtParser.parse(token);
+            return new TokenClaims(
+                    jwt.getSubject(),
+                    jwt.getClaim("email"),
+                    jwt.getClaim("accountType")
+            );
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid or expired token", e);
+        }
     }
 
     @Override

@@ -65,3 +65,22 @@ export async function refreshToken(): Promise<void> {
         credentials: 'include',
     });
 }
+
+export interface MeResponse {
+    customerId: string;
+    email: string;
+    accountType: AccountType;
+}
+
+export async function getCurrentUser(): Promise<User> {
+    const response = await apiRequest<MeResponse>('/api/auth/me', {
+        method: 'GET',
+        credentials: 'include',
+    });
+    return {
+        id: response.customerId,
+        email: response.email,
+        accountType: response.accountType,
+    };
+}
+
