@@ -10,9 +10,6 @@ export class BasePage {
     await this.page.goto(path);
   }
 
-  async waitForPageLoad(): Promise<void> {
-    await this.page.waitForLoadState('networkidle');
-  }
 
   getByTestId(testId: string): Locator {
     return this.page.getByTestId(testId);
@@ -111,9 +108,7 @@ export class RegisterPage extends BasePage {
   async register(email: string, password: string, confirmPassword?: string): Promise<void> {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
-    if (this.confirmPasswordInput) {
-      await this.confirmPasswordInput.fill(confirmPassword ?? password);
-    }
+    await this.confirmPasswordInput.fill(confirmPassword ?? password);
     await this.submitButton.click();
   }
 }
