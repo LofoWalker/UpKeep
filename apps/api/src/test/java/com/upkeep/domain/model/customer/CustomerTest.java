@@ -21,7 +21,8 @@ class CustomerTest {
 
         assertNotNull(customer.getId());
         assertEquals(email, customer.getEmail());
-        assertEquals(passwordHash, customer.getPasswordHash());
+        assertTrue(customer.getPasswordHash().isPresent());
+        assertEquals(passwordHash, customer.getPasswordHash().get());
         assertEquals(accountType, customer.getAccountType());
         assertNotNull(customer.getCreatedAt());
         assertNotNull(customer.getUpdatedAt());
@@ -66,7 +67,8 @@ class CustomerTest {
 
         assertEquals(id, customer.getId());
         assertEquals(email, customer.getEmail());
-        assertEquals(passwordHash, customer.getPasswordHash());
+        assertTrue(customer.getPasswordHash().isPresent());
+        assertEquals(passwordHash, customer.getPasswordHash().get());
         assertEquals(accountType, customer.getAccountType());
         assertEquals(createdAt, customer.getCreatedAt());
         assertEquals(updatedAt, customer.getUpdatedAt());

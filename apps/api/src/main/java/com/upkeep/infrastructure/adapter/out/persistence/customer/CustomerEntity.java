@@ -1,4 +1,4 @@
-package com.upkeep.infrastructure.adapter.out.persistence;
+package com.upkeep.infrastructure.adapter.out.persistence.customer;
 
 import com.upkeep.domain.model.customer.AccountType;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
@@ -23,7 +23,7 @@ public class CustomerEntity extends PanacheEntityBase {
     @Column(name = "email", nullable = false, unique = true)
     public String email;
 
-    @Column(name = "password_hash", nullable = false)
+    @Column(name = "password_hash")
     public String passwordHash;
 
     @Enumerated(EnumType.STRING)

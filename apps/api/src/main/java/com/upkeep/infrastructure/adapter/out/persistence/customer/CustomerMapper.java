@@ -1,4 +1,4 @@
-package com.upkeep.infrastructure.adapter.out.persistence;
+package com.upkeep.infrastructure.adapter.out.persistence.customer;
 
 import com.upkeep.domain.model.customer.Customer;
 import com.upkeep.domain.model.customer.CustomerId;
@@ -6,6 +6,7 @@ import com.upkeep.domain.model.customer.Email;
 import com.upkeep.domain.model.customer.PasswordHash;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 import java.util.UUID;
 
@@ -14,17 +15,23 @@ public interface CustomerMapper {
 
     @Mapping(target = "id", source = "id.value")
     @Mapping(target = "email", source = "email.value")
-    @Mapping(target = "passwordHash", source = "passwordHash.value")
+    @Mapping(target = "passwordHash", source = "customer", qualifiedByName = "extractPasswordHash")
     CustomerEntity toEntity(Customer customer);
+
+    @Named("extractPasswordHash")
+    default String extractPasswordHash(Customer customer) {
+        return customer.getPasswordHash().map(PasswordHash::value).orElse(null);
+    }
 
     default Customer toDomain(CustomerEntity entity) {
         if (entity == null) {
             return null;
         }
+        PasswordHash hash = entity.passwordHash != null ? new PasswordHash(entity.passwordHash) : null;
         return Customer.reconstitute(
                 new CustomerId(entity.id),
                 new Email(entity.email),
-                new PasswordHash(entity.passwordHash),
+                hash,
                 entity.accountType,
                 entity.createdAt,
                 entity.updatedAt
@@ -36,10 +43,6 @@ public interface CustomerMapper {
     }
 
     default String mapEmail(Email value) {
-        return value != null ? value.value() : null;
-    }
-
-    default String mapPasswordHash(PasswordHash value) {
         return value != null ? value.value() : null;
     }
 }

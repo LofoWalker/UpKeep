@@ -1,6 +1,7 @@
 package com.upkeep.domain.model.customer;
 
 import java.time.Instant;
+import java.util.Optional;
 
 public class Customer {
     private final CustomerId id;
@@ -36,6 +37,18 @@ public class Customer {
         );
     }
 
+    public static Customer createFromOAuth(Email email, AccountType accountType) {
+        Instant now = Instant.now();
+        return new Customer(
+                CustomerId.generate(),
+                email,
+                null,
+                accountType,
+                now,
+                now
+        );
+    }
+
     public static Customer reconstitute(CustomerId id,
                                         Email email,
                                         PasswordHash passwordHash,
@@ -43,6 +56,10 @@ public class Customer {
                                         Instant createdAt,
                                         Instant updatedAt) {
         return new Customer(id, email, passwordHash, accountType, createdAt, updatedAt);
+    }
+
+    public boolean hasPassword() {
+        return passwordHash != null;
     }
 
     public void updateTimestamp() {
@@ -57,8 +74,8 @@ public class Customer {
         return email;
     }
 
-    public PasswordHash getPasswordHash() {
-        return passwordHash;
+    public Optional<PasswordHash> getPasswordHash() {
+        return Optional.ofNullable(passwordHash);
     }
 
     public AccountType getAccountType() {

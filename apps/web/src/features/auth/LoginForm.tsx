@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom';
 import {Input} from '../../components/ui/Input';
 import {Button} from '../../components/ui/Button';
 import {Alert} from '../../components/ui/Alert';
 import {ApiError} from '@/lib/api.ts';
 import {useAuth} from "@/features/auth/useAuth.ts";
+import {OAuthButtons} from './OAuthButtons';
 
 const loginSchema = z.object({
     email: z.string().email('Invalid email address'),
@@ -22,8 +23,17 @@ export const LoginForm: React.FC = () => {
     const {login} = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+    const [searchParams] = useSearchParams();
 
     const from = (location.state as { from?: Location })?.from?.pathname || '/dashboard';
+
+    useEffect(() => {
+        const oauthError = searchParams.get('error');
+        const oauthMessage = searchParams.get('message');
+        if (oauthError) {
+            setError(oauthMessage || 'OAuth authentication failed. Please try again.');
+        }
+    }, [searchParams]);
 
     const {register, handleSubmit, formState: {errors}} = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
@@ -57,6 +67,17 @@ export const LoginForm: React.FC = () => {
                         <Alert type="error" message={error}/>
                     </div>
                 )}
+
+                <OAuthButtons className="mb-6"/>
+
+                <div className="relative mb-6">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-300"/>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                        <span className="bg-white px-2 text-gray-500">or continue with email</span>
+                    </div>
+                </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <Input

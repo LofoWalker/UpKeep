@@ -1,84 +1,78 @@
-# Copilot Processing
+# Copilot Processing Log
 
 ## User Request
-Improve the fragile cookie security logic in AuthResource.java by replacing the `corsOrigins.contains("localhost")` check with a more robust approach using Quarkus profiles or a dedicated configuration property.
+Add comprehensive integration tests for the new OAuth login flow (GitHub callback handling, account linking, and automatic customer creation).
 
 ## Action Plan
 
-### Phase 1: Add dedicated configuration property for secure cookies
-- [x] Add a new config property `app.use-secure-cookies` with profile-based defaults
-- [x] Update `isSecureCookie()` method to use the new property
-- [x] Validate changes compile correctly
+### Phase 1: Research and Context Gathering
+- [x] Examined existing auth tests (AuthResourceTest) for patterns and setup
+- [x] Reviewed OAuthResource implementation to identify all branches
+- [x] Checked related components: OAuthProviderAdapter, OAuthStateService, OAuthLoginUseCase
+- [x] Identified test infrastructure and mocking patterns used
 
-### Phase 2: Update application configuration
-- [x] Add property to application.properties with sensible default
-- [x] Verify dev profile behavior
+### Phase 2: Test Implementation
+- [x] Created OAuthResourceTest with test setup and mocks
+- [x] Added test for GitHub OAuth initiation (default and maintainer account types)
+- [x] Added tests for callback with various branches:
+  - [x] New user (redirects to /onboarding)
+  - [x] Existing user (redirects to /dashboard)
+  - [x] Maintainer account type
+- [x] Added error case tests:
+  - [x] Invalid state parameter
+  - [x] Missing authorization code
+  - [x] Empty authorization code
+  - [x] Provider error response (with description)
+  - [x] Provider error response (without description)
+  - [x] OAuth code exchange failure
+  - [x] Get user info failure
+  - [x] Unexpected server error
 
-## Summary
-
-### Changes Made
-
-**AuthResource.java:**
-- Replaced `@ConfigProperty(name = "quarkus.http.cors.origins")` with `@ConfigProperty(name = "app.use-secure-cookies", defaultValue = "true")`
-- Simplified `isSecureCookie()` method to directly return the boolean config property
-
-**application.properties:**
-- Added `%dev.app.use-secure-cookies=false` (development profile)
-- Added `%test.app.use-secure-cookies=false` (test profile)  
-- Added `app.use-secure-cookies=true` (production default)
-
-### Benefits
-- Uses Quarkus profile system for environment-aware configuration
-- No fragile string matching on CORS origins
-- Explicit control over cookie security per environment
-- Secure by default in production
-
----
-
-# Copilot Processing
-
-## User Request
-Configurer les tests qui nécessitent une authentification JWT pour fonctionner sans avoir besoin de fichiers `privateKey.pem` et `publicKey.pem` dans le répertoire principal, en utilisant des clés générées pour les tests.
-
-## Action Plan
-
-### Phase 1: Générer les clés RSA pour les tests
-- [x] Créer `privateKey.pem` dans `src/test/resources/`
-- [x] Créer `publicKey.pem` dans `src/test/resources/`
-
-### Phase 2: Vérifier que les tests passent
-- [x] Exécuter tous les tests
-- [x] Valider que les 107 tests passent avec succès
+### Phase 3: Verification
+- [x] All 13 OAuth tests pass
+- [x] All 120 tests in the project pass (no regressions)
 
 ## Summary
 
-### Solution Implémentée
+Created comprehensive integration tests for the OAuth flow in `OAuthResourceTest.java`:
 
-**Approche choisie:** Création de fichiers de clés RSA statiques dans le répertoire de test `src/test/resources/`.
+**Tests Created (13 total):**
+1. `initiateGitHubOAuth_shouldRedirectToAuthorizationUrl` - Tests OAuth initiation redirect
+2. `initiateGitHubOAuth_withMaintainerAccountType_shouldPassAccountTypeToStateService` - Tests maintainer account type
+3. `callback_withValidCode_forNewUser_shouldSetCookiesAndRedirectToOnboarding` - New user flow
+4. `callback_withValidCode_forExistingUser_shouldSetCookiesAndRedirectToDashboard` - Existing user flow
+5. `callback_withInvalidState_shouldRedirectWithError` - Invalid state error
+6. `callback_withMissingCode_shouldRedirectWithError` - Missing code error
+7. `callback_withEmptyCode_shouldRedirectWithError` - Empty code error
+8. `callback_withProviderError_shouldRedirectWithOAuthDeniedError` - Provider error with description
+9. `callback_withProviderErrorWithoutDescription_shouldUseDefaultMessage` - Provider error default message
+10. `callback_whenCodeExchangeFails_shouldRedirectWithOAuthError` - Code exchange failure
+11. `callback_whenGetUserInfoFails_shouldRedirectWithOAuthError` - User info failure
+12. `callback_whenUnexpectedErrorOccurs_shouldRedirectWithServerError` - Unexpected error handling
+13. `callback_withMaintainerAccountType_shouldCreateMaintainerAccount` - Maintainer creation
 
-**Fichiers créés:**
-- `apps/api/src/test/resources/privateKey.pem` - Clé privée RSA 2048 bits pour la signature JWT
-- `apps/api/src/test/resources/publicKey.pem` - Clé publique correspondante pour la vérification JWT
+**File Created:**
+- `apps/api/src/test/java/com/upkeep/infrastructure/adapter/in/rest/auth/OAuthResourceTest.java`
 
-### Pourquoi cette approche ?
+**Key Test Patterns Used:**
+- `@QuarkusTest` for integration testing
+- `@InjectMock` with `@Named("github")` for mocking the GitHub provider adapter
+- RestAssured for HTTP endpoint testing
+- Redirect following disabled to test 307 responses and cookies
+- `application.properties` - Added `%dev.app.cookie-domain=localhost`
 
-1. **Simplicité**: Les fichiers sont automatiquement découverts par Quarkus lors des tests grâce aux propriétés `smallrye.jwt.sign.key.location=privateKey.pem` et `mp.jwt.verify.publickey.location=publicKey.pem` déjà définies dans `application.properties`.
+**To test:** Restart the backend server and try the GitHub OAuth flow again.
 
-2. **Pas de dépendances supplémentaires**: Pas besoin de QuarkusTestResource ou de beans CDI alternatifs.
+### Issue 4: INVALID_TOKEN error on /api/auth/me
+**Root cause**: The `validateAccessToken()` method in `JwtTokenService` was throwing `UnsupportedOperationException` - it was never implemented!
 
-3. **Configuration de test séparée**: Les clés de test sont dans `src/test/resources/` et ne polluent pas les ressources principales.
+**Solution**: 
+- Injected `JWTParser` from SmallRye JWT
+- Implemented `validateAccessToken()` to parse the JWT and extract claims (subject, email, accountType)
+- The method now properly validates and decodes the access token from the cookie
 
-4. **Clés non sensibles**: Ces clés sont uniquement utilisées pour les tests et n'ont aucune valeur de sécurité - elles peuvent être versionnées dans Git.
+**Files modified:**
+- `JwtTokenService.java` - Added JWTParser injection and implemented token validation
 
-### Alternatives considérées mais non retenues
+**To test:** Restart the backend server and try the GitHub OAuth flow again.
 
-- **QuarkusTestResource avec clés inline**: Problèmes avec la priorité de configuration et la validation des propriétés à chaîne vide.
-- **Alternative CDI bean**: Complexité supplémentaire et problèmes d'activation du bean pendant le build-time de Quarkus.
-- **Fichiers temporaires**: SmallRye JWT a des problèmes avec les chemins dynamiques pendant le build.
-
-### Résultat
-
-✅ **107 tests passent avec succès**
-- 11 tests AuthResourceTest (avec authentification JWT)
-- 1 test HealthResourceTest
-- 96 tests unitaires (domain, use case, etc.)

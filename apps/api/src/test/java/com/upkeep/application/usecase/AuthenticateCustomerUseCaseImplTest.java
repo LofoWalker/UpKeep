@@ -1,9 +1,9 @@
 package com.upkeep.application.usecase;
 
 import com.upkeep.application.port.in.AuthenticateCustomerUseCase;
-import com.upkeep.application.port.out.CustomerRepository;
-import com.upkeep.application.port.out.PasswordHasher;
-import com.upkeep.application.port.out.TokenService;
+import com.upkeep.application.port.out.auth.PasswordHasher;
+import com.upkeep.application.port.out.auth.TokenService;
+import com.upkeep.application.port.out.customer.CustomerRepository;
 import com.upkeep.domain.exception.InvalidCredentialsException;
 import com.upkeep.domain.model.customer.*;
 import org.junit.jupiter.api.BeforeEach;

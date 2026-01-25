@@ -1,6 +1,6 @@
-package com.upkeep.infrastructure.adapter.out.persistence;
+package com.upkeep.infrastructure.adapter.out.persistence.auth;
 
-import com.upkeep.application.port.out.RefreshTokenRepository;
+import com.upkeep.application.port.out.auth.RefreshTokenRepository;
 import com.upkeep.domain.model.customer.CustomerId;
 import jakarta.enterprise.context.ApplicationScoped;
 
