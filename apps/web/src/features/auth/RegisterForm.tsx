@@ -7,6 +7,7 @@ import {Button} from '../../components/ui/Button';
 import {Alert} from '../../components/ui/Alert';
 import {AccountType, registerCustomer} from './api';
 import {ApiError} from '../../lib/api';
+import {OAuthButtons} from './OAuthButtons';
 
 const registerSchema = z.object({
     email: z.string().email('Invalid email address'),
@@ -28,12 +29,14 @@ export const RegisterForm: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
-    const {register, handleSubmit, formState: {errors}, setError: setFieldError} = useForm<RegisterFormData>({
+    const {register, handleSubmit, formState: {errors}, setError: setFieldError, watch} = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
             accountType: AccountType.COMPANY,
         },
     });
+
+    const watchedAccountType = watch('accountType');
 
     const onSubmit = async (data: RegisterFormData) => {
         setIsLoading(true);
@@ -81,6 +84,17 @@ export const RegisterForm: React.FC = () => {
                         <Alert type="success" message="Account created successfully!" details="Welcome to Upkeep!"/>
                     </div>
                 )}
+
+                <OAuthButtons accountType={watchedAccountType} className="mb-6"/>
+
+                <div className="relative mb-6">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-300"/>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                        <span className="bg-white px-2 text-gray-500">or register with email</span>
+                    </div>
+                </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <Input

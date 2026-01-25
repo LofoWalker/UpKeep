@@ -1,6 +1,6 @@
 package com.upkeep.infrastructure.adapter.out.persistence;
 
-import com.upkeep.domain.model.customer.AccountType;
+import com.upkeep.domain.model.oauth.OAuthProvider;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,26 +13,26 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "customers")
-public class CustomerEntity extends PanacheEntityBase {
+@Table(name = "user_oauth_providers")
+public class UserOAuthProviderEntity extends PanacheEntityBase {
 
     @Id
     @Column(name = "id", nullable = false)
     public UUID id;
 
-    @Column(name = "email", nullable = false, unique = true)
-    public String email;
-
-    @Column(name = "password_hash")
-    public String passwordHash;
+    @Column(name = "user_id", nullable = false)
+    public UUID userId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "account_type", nullable = false, length = 20)
-    public AccountType accountType;
+    @Column(name = "provider", nullable = false, length = 50)
+    public OAuthProvider provider;
+
+    @Column(name = "provider_user_id", nullable = false)
+    public String providerUserId;
+
+    @Column(name = "provider_email")
+    public String providerEmail;
 
     @Column(name = "created_at", nullable = false)
     public Instant createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    public Instant updatedAt;
 }

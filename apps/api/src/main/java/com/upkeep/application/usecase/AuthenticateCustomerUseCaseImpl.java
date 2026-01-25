@@ -8,6 +8,7 @@ import com.upkeep.domain.exception.InvalidCredentialsException;
 import com.upkeep.domain.model.customer.Customer;
 import com.upkeep.domain.model.customer.Email;
 import com.upkeep.domain.model.customer.Password;
+import com.upkeep.domain.model.customer.PasswordHash;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
@@ -35,7 +36,10 @@ public class AuthenticateCustomerUseCaseImpl implements AuthenticateCustomerUseC
         Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(InvalidCredentialsException::new);
 
-        if (!passwordHasher.verify(password, customer.getPasswordHash())) {
+        PasswordHash storedHash = customer.getPasswordHash()
+                .orElseThrow(InvalidCredentialsException::new);
+
+        if (!passwordHasher.verify(password, storedHash)) {
             throw new InvalidCredentialsException();
         }
 
