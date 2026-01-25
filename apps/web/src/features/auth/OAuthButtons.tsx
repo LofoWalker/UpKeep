@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from '@/components/ui/Button';
+import {Button} from '@/components/ui/button';
 import {GitHubIcon} from '@/components/icons/GitHubIcon';
 import {AccountType} from './api';
 import {API_BASE_URL} from '@/lib/api';
