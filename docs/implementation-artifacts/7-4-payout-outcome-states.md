@@ -41,6 +41,16 @@ export function PayoutStatusBadge({ status, reason }: Props) {
 }
 ```
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Test: Payout status badges display correct colors and labels
+- [ ] Test: COMPLETED, FAILED, HELD states render correctly
+- [ ] Test: Failure reason shown for failed payouts
+
+**Test file location:** `apps/web/e2e/payout-status.spec.ts`
+
 ### References
 - [Source: epics.md#Story-7.4]
 - FR29: Payout outcome states

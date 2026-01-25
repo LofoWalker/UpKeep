@@ -1,6 +1,6 @@
 # Story 1.7: OAuth Authentication (GitHub)
 
-Status: done
+Status: ready-for-dev
 
 ## Story
 
@@ -26,32 +26,32 @@ so that I can quickly access Upkeep without creating a password.
 
 ## Tasks / Subtasks
 
-- [x] Task 1: Setup GitHub OAuth application
-  - [x] 1.1: Document GitHub OAuth app creation
-  - [x] 1.2: Add OAuth config to environment variables
-  - [x] 1.3: Create OAuth configuration class
+- [ ] Task 1: Setup GitHub OAuth application
+  - [ ] 1.1: Document GitHub OAuth app creation
+  - [ ] 1.2: Add OAuth config to environment variables
+  - [ ] 1.3: Create OAuth configuration class
 
-- [x] Task 2: Create OAuth use case (AC: #1, #2, #3)
-  - [x] 2.1: Create `OAuthLoginUseCase` port interface
-  - [x] 2.2: Implement OAuth flow logic
-  - [x] 2.3: Handle account linking
-  - [x] 2.4: Handle new account creation
+- [ ] Task 2: Create OAuth use case (AC: #1, #2, #3)
+  - [ ] 2.1: Create `OAuthLoginUseCase` port interface
+  - [ ] 2.2: Implement OAuth flow logic
+  - [ ] 2.3: Handle account linking
+  - [ ] 2.4: Handle new account creation
 
-- [x] Task 3: Create OAuth infrastructure (AC: #1, #2)
-  - [x] 3.1: Create `GitHubOAuthAdapter`
-  - [x] 3.2: Implement token exchange
-  - [x] 3.3: Implement user info retrieval
-  - [x] 3.4: Update User entity for OAuth providers
+- [ ] Task 3: Create OAuth infrastructure (AC: #1, #2)
+  - [ ] 3.1: Create `GitHubOAuthAdapter`
+  - [ ] 3.2: Implement token exchange
+  - [ ] 3.3: Implement user info retrieval
+  - [ ] 3.4: Update User entity for OAuth providers
 
-- [x] Task 4: Create REST endpoints (AC: #1, #2)
-  - [x] 4.1: Create `/api/auth/oauth/github` redirect endpoint
-  - [x] 4.2: Create `/api/auth/oauth/github/callback` endpoint
-  - [x] 4.3: Handle state parameter for CSRF protection
+- [ ] Task 4: Create REST endpoints (AC: #1, #2)
+  - [ ] 4.1: Create `/api/auth/oauth/github` redirect endpoint
+  - [ ] 4.2: Create `/api/auth/oauth/github/callback` endpoint
+  - [ ] 4.3: Handle state parameter for CSRF protection
 
-- [x] Task 5: Frontend OAuth flow (AC: #1, #2)
-  - [x] 5.1: Add "Continue with GitHub" button
-  - [x] 5.2: Create OAuth callback page
-  - [x] 5.3: Handle OAuth errors
+- [ ] Task 5: Frontend OAuth flow (AC: #1, #2)
+  - [ ] 5.1: Add "Continue with GitHub" button
+  - [ ] 5.2: Create OAuth callback page
+  - [ ] 5.3: Handle OAuth errors
 
 ## Dev Notes
 
@@ -83,8 +83,8 @@ CREATE TABLE user_oauth_providers (
     UNIQUE(provider, provider_user_id)
 );
 
--- Only index on user_id; UNIQUE constraint already indexes (provider, provider_user_id)
 CREATE INDEX idx_user_oauth_providers__user_id ON user_oauth_providers(user_id);
+CREATE INDEX idx_user_oauth_providers__provider ON user_oauth_providers(provider, provider_user_id);
 ```
 
 ### OAuth Adapter
@@ -340,75 +340,17 @@ OAUTH_GITHUB_REDIRECT_URI=http://localhost:8080/api/auth/oauth/github/callback
 
 ### Agent Model Used
 
-Claude (GitHub Copilot)
+_To be filled by dev agent_
 
 ### Completion Notes List
 
-- Implemented full OAuth flow for GitHub authentication
-- Extended Customer domain model to support OAuth users (no password)
-- Created hexagonal architecture compliant structure
-- Frontend OAuth buttons added to login and register forms
-- State parameter implemented for CSRF protection
-- Account linking supported when email matches
+_To be filled during implementation_
 
 ### Change Log
 
-**Backend:**
-- `V3__create_user_oauth_providers_table.sql` - OAuth provider links table
-- `V4__make_password_hash_nullable.sql` - Allow OAuth users without password
-- `domain/model/oauth/` - OAuthProvider, UserOAuthProvider, OAuthUserInfo
-- `domain/model/customer/Customer.java` - Added createFromOAuth(), Optional<PasswordHash>
-- `application/port/in/OAuthLoginUseCase.java` - Use case interface
-- `application/port/out/OAuthProviderAdapter.java` - OAuth provider port
-- `application/port/out/UserOAuthProviderRepository.java` - Repository port
-- `application/port/out/OAuthStateService.java` - State management port
-- `application/usecase/OAuthLoginUseCaseImpl.java` - Use case implementation
-- `infrastructure/adapter/out/persistence/UserOAuthProvider*` - Persistence layer
-- `infrastructure/adapter/out/oauth/GitHubOAuthAdapter.java` - GitHub API integration
-- `infrastructure/adapter/out/oauth/InMemoryOAuthStateService.java` - State management
-- `infrastructure/adapter/in/rest/auth/OAuthResource.java` - REST endpoints
-
-**Frontend:**
-- `components/icons/GitHubIcon.tsx` - GitHub SVG icon
-- `features/auth/OAuthButtons.tsx` - OAuth button component
-- `features/auth/LoginForm.tsx` - Added OAuth buttons and error handling
-- `features/auth/RegisterForm.tsx` - Added OAuth buttons
+_To be filled during implementation_
 
 ### File List
 
-**Backend (apps/api/src/main/java/com/upkeep/):**
-- domain/model/oauth/OAuthProvider.java
-- domain/model/oauth/UserOAuthProvider.java
-- domain/model/oauth/OAuthUserInfo.java
-- application/port/in/OAuthLoginUseCase.java
-- application/port/out/OAuthProviderAdapter.java
-- application/port/out/UserOAuthProviderRepository.java
-- application/port/out/OAuthStateService.java
-- application/usecase/OAuthLoginUseCaseImpl.java
-- infrastructure/adapter/out/persistence/UserOAuthProviderEntity.java
-- infrastructure/adapter/out/persistence/UserOAuthProviderJpaRepository.java
-- infrastructure/adapter/out/persistence/UserOAuthProviderMapper.java
-- infrastructure/adapter/out/persistence/UserOAuthProviderRepositoryImpl.java
-- infrastructure/adapter/out/oauth/GitHubOAuthAdapter.java
-- infrastructure/adapter/out/oauth/InMemoryOAuthStateService.java
-- infrastructure/adapter/in/rest/auth/OAuthResource.java
-
-**Backend Resources:**
-- db/migration/V3__create_user_oauth_providers_table.sql
-- db/migration/V4__make_password_hash_nullable.sql
-
-**Frontend (apps/web/src/):**
-- components/icons/GitHubIcon.tsx
-- components/icons/index.ts
-- features/auth/OAuthButtons.tsx
-
-**Modified Files:**
-- domain/model/customer/Customer.java
-- application/usecase/AuthenticateCustomerUseCaseImpl.java
-- infrastructure/adapter/out/persistence/CustomerEntity.java
-- infrastructure/adapter/out/persistence/CustomerMapper.java
-- resources/application.properties
-- features/auth/LoginForm.tsx
-- features/auth/RegisterForm.tsx
-- features/auth/index.ts
+_To be filled after implementation_
 

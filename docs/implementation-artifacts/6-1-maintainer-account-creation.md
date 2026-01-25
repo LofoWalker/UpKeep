@@ -37,6 +37,16 @@ public void addMaintainerRole() {
 }
 ```
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Test: User can register as maintainer account type
+- [ ] Test: Existing company user can add maintainer role
+- [ ] Test: Account type selector works correctly on registration
+
+**Test file location:** `apps/web/e2e/maintainer-registration.spec.ts`
+
 ### References
 - [Source: epics.md#Story-6.1]
 - FR21: Maintainer account creation

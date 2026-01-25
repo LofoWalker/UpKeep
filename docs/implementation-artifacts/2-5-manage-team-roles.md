@@ -212,6 +212,17 @@ export function MembersList({ members, isOwner }: MembersListProps) {
 - Story 2.1: Membership entity
 - Story 2.3: Team settings page
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Test: Owner can change member's role
+- [ ] Test: Owner cannot demote themselves if they are the last owner
+- [ ] Test: Owner can remove a member from the team
+- [ ] Test: Member cannot change roles (feature hidden or error)
+
+**Test file location:** `apps/web/e2e/team-roles.spec.ts`
+
 ### References
 
 - [Source: architecture.md#Authentication-Security] - RBAC

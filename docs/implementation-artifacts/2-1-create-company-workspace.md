@@ -324,6 +324,18 @@ export function CreateCompanyForm() {
 - Story 1.6: Authentication (JWT)
 - Story 1.9: OnboardingLayout
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Create Page Object Model for company creation page (`e2e/pages/company.ts`)
+- [ ] Test: User can create a company workspace with valid data
+- [ ] Test: Slug auto-generation from company name
+- [ ] Test: Error displayed when slug is already taken
+- [ ] Test: Redirect to dashboard after successful creation
+
+**Test file location:** `apps/web/e2e/company-creation.spec.ts`
+
 ### References
 
 - [Source: architecture.md#Data-Architecture] - Entity design

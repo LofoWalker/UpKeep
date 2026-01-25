@@ -38,6 +38,17 @@ public record ClaimInfo(
 ) {}
 ```
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Create Page Object Model for maintainer dashboard (`e2e/pages/maintainer-dashboard.ts`)
+- [ ] Test: Dashboard shows list of claimed packages
+- [ ] Test: Each package shows expected payout and status
+- [ ] Test: Total earnings displayed correctly
+
+**Test file location:** `apps/web/e2e/maintainer-dashboard.spec.ts`
+
 ### References
 - [Source: epics.md#Story-6.5]
 - FR25: View claimed packages

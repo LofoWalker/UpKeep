@@ -45,15 +45,15 @@ development_status:
   #       core infrastructure.
   # FRs: FR1 (partial - account creation)
   # ═══════════════════════════════════════════════════════════════════════════
-  epic-1: in-progress
-  1-1-monorepo-hexagonal-architecture-setup: ready-for-dev
-  1-4-api-envelope-error-handling-pattern: ready-for-dev
-  1-5-user-registration-with-email: ready-for-dev
-  1-6-user-login-with-email-password: ready-for-dev
-  1-7-oauth-authentication-github: ready-for-dev
-  1-8-design-system-base-components: ready-for-dev
-  1-9-base-layouts-implementation: ready-for-dev
-  epic-1-retrospective: optional
+  epic-1: done
+  1-1-monorepo-hexagonal-architecture-setup: done
+  1-4-api-envelope-error-handling-pattern: done
+  1-5-user-registration-with-email: done
+  1-6-user-login-with-email-password: done
+  1-7-oauth-authentication-github: done
+  1-8-design-system-base-components: done
+  1-9-base-layouts-implementation: done
+  epic-1-retrospective: ready-for-dev
 
   # ═══════════════════════════════════════════════════════════════════════════
   # EPIC 2: Company Workspace & Team Management

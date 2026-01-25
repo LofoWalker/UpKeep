@@ -64,6 +64,17 @@ export function PublicSponsorshipPage() {
 }
 ```
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Create Page Object Model for public sponsorship page (`e2e/pages/public-sponsorship.ts`)
+- [ ] Test: Public page displays company name and aggregate stats
+- [ ] Test: Sponsored packages list shows correctly
+- [ ] Test: Unauthenticated users can view public page
+
+**Test file location:** `apps/web/e2e/public-sponsorship.spec.ts`
+
 ### References
 - [Source: epics.md#Story-5.2]
 - FR18, FR19: View public page with aggregates

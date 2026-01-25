@@ -329,6 +329,18 @@ export function BudgetSetupForm() {
 - Story 2.1: Company entity
 - Story 2.7: Tenant isolation
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Create Page Object Model for budget settings (`e2e/pages/budget.ts`)
+- [ ] Test: User can set initial monthly budget
+- [ ] Test: Budget validation (minimum $1, positive numbers only)
+- [ ] Test: Success confirmation displayed after setting budget
+- [ ] Test: Budget amount persists after page reload
+
+**Test file location:** `apps/web/e2e/budget.spec.ts`
+
 ### References
 
 - [Source: architecture.md#Data-Architecture] - Money in cents

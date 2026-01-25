@@ -46,6 +46,17 @@ Transfer transfer = Transfer.create(
 );
 ```
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Test: Admin can trigger payout run (if applicable)
+- [ ] Test: Payout run progress/status displayed
+
+**Test file location:** `apps/web/e2e/payout-execution.spec.ts`
+
+**Note:** This is primarily backend/admin functionality. Mock Stripe for E2E.
+
 ### References
 - [Source: architecture.md#Communication-State-Machine-Patterns] - Payout states
 - [Source: epics.md#Story-7.3]
