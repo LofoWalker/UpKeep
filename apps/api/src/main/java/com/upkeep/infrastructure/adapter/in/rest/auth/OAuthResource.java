@@ -1,8 +1,8 @@
 package com.upkeep.infrastructure.adapter.in.rest.auth;
 
 import com.upkeep.application.port.in.OAuthLoginUseCase;
-import com.upkeep.application.port.out.OAuthProviderAdapter;
-import com.upkeep.application.port.out.OAuthStateService;
+import com.upkeep.application.port.out.oauth.OAuthProviderAdapter;
+import com.upkeep.application.port.out.oauth.OAuthStateService;
 import com.upkeep.domain.model.customer.AccountType;
 import com.upkeep.domain.model.oauth.OAuthProvider;
 import com.upkeep.domain.model.oauth.OAuthUserInfo;

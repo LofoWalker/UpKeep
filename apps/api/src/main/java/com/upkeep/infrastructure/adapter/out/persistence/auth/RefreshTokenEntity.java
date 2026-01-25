@@ -1,4 +1,4 @@
-package com.upkeep.infrastructure.adapter.out.persistence;
+package com.upkeep.infrastructure.adapter.out.persistence.auth;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;

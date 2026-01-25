@@ -1,4 +1,4 @@
-package com.upkeep.infrastructure.adapter.out.persistence;
+package com.upkeep.infrastructure.adapter.out.persistence.customer;
 
 import com.upkeep.domain.model.customer.Customer;
 import com.upkeep.domain.model.customer.CustomerId;
@@ -8,7 +8,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Mapper(componentModel = "cdi")

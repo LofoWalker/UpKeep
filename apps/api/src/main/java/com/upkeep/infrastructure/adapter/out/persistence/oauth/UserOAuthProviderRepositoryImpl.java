@@ -1,6 +1,6 @@
-package com.upkeep.infrastructure.adapter.out.persistence;
+package com.upkeep.infrastructure.adapter.out.persistence.oauth;
 
-import com.upkeep.application.port.out.UserOAuthProviderRepository;
+import com.upkeep.application.port.out.oauth.UserOAuthProviderRepository;
 import com.upkeep.domain.model.customer.CustomerId;
 import com.upkeep.domain.model.oauth.OAuthProvider;
 import com.upkeep.domain.model.oauth.UserOAuthProvider;

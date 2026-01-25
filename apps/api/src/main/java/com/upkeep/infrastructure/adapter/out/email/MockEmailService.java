@@ -1,6 +1,6 @@
 package com.upkeep.infrastructure.adapter.out.email;
 
-import com.upkeep.application.port.out.EmailService;
+import com.upkeep.application.port.out.notification.EmailService;
 import com.upkeep.domain.model.customer.Email;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.jboss.logging.Logger;

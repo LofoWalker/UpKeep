@@ -1,6 +1,6 @@
 package com.upkeep.infrastructure.adapter.out.security;
 
-import com.upkeep.application.port.out.PasswordHasher;
+import com.upkeep.application.port.out.auth.PasswordHasher;
 import com.upkeep.domain.model.customer.Password;
 import com.upkeep.domain.model.customer.PasswordHash;
 import jakarta.enterprise.context.ApplicationScoped;

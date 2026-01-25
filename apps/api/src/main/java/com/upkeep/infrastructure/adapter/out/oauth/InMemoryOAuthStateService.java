@@ -1,6 +1,6 @@
 package com.upkeep.infrastructure.adapter.out.oauth;
 
-import com.upkeep.application.port.out.OAuthStateService;
+import com.upkeep.application.port.out.oauth.OAuthStateService;
 import com.upkeep.domain.model.customer.AccountType;
 import jakarta.enterprise.context.ApplicationScoped;
 

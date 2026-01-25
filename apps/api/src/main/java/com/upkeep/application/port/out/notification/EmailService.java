@@ -1,4 +1,4 @@
-package com.upkeep.application.port.out;
+package com.upkeep.application.port.out.notification;
 
 import com.upkeep.domain.model.customer.Email;
 

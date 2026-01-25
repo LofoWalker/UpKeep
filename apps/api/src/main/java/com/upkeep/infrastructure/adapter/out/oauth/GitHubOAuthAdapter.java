@@ -2,7 +2,7 @@ package com.upkeep.infrastructure.adapter.out.oauth;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.upkeep.application.port.out.OAuthProviderAdapter;
+import com.upkeep.application.port.out.oauth.OAuthProviderAdapter;
 import com.upkeep.domain.model.oauth.OAuthProvider;
 import com.upkeep.domain.model.oauth.OAuthUserInfo;
 import jakarta.enterprise.context.ApplicationScoped;

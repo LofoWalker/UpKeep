@@ -1,6 +1,6 @@
-package com.upkeep.infrastructure.adapter.out.persistence;
+package com.upkeep.infrastructure.adapter.out.persistence.customer;
 
-import com.upkeep.application.port.out.CustomerRepository;
+import com.upkeep.application.port.out.customer.CustomerRepository;
 import com.upkeep.domain.model.customer.Customer;
 import com.upkeep.domain.model.customer.CustomerId;
 import com.upkeep.domain.model.customer.Email;

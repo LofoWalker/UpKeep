@@ -1,4 +1,4 @@
-package com.upkeep.application.port.out;
+package com.upkeep.application.port.out.oauth;
 
 import com.upkeep.domain.model.customer.AccountType;
 

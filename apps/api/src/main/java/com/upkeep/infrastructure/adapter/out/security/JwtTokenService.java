@@ -1,9 +1,9 @@
 package com.upkeep.infrastructure.adapter.out.security;
 
-import com.upkeep.application.port.out.CustomerRepository;
-import com.upkeep.application.port.out.RefreshTokenRepository;
-import com.upkeep.application.port.out.RefreshTokenRepository.RefreshTokenData;
-import com.upkeep.application.port.out.TokenService;
+import com.upkeep.application.port.out.auth.RefreshTokenRepository;
+import com.upkeep.application.port.out.auth.RefreshTokenRepository.RefreshTokenData;
+import com.upkeep.application.port.out.auth.TokenService;
+import com.upkeep.application.port.out.customer.CustomerRepository;
 import com.upkeep.domain.exception.CustomerNotFoundException;
 import com.upkeep.domain.exception.InvalidRefreshTokenException;
 import com.upkeep.domain.model.customer.Customer;

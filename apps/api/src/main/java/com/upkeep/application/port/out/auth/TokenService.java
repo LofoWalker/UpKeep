@@ -1,4 +1,4 @@
-package com.upkeep.application.port.out;
+package com.upkeep.application.port.out.auth;
 
 import com.upkeep.domain.model.customer.Customer;
 

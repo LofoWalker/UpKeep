@@ -1,4 +1,4 @@
-package com.upkeep.application.port.out;
+package com.upkeep.application.port.out.customer;
 
 import com.upkeep.domain.model.customer.Customer;
 import com.upkeep.domain.model.customer.CustomerId;

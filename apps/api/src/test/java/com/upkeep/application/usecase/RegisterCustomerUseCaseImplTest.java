@@ -1,9 +1,9 @@
 package com.upkeep.application.usecase;
 
 import com.upkeep.application.port.in.RegisterCustomerUseCase;
-import com.upkeep.application.port.out.CustomerRepository;
-import com.upkeep.application.port.out.EmailService;
-import com.upkeep.application.port.out.PasswordHasher;
+import com.upkeep.application.port.out.auth.PasswordHasher;
+import com.upkeep.application.port.out.customer.CustomerRepository;
+import com.upkeep.application.port.out.notification.EmailService;
 import com.upkeep.domain.exception.CustomerAlreadyExistsException;
 import com.upkeep.domain.exception.DomainValidationException;
 import com.upkeep.domain.model.customer.*;

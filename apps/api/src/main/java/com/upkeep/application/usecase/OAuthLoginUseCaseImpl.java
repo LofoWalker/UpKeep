@@ -1,12 +1,11 @@
 package com.upkeep.application.usecase;
 
 import com.upkeep.application.port.in.OAuthLoginUseCase;
-import com.upkeep.application.port.out.CustomerRepository;
-import com.upkeep.application.port.out.TokenService;
-import com.upkeep.application.port.out.UserOAuthProviderRepository;
+import com.upkeep.application.port.out.auth.TokenService;
+import com.upkeep.application.port.out.customer.CustomerRepository;
+import com.upkeep.application.port.out.oauth.UserOAuthProviderRepository;
 import com.upkeep.domain.model.customer.Customer;
 import com.upkeep.domain.model.customer.Email;
-import com.upkeep.domain.model.oauth.OAuthProvider;
 import com.upkeep.domain.model.oauth.UserOAuthProvider;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
