@@ -1,16 +1,6 @@
-import React, {createContext, useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {loginCustomer, logoutCustomer, refreshToken, User} from './api';
-
-interface AuthContextType {
-    user: User | null;
-    isAuthenticated: boolean;
-    isLoading: boolean;
-    login: (email: string, password: string) => Promise<void>;
-    logout: () => Promise<void>;
-    setUser: (user: User | null) => void;
-}
-
-const AuthContext = createContext<AuthContextType | null>(null);
+import {AuthContext} from './authContextDef';
 
 const USER_STORAGE_KEY = 'upkeep_user';
 
@@ -91,10 +81,3 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
     );
 }
 
-export function useAuth() {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within AuthProvider');
-    }
-    return context;
-}
