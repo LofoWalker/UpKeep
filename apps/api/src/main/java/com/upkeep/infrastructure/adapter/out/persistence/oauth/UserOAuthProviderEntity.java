@@ -2,7 +2,12 @@ package com.upkeep.infrastructure.adapter.out.persistence.oauth;
 
 import com.upkeep.domain.model.oauth.OAuthProvider;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.time.Instant;
 import java.util.UUID;
