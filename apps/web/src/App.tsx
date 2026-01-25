@@ -6,6 +6,7 @@ import {DashboardPage} from './pages/DashboardPage'
 import {OnboardingPage} from './pages/OnboardingPage'
 import {AuthProvider} from './features/auth/AuthContext'
 import {ProtectedRoute} from './features/auth/ProtectedRoute'
+import {Toaster} from './components/ui'
 
 function HomePage() {
     return (
@@ -76,6 +77,7 @@ function App() {
                         }
                     />
                 </Routes>
+                <Toaster />
             </AuthProvider>
         </BrowserRouter>
     )
