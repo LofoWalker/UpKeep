@@ -1,15 +1,16 @@
 package com.upkeep.domain.exception;
 
 /**
- * Base domain exception. All domain-specific exceptions extend this.
+ * Base exception for all domain-specific business rule violations.
+ * Domain exceptions are pure business concepts without HTTP semantics.
  */
-public class DomainException extends RuntimeException {
-    public DomainException(String message) {
+public abstract class DomainException extends RuntimeException {
+
+    protected DomainException(String message) {
         super(message);
     }
 
-    public DomainException(String message, Throwable cause) {
+    protected DomainException(String message, Throwable cause) {
         super(message, cause);
     }
 }
-

@@ -1,7 +1,7 @@
 package com.upkeep.domain.model.customer;
 
+import com.upkeep.domain.exception.DomainValidationException;
 import com.upkeep.domain.exception.FieldError;
-import com.upkeep.domain.exception.ValidationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public record Password(String value) {
         }
 
         if (!errors.isEmpty()) {
-            throw new ValidationException("Invalid password", errors);
+            throw new DomainValidationException("Invalid password", errors);
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.upkeep.domain.model.customer;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
@@ -106,17 +106,17 @@ class CustomerTest {
 
     private Customer createDefaultCustomer() {
         return Customer.create(
-            new Email("test@example.com"),
-            new PasswordHash("$2a$10$hashedpassword"),
-            AccountType.COMPANY
+                new Email("test@example.com"),
+                new PasswordHash("$2a$10$hashedpassword"),
+                AccountType.COMPANY
         );
     }
 
     private Customer createCustomerWithAccountType(AccountType accountType) {
         return Customer.create(
-            new Email("test@example.com"),
-            new PasswordHash("$2a$10$hashedpassword"),
-            accountType
+                new Email("test@example.com"),
+                new PasswordHash("$2a$10$hashedpassword"),
+                accountType
         );
     }
 }

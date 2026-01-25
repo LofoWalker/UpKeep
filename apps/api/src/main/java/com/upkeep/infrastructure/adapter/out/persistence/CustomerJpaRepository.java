@@ -1,9 +1,9 @@
 package com.upkeep.infrastructure.adapter.out.persistence;
 
 import com.upkeep.application.port.out.CustomerRepository;
-import com.upkeep.domain.model.customer.Email;
 import com.upkeep.domain.model.customer.Customer;
 import com.upkeep.domain.model.customer.CustomerId;
+import com.upkeep.domain.model.customer.Email;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -28,14 +28,14 @@ public class CustomerJpaRepository implements CustomerRepository {
     @Override
     public Optional<Customer> findById(CustomerId id) {
         return CustomerEntity.<CustomerEntity>findByIdOptional(id.value())
-            .map(customerMapper::toDomain);
+                .map(customerMapper::toDomain);
     }
 
     @Override
     public Optional<Customer> findByEmail(Email email) {
         return CustomerEntity.<CustomerEntity>find("email", email.value())
-            .firstResultOptional()
-            .map(customerMapper::toDomain);
+                .firstResultOptional()
+                .map(customerMapper::toDomain);
     }
 
     @Override

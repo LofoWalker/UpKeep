@@ -1,17 +1,19 @@
 package com.upkeep.application.usecase;
+
 import com.upkeep.application.port.in.RegisterCustomerUseCase;
 import com.upkeep.application.port.out.CustomerRepository;
 import com.upkeep.application.port.out.EmailService;
 import com.upkeep.application.port.out.PasswordHasher;
-import com.upkeep.domain.exception.ConflictException;
+import com.upkeep.domain.exception.CustomerAlreadyExistsException;
+import com.upkeep.domain.exception.DomainValidationException;
 import com.upkeep.domain.exception.FieldError;
-import com.upkeep.domain.exception.ValidationException;
 import com.upkeep.domain.model.customer.Customer;
 import com.upkeep.domain.model.customer.Email;
 import com.upkeep.domain.model.customer.Password;
 import com.upkeep.domain.model.customer.PasswordHash;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+
 import java.util.List;
 
 @ApplicationScoped
@@ -33,13 +35,13 @@ public class RegisterCustomerUseCaseImpl implements RegisterCustomerUseCase {
     @Transactional
     public RegisterResult execute(RegisterCommand command) {
         if (!command.password().equals(command.confirmPassword())) {
-            throw new ValidationException("Passwords do not match", List.of(
-                new FieldError("confirmPassword", "Passwords do not match")
+            throw new DomainValidationException("Passwords do not match", List.of(
+                    new FieldError("confirmPassword", "Passwords do not match")
             ));
         }
         Email email = new Email(command.email());
         if (customerRepository.existsByEmail(email)) {
-            throw new ConflictException("An account with this email already exists");
+            throw new CustomerAlreadyExistsException(email.value());
         }
         Password password = new Password(command.password());
         PasswordHash hash = passwordHasher.hash(password);
@@ -47,9 +49,9 @@ public class RegisterCustomerUseCaseImpl implements RegisterCustomerUseCase {
         customerRepository.save(customer);
         emailService.sendWelcomeEmail(email);
         return new RegisterResult(
-            customer.getId().value().toString(),
-            email.value(),
-            customer.getAccountType()
+                customer.getId().value().toString(),
+                email.value(),
+                customer.getAccountType()
         );
     }
 }

@@ -305,11 +305,15 @@ src/
   - Hooks: `useCamelCase` (e.g., `useAllocation.ts`).
   - Utilities: `camelCase` (e.g., `formatCurrency.ts`).
   - Types/interfaces: `PascalCase` (e.g., `Package`, `AllocationDraft`).
-- Quarkus:
-  - Packages: `com.upkeep.<boundedcontext>...`.
-  - Resources: `XxxResource`.
-  - Services: `XxxService`.
-  - Repositories: `XxxRepository`.
+- Quarkus (Hexagonal Architecture):
+  - Packages: `com.upkeep.{layer}.{sublayer}` (e.g., `com.upkeep.application.port.in`).
+  - Use cases (ports in): `XxxUseCase` interface, `XxxUseCaseImpl` implementation.
+  - Repositories (ports out): `XxxRepository` interface.
+  - REST resources: `XxxResource` (in `adapter/in/rest/<domain>/`).
+  - REST DTOs: `XxxRequest`, `XxxResponse` (co-located with resource).
+  - JPA entities: `XxxEntity` (in `adapter/out/persistence/`).
+  - Mappers: `XxxMapper` (MapStruct interfaces).
+  - Domain models: `Xxx` (pure domain classes in `domain/model/<aggregate>/`).
 
 ### Structure Patterns
 
@@ -318,13 +322,113 @@ src/
 - `apps/api/` (Quarkus)
 - `libs/` (shared contracts if needed later)
 
-**Backend layering (Quarkus):**
-- `resource` (HTTP boundary) → `service` (domain logic) → `repository` (persistence).
-- Domain objects are explicit; DTOs are separate.
-- **Entity mapping**: Use MapStruct for converting between domain objects and JPA entities.
-  - Mappers are defined as interfaces annotated with `@Mapper(componentModel = "cdi")`.
-  - MapStruct generates implementations at compile time and registers them as CDI beans.
-  - Complex mappings (e.g., value objects to primitives) use custom mapping methods in the interface.
+**Backend architecture (Hexagonal / Ports & Adapters):**
+
+```
+com.upkeep/
+├── application/
+│   ├── port/
+│   │   ├── in/                    # Use case interfaces (driving ports)
+│   │   │   └── XxxUseCase.java
+│   │   └── out/                   # Repository/service interfaces (driven ports)
+│   │       └── XxxRepository.java
+│   └── usecase/                   # Use case implementations
+│       └── XxxUseCaseImpl.java
+├── domain/
+│   ├── model/                     # Domain entities & value objects
+│   │   └── <aggregate>/
+│   │       ├── Entity.java
+│   │       └── ValueObject.java
+│   └── exception/                 # Domain exceptions (business-oriented)
+│       ├── DomainException.java   # Abstract base class
+│       ├── DomainValidationException.java
+│       ├── InvalidCredentialsException.java
+│       ├── CustomerNotFoundException.java
+│       ├── CustomerAlreadyExistsException.java
+│       └── FieldError.java
+└── infrastructure/
+    └── adapter/
+        ├── in/                    # Driving adapters (HTTP, CLI, etc.)
+        │   └── rest/
+        │       ├── <domain>/      # Per-domain REST resources & DTOs
+        │       │   ├── XxxResource.java
+        │       │   ├── XxxRequest.java
+        │       │   └── XxxResponse.java
+        │       └── common/        # Shared REST components
+        │           ├── exception/
+        │           │   └── GlobalExceptionMapper.java  # Maps domain exceptions to HTTP
+        │           └── response/
+        │               ├── ApiResponse.java
+        │               ├── ApiError.java
+        │               └── ApiMeta.java
+        └── out/                   # Driven adapters (DB, email, external APIs)
+            ├── persistence/       # JPA entities & repositories
+            │   ├── XxxEntity.java
+            │   ├── XxxJpaRepository.java
+            │   └── XxxMapper.java
+            ├── email/             # Email service implementations
+            │   └── XxxEmailService.java
+            └── security/          # Security adapters (password hashing, JWT)
+                └── XxxService.java
+```
+
+**Layer responsibilities:**
+- **Domain**: Pure business logic, no framework dependencies. Exceptions are business-oriented.
+- **Application**: Orchestrates use cases, defines port interfaces.
+- **Infrastructure**: Implements adapters for external systems (DB, HTTP, email). Maps domain exceptions to HTTP responses.
+
+**Domain exceptions pattern (DDD-compliant):**
+
+Domain exceptions must follow Domain-Driven Design principles:
+
+1. **Business-oriented naming**: Exceptions describe business rule violations, not technical/HTTP concepts.
+   - ✅ `InvalidCredentialsException`, `CustomerNotFoundException`, `AllocationGuardrailViolationException`
+   - ❌ `UnauthorizedException`, `NotFoundException`, `BadRequestException`
+
+2. **Domain language (Ubiquitous Language)**: Exception names use domain terminology understood by business stakeholders.
+   - ✅ `PackageClaimAlreadyExistsException` (domain concept)
+   - ❌ `ConflictException` (technical HTTP concept)
+
+3. **Single responsibility**: Each exception represents one specific business rule violation.
+   - ✅ `BudgetExceededException`, `MinimumPackagesNotMetException`
+   - ❌ `ValidationException` (too generic)
+
+4. **Context-rich**: Exceptions carry domain context needed for error handling.
+   - Include relevant identifiers (e.g., `customerId`, `packageName`)
+   - Provide a human-readable message in domain terms
+
+5. **Framework-agnostic**: Domain exceptions have no dependencies on HTTP, JAX-RS, or any framework.
+   - All domain exceptions extend `DomainException` (abstract base class)
+   - HTTP mapping happens in infrastructure layer (`GlobalExceptionMapper`)
+
+**Exception hierarchy:**
+```
+DomainException (abstract)
+├── DomainValidationException      # Field-level validation errors
+├── InvalidCredentialsException    # Authentication failure
+├── InvalidRefreshTokenException   # Token expired/revoked/not found
+├── CustomerNotFoundException      # Customer lookup failed
+├── CustomerAlreadyExistsException # Duplicate email
+├── PackageClaimAlreadyExistsException
+├── AllocationGuardrailViolationException
+└── ... (one exception per distinct business rule violation)
+```
+
+**Infrastructure mapping (`GlobalExceptionMapper`):**
+| Domain Exception | HTTP Status | Error Code |
+|------------------|-------------|------------|
+| `DomainValidationException` | 400 | `VALIDATION_ERROR` |
+| `InvalidCredentialsException` | 401 | `INVALID_CREDENTIALS` |
+| `InvalidRefreshTokenException` | 401 | `INVALID_TOKEN` |
+| `CustomerNotFoundException` | 404 | `CUSTOMER_NOT_FOUND` |
+| `CustomerAlreadyExistsException` | 409 | `CUSTOMER_ALREADY_EXISTS` |
+| `AllocationGuardrailViolationException` | 422 | `GUARDRAIL_VIOLATION` |
+| Other `DomainException` | 422 | `DOMAIN_ERROR` |
+
+**Entity mapping**: Use MapStruct for converting between domain objects and JPA entities.
+- Mappers are defined as interfaces annotated with `@Mapper(componentModel = "cdi")`.
+- MapStruct generates implementations at compile time and registers them as CDI beans.
+- Complex mappings (e.g., value objects to primitives) use custom mapping methods in the interface.
 
 **Frontend organization (React):**
 - Feature-first (reduces cross-agent conflicts):

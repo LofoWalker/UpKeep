@@ -22,12 +22,12 @@ public interface CustomerMapper {
             return null;
         }
         return Customer.reconstitute(
-            new CustomerId(entity.id),
-            new Email(entity.email),
-            new PasswordHash(entity.passwordHash),
-            entity.accountType,
-            entity.createdAt,
-            entity.updatedAt
+                new CustomerId(entity.id),
+                new Email(entity.email),
+                new PasswordHash(entity.passwordHash),
+                entity.accountType,
+                entity.createdAt,
+                entity.updatedAt
         );
     }
 

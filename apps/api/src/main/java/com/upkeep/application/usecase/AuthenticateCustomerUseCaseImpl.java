@@ -1,0 +1,55 @@
+package com.upkeep.application.usecase;
+
+import com.upkeep.application.port.in.AuthenticateCustomerUseCase;
+import com.upkeep.application.port.out.CustomerRepository;
+import com.upkeep.application.port.out.PasswordHasher;
+import com.upkeep.application.port.out.TokenService;
+import com.upkeep.domain.exception.InvalidCredentialsException;
+import com.upkeep.domain.model.customer.Customer;
+import com.upkeep.domain.model.customer.Email;
+import com.upkeep.domain.model.customer.Password;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+
+@ApplicationScoped
+public class AuthenticateCustomerUseCaseImpl implements AuthenticateCustomerUseCase {
+
+    private final CustomerRepository customerRepository;
+    private final PasswordHasher passwordHasher;
+    private final TokenService tokenService;
+
+    public AuthenticateCustomerUseCaseImpl(CustomerRepository customerRepository,
+                                           PasswordHasher passwordHasher,
+                                           TokenService tokenService) {
+        this.customerRepository = customerRepository;
+        this.passwordHasher = passwordHasher;
+        this.tokenService = tokenService;
+    }
+
+    @Override
+    @Transactional
+    public AuthResult execute(AuthCommand command) {
+        Email email = new Email(command.email());
+        Password password = new Password(command.password());
+
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(InvalidCredentialsException::new);
+
+        if (!passwordHasher.verify(password, customer.getPasswordHash())) {
+            throw new InvalidCredentialsException();
+        }
+
+        String accessToken = tokenService.generateAccessToken(customer);
+        String refreshToken = tokenService.generateRefreshToken(customer);
+
+        return new AuthResult(
+                accessToken,
+                refreshToken,
+                new UserInfo(
+                        customer.getId().value().toString(),
+                        customer.getEmail().value(),
+                        customer.getAccountType()
+                )
+        );
+    }
+}
