@@ -1,6 +1,6 @@
 package com.upkeep.domain.model.customer;
 
-import com.upkeep.domain.exception.ValidationException;
+import com.upkeep.domain.exception.DomainValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -57,8 +57,8 @@ class EmailTest {
     @NullAndEmptySource
     @ValueSource(strings = {"   ", "\t", "\n"})
     void shouldRejectNullAndBlankEmails(String invalidEmail) {
-        ValidationException exception = assertThrows(
-                ValidationException.class,
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
                 () -> new Email(invalidEmail)
         );
 
@@ -79,8 +79,8 @@ class EmailTest {
             "user@@example.com"
     })
     void shouldRejectInvalidFormats(String invalidEmail) {
-        ValidationException exception = assertThrows(
-                ValidationException.class,
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
                 () -> new Email(invalidEmail)
         );
 

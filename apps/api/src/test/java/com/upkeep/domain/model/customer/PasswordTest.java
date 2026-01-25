@@ -1,6 +1,6 @@
 package com.upkeep.domain.model.customer;
 
-import com.upkeep.domain.exception.ValidationException;
+import com.upkeep.domain.exception.DomainValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -41,8 +41,8 @@ class PasswordTest {
     @NullAndEmptySource
     @ValueSource(strings = {"   ", "\t"})
     void shouldRejectNullAndBlankPasswords(String invalidPassword) {
-        ValidationException exception = assertThrows(
-                ValidationException.class,
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
                 () -> new Password(invalidPassword)
         );
 
@@ -58,8 +58,8 @@ class PasswordTest {
             "Short1"
     })
     void shouldRejectShortPasswords(String shortPassword) {
-        ValidationException exception = assertThrows(
-                ValidationException.class,
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
                 () -> new Password(shortPassword)
         );
 
@@ -75,8 +75,8 @@ class PasswordTest {
             "12345678a"
     })
     void shouldRejectPasswordsWithoutUppercase(String noUppercase) {
-        ValidationException exception = assertThrows(
-                ValidationException.class,
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
                 () -> new Password(noUppercase)
         );
 
@@ -92,8 +92,8 @@ class PasswordTest {
             "ALLUPPERCASENONUM"
     })
     void shouldRejectPasswordsWithoutNumber(String noNumber) {
-        ValidationException exception = assertThrows(
-                ValidationException.class,
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
                 () -> new Password(noNumber)
         );
 
@@ -104,8 +104,8 @@ class PasswordTest {
     @Test
     @DisplayName("should collect all validation errors when multiple rules fail")
     void shouldCollectAllValidationErrors() {
-        ValidationException exception = assertThrows(
-                ValidationException.class,
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
                 () -> new Password("short")
         );
 

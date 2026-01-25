@@ -1,69 +1,84 @@
 # Copilot Processing
 
 ## User Request
-
-Implement Story 1.6: User Login with Email/Password
+Improve the fragile cookie security logic in AuthResource.java by replacing the `corsOrigins.contains("localhost")` check with a more robust approach using Quarkus profiles or a dedicated configuration property.
 
 ## Action Plan
 
-### Phase 1: Backend - Authentication Use Case & Token Service
-- [x] 1.1: Create `AuthenticateUserUseCase` port interface
-- [x] 1.2: Create `TokenService` port interface  
-- [x] 1.3: Create authentication DTOs (AuthCommand, AuthResult, TokenClaims)
-- [x] 1.4: Implement `AuthenticateCustomerUseCaseImpl`
-- [x] 1.5: Implement `JwtTokenService` adapter
-- [x] 1.6: Create RefreshToken entity and repository
+### Phase 1: Add dedicated configuration property for secure cookies
+- [x] Add a new config property `app.use-secure-cookies` with profile-based defaults
+- [x] Update `isSecureCookie()` method to use the new property
+- [x] Validate changes compile correctly
 
-### Phase 2: Backend - Database Migration
-- [x] 2.1: Create Flyway migration for refresh_tokens table
-
-### Phase 3: Backend - REST Endpoints
-- [x] 3.1: Create login/logout/refresh DTOs
-- [x] 3.2: Update `AuthResource` REST controller with login, refresh, logout
-- [x] 3.3: Configure JWT in application.properties
-
-### Phase 4: Frontend - Auth Context & Components
-- [x] 4.1: Create AuthContext and AuthProvider
-- [x] 4.2: Create ProtectedRoute component
-- [x] 4.3: Create Login page component
-- [x] 4.4: Create Login form component
-- [x] 4.5: Configure routing for login
-
-### Phase 5: Testing
-- [x] 5.1: Write unit tests for AuthenticateCustomerUseCase
-- [x] 5.2: Write integration tests for AuthResource (login/refresh/logout)
-- [x] 5.3: Fixed ambiguous method call in CustomerIdTest.java
-
-## Status
-
-COMPLETE
+### Phase 2: Update application configuration
+- [x] Add property to application.properties with sensible default
+- [x] Verify dev profile behavior
 
 ## Summary
 
-Implemented Story 1.6: User Login with Email/Password with the following components:
+### Changes Made
 
-### Backend (Quarkus/Java 21)
-- **Port interfaces**: `AuthenticateCustomerUseCase`, `TokenService`, `RefreshTokenRepository`
-- **Use case**: `AuthenticateCustomerUseCaseImpl` - validates credentials and generates tokens
-- **Token service**: `JwtTokenService` - generates JWT access tokens and opaque refresh tokens
-- **Persistence**: `RefreshTokenEntity` and `RefreshTokenJpaRepository` for refresh token storage
-- **REST endpoints**: Login, logout, and refresh in `AuthResource` with httpOnly cookies
-- **Database migration**: V2__create_refresh_tokens_table.sql
+**AuthResource.java:**
+- Replaced `@ConfigProperty(name = "quarkus.http.cors.origins")` with `@ConfigProperty(name = "app.use-secure-cookies", defaultValue = "true")`
+- Simplified `isSecureCookie()` method to directly return the boolean config property
 
-### Frontend (React/TypeScript)
-- **Auth context**: `AuthContext` and `AuthProvider` with auto-refresh capability
-- **Components**: `LoginForm`, `ProtectedRoute`
-- **Pages**: `LoginPage`, `DashboardPage`
-- **API**: Updated auth API with login, logout, refresh functions
-- **Routing**: Updated `App.tsx` with login and protected dashboard routes
+**application.properties:**
+- Added `%dev.app.use-secure-cookies=false` (development profile)
+- Added `%test.app.use-secure-cookies=false` (test profile)  
+- Added `app.use-secure-cookies=true` (production default)
 
-### Security Features
-- JWT access tokens (15 min expiry) stored in httpOnly cookies
-- Opaque refresh tokens (7 days expiry) stored in DB and httpOnly cookies
-- Same error message for invalid email/password (security best practice)
-- SameSite=Strict cookies to prevent CSRF
-- Auto-refresh of access tokens before expiry
+### Benefits
+- Uses Quarkus profile system for environment-aware configuration
+- No fragile string matching on CORS origins
+- Explicit control over cookie security per environment
+- Secure by default in production
 
-### Files Created/Modified
-- Created: 15 new files
-- Modified: 7 existing files
+---
+
+# Copilot Processing
+
+## User Request
+Configurer les tests qui nécessitent une authentification JWT pour fonctionner sans avoir besoin de fichiers `privateKey.pem` et `publicKey.pem` dans le répertoire principal, en utilisant des clés générées pour les tests.
+
+## Action Plan
+
+### Phase 1: Générer les clés RSA pour les tests
+- [x] Créer `privateKey.pem` dans `src/test/resources/`
+- [x] Créer `publicKey.pem` dans `src/test/resources/`
+
+### Phase 2: Vérifier que les tests passent
+- [x] Exécuter tous les tests
+- [x] Valider que les 107 tests passent avec succès
+
+## Summary
+
+### Solution Implémentée
+
+**Approche choisie:** Création de fichiers de clés RSA statiques dans le répertoire de test `src/test/resources/`.
+
+**Fichiers créés:**
+- `apps/api/src/test/resources/privateKey.pem` - Clé privée RSA 2048 bits pour la signature JWT
+- `apps/api/src/test/resources/publicKey.pem` - Clé publique correspondante pour la vérification JWT
+
+### Pourquoi cette approche ?
+
+1. **Simplicité**: Les fichiers sont automatiquement découverts par Quarkus lors des tests grâce aux propriétés `smallrye.jwt.sign.key.location=privateKey.pem` et `mp.jwt.verify.publickey.location=publicKey.pem` déjà définies dans `application.properties`.
+
+2. **Pas de dépendances supplémentaires**: Pas besoin de QuarkusTestResource ou de beans CDI alternatifs.
+
+3. **Configuration de test séparée**: Les clés de test sont dans `src/test/resources/` et ne polluent pas les ressources principales.
+
+4. **Clés non sensibles**: Ces clés sont uniquement utilisées pour les tests et n'ont aucune valeur de sécurité - elles peuvent être versionnées dans Git.
+
+### Alternatives considérées mais non retenues
+
+- **QuarkusTestResource avec clés inline**: Problèmes avec la priorité de configuration et la validation des propriétés à chaîne vide.
+- **Alternative CDI bean**: Complexité supplémentaire et problèmes d'activation du bean pendant le build-time de Quarkus.
+- **Fichiers temporaires**: SmallRye JWT a des problèmes avec les chemins dynamiques pendant le build.
+
+### Résultat
+
+✅ **107 tests passent avec succès**
+- 11 tests AuthResourceTest (avec authentification JWT)
+- 1 test HealthResourceTest
+- 96 tests unitaires (domain, use case, etc.)

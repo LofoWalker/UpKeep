@@ -34,13 +34,13 @@ apps/api/.quarkus/
 *.class
 
 # Security - Never commit private keys
-*.pem
 apps/api/src/main/resources/privateKey.pem
 apps/api/src/main/resources/publicKey.pem
 
 # Frontend
 apps/web/dist/
 apps/web/.vite/
+*.tsbuildinfo
 
 # BMAD Framework
 _bmad/

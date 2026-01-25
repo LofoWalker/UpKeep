@@ -15,10 +15,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 const USER_STORAGE_KEY = 'upkeep_user';
 
 export function AuthProvider({children}: { children: React.ReactNode }) {
-    const [user, setUser] = useState<User | null>(() => {
-        const stored = localStorage.getItem(USER_STORAGE_KEY);
-        return stored ? JSON.parse(stored) : null;
-    });
+    const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -30,7 +27,6 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
                     setUser(JSON.parse(storedUser));
                 } catch {
                     localStorage.removeItem(USER_STORAGE_KEY);
-                    setUser(null);
                 }
             }
             setIsLoading(false);
@@ -50,7 +46,7 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
     useEffect(() => {
         if (!user) return;
 
-        const REFRESH_INTERVAL = 13 * 60 * 1000; // 13 minutes (token expires at 15)
+        const REFRESH_INTERVAL = 13 * 60 * 1000; // 13 minutes (token expires in 15 minutes)
         const intervalId = setInterval(async () => {
             try {
                 await refreshToken();

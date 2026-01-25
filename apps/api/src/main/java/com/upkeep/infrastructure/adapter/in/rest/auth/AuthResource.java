@@ -33,8 +33,8 @@ public class AuthResource {
     @ConfigProperty(name = "jwt.refresh-token-expiry-seconds", defaultValue = "604800")
     int refreshTokenExpirySeconds;
 
-    @ConfigProperty(name = "quarkus.http.cors.origins", defaultValue = "http://localhost:5173")
-    String corsOrigins;
+    @ConfigProperty(name = "app.use-secure-cookies", defaultValue = "true")
+    boolean useSecureCookies;
 
     public AuthResource(RegisterCustomerUseCase registerCustomerUseCase,
                         AuthenticateCustomerUseCase authenticateCustomerUseCase,
@@ -144,6 +144,6 @@ public class AuthResource {
     }
 
     private boolean isSecureCookie() {
-        return !corsOrigins.contains("localhost");
+        return useSecureCookies;
     }
 }
