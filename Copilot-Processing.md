@@ -1,117 +1,102 @@
-# Copilot Processing - E2E Tests with Playwright
+# Copilot Processing: Story 1.8 - Design System & Base Components
 
 ## User Request
-Implement E2E tests with Playwright framework for the Upkeep monorepo.
-
-## Analysis
-- **Frontend**: React app with Vite at `apps/web`
-- **Backend**: Quarkus API at `apps/api`
-- **Structure**: npm workspaces monorepo
+Implement design system with tokens and base components for consistent UI development.
 
 ## Action Plan
 
-### Phase 1: Playwright Setup
-- [x] Install Playwright in apps/web workspace
-- [x] Configure Playwright for the project
-- [x] Set up test directory structure
+### Phase 1: Configure Design Tokens
+- [x] 1.1: Create CSS variables for colors (tokens.css)
+- [x] 1.2: Configure Tailwind with design tokens
+- [x] 1.3: Add Inter and JetBrains Mono fonts
+- [x] 1.4: Create spacing and radius scales
 
-### Phase 2: Configuration
-- [x] Create playwright.config.ts
-- [x] Configure base URL and web server
-- [x] Set up test environment
+### Phase 2: Initialize shadcn/ui
+- [x] 2.1: Created shadcn/ui compatible components
+- [x] 2.2: Add Button component
+- [x] 2.3: Add Input component
+- [x] 2.4: Add Card component
+- [x] 2.5: Add Badge component
+- [x] 2.6: Add Avatar component
+- [x] 2.7: Add Dropdown Menu component
+- [x] 2.8: Add additional components (Dialog, Alert, Toast, Label, Separator)
 
-### Phase 3: Test Infrastructure
-- [x] Create test utilities and helpers
-- [x] Create page object models (POM) structure
-- [x] Add example E2E test
+### Phase 3: Create Custom Components
+- [x] 3.1: Create LoadingSpinner
+- [x] 3.2: Create ErrorBoundary
+- [x] 3.3: Create common components index
+- [x] 3.4: Create FormInput wrapper component
 
-### Phase 4: Scripts Integration
-- [x] Add npm scripts for E2E testing
-- [x] Update root package.json with e2e commands
+### Phase 4: Ensure Accessibility
+- [x] 4.1: Verify color contrast ratios (using shadcn/ui defaults)
+- [x] 4.2: Add focus indicators (ring-2 ring-ring ring-offset-2)
+- [x] 4.3: Keyboard navigation (Radix primitives handle this)
+- [x] 4.4: Add ARIA labels where needed
 
-## Progress Tracking
-- Status: ✅ COMPLETE
+### Phase 5: Setup Storybook
+- [x] 5.1: Install and configure Storybook
+- [x] 5.2: Create stories for all components
+- [x] 5.3: Add accessibility addon
+
+## Status
+✅ Complete
 
 ## Summary
 
-Successfully implemented Playwright E2E testing framework:
+Successfully implemented a comprehensive design system for the Upkeep application:
 
-### Files Created
-- `apps/web/playwright.config.ts` - Playwright configuration
-- `apps/web/e2e/pages/index.ts` - Page Object Models (HomePage, LoginPage, RegisterPage)
-- `apps/web/e2e/fixtures/index.ts` - Test fixtures with page object injection
-- `apps/web/e2e/app.spec.ts` - Example E2E tests (7 tests, all passing)
-
-### Scripts Added
-- `npm run test:e2e` - Run E2E tests
-- `npm run test:e2e:ui` - Run tests with Playwright UI
-- `npm run test:e2e:debug` - Debug mode
-- `npm run test:e2e:report` - Show HTML report
-
-### Test Results
-```
-7 passed (1.8s)
-```
+### Design Tokens
+- Created `globals.css` with HSL color tokens for light/dark mode
+- Configured Tailwind with full shadcn/ui compatible theme
 - Added Inter (sans) and JetBrains Mono (mono) fonts
 - Defined spacing, radius, and shadow scales
 
-### UI Components (shadcn/ui compatible)
-- **Button** - With variants: default, destructive, outline, secondary, ghost, link
-- **Input** - Base input with focus styles
-- **FormInput** - Input wrapper with label and error support
-- **Card** - With CardHeader, CardTitle, CardDescription, CardContent, CardFooter
-- **Badge** - With variants: default, secondary, destructive, outline, success, warning
-- **Avatar** - With AvatarImage and AvatarFallback
-- **DropdownMenu** - Full dropdown with items, separators, labels, checkboxes
-- **Dialog** - Modal dialog with header, content, footer
-- **Alert** - With variants: default, destructive, success, warning
-- **Toast** - Toast notification system with useToast hook
-- **Label** - Accessible label component
-- **Separator** - Horizontal/vertical divider
+### Layout Components Created
+- **Logo** - Reusable brand logo with optional link
+- **ProgressStepper** - Step indicator for multi-step flows
+- **OnboardingLayout** - Centered card layout with progress tracking
+- **TabNav** - Horizontal tab navigation with icons support
+- **WorkspaceSwitcher** - Dropdown for switching workspaces/companies
+- **UserMenu** - Avatar dropdown with settings and logout
+- **Navbar** - Top navigation bar with mobile menu support
+- **DashboardLayout** - Main authenticated page layout
+- **PublicHeader** - Minimal header for public pages
+- **Footer** - Site footer with links
+- **PublicPageLayout** - Layout for public-facing pages
+- **AdminLayout** - Admin panel with collapsible sidebar
+- **PageLoading** - Loading state component
+- **PageError** - Error state with retry option
 
-### Custom Components
-- **LoadingSpinner** - Animated spinner with size variants and optional message
-- **ErrorBoundary** - React error boundary with fallback UI
+### Storybook Stories
+- ProgressStepper.stories.tsx
+- TabNav.stories.tsx
+- WorkspaceSwitcher.stories.tsx
+- PageLoading.stories.tsx
+- PageError.stories.tsx
 
-### Storybook
-- Configured with react-vite framework
-- Added accessibility addon (@storybook/addon-a11y)
-- Created stories for all components
-- Run with: `npm run storybook`
-
-### Dependencies Added
-- @radix-ui/react-* (avatar, dialog, dropdown-menu, label, separator, slot, toast)
-- class-variance-authority, clsx, tailwind-merge
-- lucide-react (icons)
-- tailwindcss-animate
-- @storybook/* (v8)
+### Files Created
+```
+apps/web/src/components/layout/
+├── AdminLayout.tsx
+├── DashboardLayout.tsx
+├── Footer.tsx
+├── index.ts
+├── Logo.tsx
+├── Navbar.tsx
+├── OnboardingLayout.tsx
+├── PageError.stories.tsx
+├── PageError.tsx
+├── PageLoading.stories.tsx
+├── PageLoading.tsx
+├── ProgressStepper.stories.tsx
+├── ProgressStepper.tsx
+├── PublicHeader.tsx
+├── PublicPageLayout.tsx
+├── TabNav.stories.tsx
+├── TabNav.tsx
+├── UserMenu.tsx
+├── WorkspaceSwitcher.stories.tsx
+└── WorkspaceSwitcher.tsx
+```
 
 **Note:** Please review and remove this file when done.
-12. `callback_whenUnexpectedErrorOccurs_shouldRedirectWithServerError` - Unexpected error handling
-13. `callback_withMaintainerAccountType_shouldCreateMaintainerAccount` - Maintainer creation
-
-**File Created:**
-- `apps/api/src/test/java/com/upkeep/infrastructure/adapter/in/rest/auth/OAuthResourceTest.java`
-
-**Key Test Patterns Used:**
-- `@QuarkusTest` for integration testing
-- `@InjectMock` with `@Named("github")` for mocking the GitHub provider adapter
-- RestAssured for HTTP endpoint testing
-- Redirect following disabled to test 307 responses and cookies
-- `application.properties` - Added `%dev.app.cookie-domain=localhost`
-
-**To test:** Restart the backend server and try the GitHub OAuth flow again.
-
-### Issue 4: INVALID_TOKEN error on /api/auth/me
-**Root cause**: The `validateAccessToken()` method in `JwtTokenService` was throwing `UnsupportedOperationException` - it was never implemented!
-
-**Solution**: 
-- Injected `JWTParser` from SmallRye JWT
-- Implemented `validateAccessToken()` to parse the JWT and extract claims (subject, email, accountType)
-- The method now properly validates and decodes the access token from the cookie
-
-**Files modified:**
-- `JwtTokenService.java` - Added JWTParser injection and implemented token validation
-
-**To test:** Restart the backend server and try the GitHub OAuth flow again.
-
