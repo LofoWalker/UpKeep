@@ -3,9 +3,10 @@ import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom';
-import {Input} from '../../components/ui/Input';
-import {Button} from '../../components/ui/Button';
-import {Alert} from '../../components/ui/Alert';
+import {FormInput} from '@/components/ui/form-input';
+import {Button} from '@/components/ui/button';
+import {Alert, AlertDescription} from '@/components/ui/alert';
+import {AlertCircle, Loader2} from 'lucide-react';
 import {ApiError} from '@/lib/api.ts';
 import {useAuth} from "@/features/auth/useAuth.ts";
 import {OAuthButtons} from './OAuthButtons';
@@ -64,7 +65,10 @@ export const LoginForm: React.FC = () => {
 
                 {error && (
                     <div className="mb-4">
-                        <Alert type="error" message={error}/>
+                        <Alert variant="destructive">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertDescription>{error}</AlertDescription>
+                        </Alert>
                     </div>
                 )}
 
@@ -80,7 +84,7 @@ export const LoginForm: React.FC = () => {
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <Input
+                    <FormInput
                         label="Email"
                         type="email"
                         {...register('email')}
@@ -89,7 +93,7 @@ export const LoginForm: React.FC = () => {
                         autoComplete="email"
                     />
 
-                    <Input
+                    <FormInput
                         label="Password"
                         type="password"
                         {...register('password')}
@@ -98,7 +102,8 @@ export const LoginForm: React.FC = () => {
                         autoComplete="current-password"
                     />
 
-                    <Button type="submit" className="w-full" isLoading={isLoading}>
+                    <Button type="submit" className="w-full" disabled={isLoading}>
+                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         Sign In
                     </Button>
                 </form>

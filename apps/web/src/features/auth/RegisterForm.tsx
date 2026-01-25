@@ -2,11 +2,12 @@ import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
-import {Input} from '../../components/ui/Input';
-import {Button} from '../../components/ui/Button';
-import {Alert} from '../../components/ui/Alert';
+import {FormInput} from '@/components/ui/form-input';
+import {Button} from '@/components/ui/button';
+import {Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
+import {AlertCircle, CheckCircle2, Loader2} from 'lucide-react';
 import {AccountType, registerCustomer} from './api';
-import {ApiError} from '../../lib/api';
+import {ApiError} from '@/lib/api';
 import {OAuthButtons} from './OAuthButtons';
 
 const registerSchema = z.object({
@@ -75,13 +76,20 @@ export const RegisterForm: React.FC = () => {
 
                 {error && (
                     <div className="mb-4">
-                        <Alert type="error" message={error}/>
+                        <Alert variant="destructive">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertDescription>{error}</AlertDescription>
+                        </Alert>
                     </div>
                 )}
 
                 {success && (
                     <div className="mb-4">
-                        <Alert type="success" message="Account created successfully!" details="Welcome to Upkeep!"/>
+                        <Alert variant="success">
+                            <CheckCircle2 className="h-4 w-4" />
+                            <AlertTitle>Account created successfully!</AlertTitle>
+                            <AlertDescription>Welcome to Upkeep!</AlertDescription>
+                        </Alert>
                     </div>
                 )}
 
@@ -97,7 +105,7 @@ export const RegisterForm: React.FC = () => {
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <Input
+                    <FormInput
                         label="Email"
                         type="email"
                         {...register('email')}
@@ -105,7 +113,7 @@ export const RegisterForm: React.FC = () => {
                         placeholder="you@example.com"
                     />
 
-                    <Input
+                    <FormInput
                         label="Password"
                         type="password"
                         {...register('password')}
@@ -113,7 +121,7 @@ export const RegisterForm: React.FC = () => {
                         placeholder="••••••••"
                     />
 
-                    <Input
+                    <FormInput
                         label="Confirm Password"
                         type="password"
                         {...register('confirmPassword')}
@@ -159,7 +167,8 @@ export const RegisterForm: React.FC = () => {
                         )}
                     </div>
 
-                    <Button type="submit" className="w-full" isLoading={isLoading}>
+                    <Button type="submit" className="w-full" disabled={isLoading}>
+                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         Create Account
                     </Button>
                 </form>
