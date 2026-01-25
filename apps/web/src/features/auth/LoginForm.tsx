@@ -6,8 +6,8 @@ import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {Input} from '../../components/ui/Input';
 import {Button} from '../../components/ui/Button';
 import {Alert} from '../../components/ui/Alert';
-import {useAuth} from './AuthContext';
-import {ApiError} from '../../lib/api';
+import {ApiError} from '@/lib/api.ts';
+import {useAuth} from "@/features/auth/useAuth.ts";
 
 const loginSchema = z.object({
     email: z.string().email('Invalid email address'),
