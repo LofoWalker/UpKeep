@@ -1,53 +1,64 @@
 # Copilot Processing Log
 
 ## User Request
-1. Fix OAuth callback redirect for new users: currently redirects to `/onboarding` which doesn't exist in the frontend router, causing 404/blank page for first-time GitHub sign-ins.
-2. OAuth flow completes (cookie appears) but user stays on login page instead of being redirected.
-3. **NEW**: GET /api/auth/me returns 401 Unauthorized - cookie not sent correctly.
+Add comprehensive integration tests for the new OAuth login flow (GitHub callback handling, account linking, and automatic customer creation).
 
 ## Action Plan
 
-### Phase 1: Create Onboarding Page Component
-- [x] Create `OnboardingPage.tsx` in the pages directory
-- [x] Implement a basic onboarding UI for new OAuth users
+### Phase 1: Research and Context Gathering
+- [x] Examined existing auth tests (AuthResourceTest) for patterns and setup
+- [x] Reviewed OAuthResource implementation to identify all branches
+- [x] Checked related components: OAuthProviderAdapter, OAuthStateService, OAuthLoginUseCase
+- [x] Identified test infrastructure and mocking patterns used
 
-### Phase 2: Add Route to Router
-- [x] Add `/onboarding` route to `App.tsx`
-- [x] Configure it as a protected route
+### Phase 2: Test Implementation
+- [x] Created OAuthResourceTest with test setup and mocks
+- [x] Added test for GitHub OAuth initiation (default and maintainer account types)
+- [x] Added tests for callback with various branches:
+  - [x] New user (redirects to /onboarding)
+  - [x] Existing user (redirects to /dashboard)
+  - [x] Maintainer account type
+- [x] Added error case tests:
+  - [x] Invalid state parameter
+  - [x] Missing authorization code
+  - [x] Empty authorization code
+  - [x] Provider error response (with description)
+  - [x] Provider error response (without description)
+  - [x] OAuth code exchange failure
+  - [x] Get user info failure
+  - [x] Unexpected server error
 
-### Phase 3: Fix OAuth Session Detection
-- [x] Create `/api/auth/me` endpoint in backend to return current user from JWT cookie
-- [x] Create `MeResponse.java` record
-- [x] Add `getCurrentUser()` function in frontend API
-- [x] Modify `AuthContext` to call `/api/auth/me` on startup to detect OAuth sessions
-
-### Phase 4: Fix Cookie Domain for Cross-Port Sharing
-- [x] Add `app.cookie-domain` config property to OAuthResource
-- [x] Set `%dev.app.cookie-domain=localhost` in application.properties
-- [x] Update cookie creation methods to use configurable domain
-
-### Phase 5: Fix Token Validation (INVALID_TOKEN error)
-- [x] Implement `validateAccessToken()` in `JwtTokenService.java` using SmallRye JWTParser
-- [x] Add JWTParser dependency injection
-- [x] Parse and extract claims from JWT token
-
-### Phase 6: Validation
-- [x] Verify no TypeScript errors
-- [x] Verify backend compiles
-- [x] Confirm route is properly configured
+### Phase 3: Verification
+- [x] All 13 OAuth tests pass
+- [x] All 120 tests in the project pass (no regressions)
 
 ## Summary
 
-### Issue 3: Cookie not sent on /api/auth/me call (401 Unauthorized)
-**Root cause**: Cookies set by backend (port 8080) during OAuth redirect were not being sent when frontend (port 5173) made requests back to the backend. Different ports are treated as different origins for cookie purposes.
+Created comprehensive integration tests for the OAuth flow in `OAuthResourceTest.java`:
 
-**Solution**: 
-- Added configurable `app.cookie-domain` property
-- Set `domain=localhost` for cookies in dev environment, allowing cookie sharing across ports
-- Cookies are now shared between `localhost:5173` (frontend) and `localhost:8080` (backend)
+**Tests Created (13 total):**
+1. `initiateGitHubOAuth_shouldRedirectToAuthorizationUrl` - Tests OAuth initiation redirect
+2. `initiateGitHubOAuth_withMaintainerAccountType_shouldPassAccountTypeToStateService` - Tests maintainer account type
+3. `callback_withValidCode_forNewUser_shouldSetCookiesAndRedirectToOnboarding` - New user flow
+4. `callback_withValidCode_forExistingUser_shouldSetCookiesAndRedirectToDashboard` - Existing user flow
+5. `callback_withInvalidState_shouldRedirectWithError` - Invalid state error
+6. `callback_withMissingCode_shouldRedirectWithError` - Missing code error
+7. `callback_withEmptyCode_shouldRedirectWithError` - Empty code error
+8. `callback_withProviderError_shouldRedirectWithOAuthDeniedError` - Provider error with description
+9. `callback_withProviderErrorWithoutDescription_shouldUseDefaultMessage` - Provider error default message
+10. `callback_whenCodeExchangeFails_shouldRedirectWithOAuthError` - Code exchange failure
+11. `callback_whenGetUserInfoFails_shouldRedirectWithOAuthError` - User info failure
+12. `callback_whenUnexpectedErrorOccurs_shouldRedirectWithServerError` - Unexpected error handling
+13. `callback_withMaintainerAccountType_shouldCreateMaintainerAccount` - Maintainer creation
 
-**Files modified:**
-- `OAuthResource.java` - Added `cookieDomain` config and updated cookie builders
+**File Created:**
+- `apps/api/src/test/java/com/upkeep/infrastructure/adapter/in/rest/auth/OAuthResourceTest.java`
+
+**Key Test Patterns Used:**
+- `@QuarkusTest` for integration testing
+- `@InjectMock` with `@Named("github")` for mocking the GitHub provider adapter
+- RestAssured for HTTP endpoint testing
+- Redirect following disabled to test 307 responses and cookies
 - `application.properties` - Added `%dev.app.cookie-domain=localhost`
 
 **To test:** Restart the backend server and try the GitHub OAuth flow again.

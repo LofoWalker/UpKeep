@@ -83,8 +83,8 @@ CREATE TABLE user_oauth_providers (
     UNIQUE(provider, provider_user_id)
 );
 
+-- Only index on user_id; UNIQUE constraint already indexes (provider, provider_user_id)
 CREATE INDEX idx_user_oauth_providers__user_id ON user_oauth_providers(user_id);
-CREATE INDEX idx_user_oauth_providers__provider ON user_oauth_providers(provider, provider_user_id);
 ```
 
 ### OAuth Adapter
