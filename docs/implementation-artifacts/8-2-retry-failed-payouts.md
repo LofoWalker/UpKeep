@@ -43,6 +43,16 @@ public void execute(List<String> lineItemIds) {
 }
 ```
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Test: Admin can select failed payout items for retry
+- [ ] Test: Retry button triggers re-processing
+- [ ] Test: Manual review flag displayed after max retries
+
+**Test file location:** `apps/web/e2e/admin-payout-dashboard.spec.ts` (extend existing file)
+
 ### References
 - [Source: epics.md#Story-8.2]
 - FR34: Retry failed payouts

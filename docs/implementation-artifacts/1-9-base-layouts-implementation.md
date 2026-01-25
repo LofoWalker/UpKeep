@@ -1,6 +1,6 @@
 # Story 1.9: Base Layouts Implementation
 
-Status: ready-for-dev
+Status: completed
 
 ## Story
 
@@ -38,33 +38,33 @@ so that I can quickly scaffold new pages.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create OnboardingLayout (AC: #1, #4, #5)
-  - [ ] 1.1: Create OnboardingLayout component
-  - [ ] 1.2: Create ProgressStepper component
-  - [ ] 1.3: Add responsive styles
-  - [ ] 1.4: Add loading state support
+- [x] Task 1: Create OnboardingLayout (AC: #1, #4, #5)
+  - [x] 1.1: Create OnboardingLayout component
+  - [x] 1.2: Create ProgressStepper component
+  - [x] 1.3: Add responsive styles
+  - [x] 1.4: Add loading state support
 
-- [ ] Task 2: Create DashboardLayout (AC: #2, #4, #5)
-  - [ ] 2.1: Create DashboardLayout component
-  - [ ] 2.2: Create Navbar component
-  - [ ] 2.3: Create WorkspaceSwitcher placeholder
-  - [ ] 2.4: Create UserMenu component
-  - [ ] 2.5: Create TabNav component
-  - [ ] 2.6: Add responsive sidebar for mobile
+- [x] Task 2: Create DashboardLayout (AC: #2, #4, #5)
+  - [x] 2.1: Create DashboardLayout component
+  - [x] 2.2: Create Navbar component
+  - [x] 2.3: Create WorkspaceSwitcher placeholder
+  - [x] 2.4: Create UserMenu component
+  - [x] 2.5: Create TabNav component
+  - [x] 2.6: Add responsive sidebar for mobile
 
-- [ ] Task 3: Create PublicPageLayout (AC: #3, #4)
-  - [ ] 3.1: Create PublicPageLayout component
-  - [ ] 3.2: Create PublicHeader component
-  - [ ] 3.3: Create Footer component
+- [x] Task 3: Create PublicPageLayout (AC: #3, #4)
+  - [x] 3.1: Create PublicPageLayout component
+  - [x] 3.2: Create PublicHeader component
+  - [x] 3.3: Create Footer component
 
-- [ ] Task 4: Create AdminLayout (bonus)
-  - [ ] 4.1: Create AdminLayout component
-  - [ ] 4.2: Create AdminSidebar component
+- [x] Task 4: Create AdminLayout (bonus)
+  - [x] 4.1: Create AdminLayout component
+  - [x] 4.2: Create AdminSidebar component
 
-- [ ] Task 5: Create shared layout utilities (AC: #5)
-  - [ ] 5.1: Create PageLoading component
-  - [ ] 5.2: Create PageError component
-  - [ ] 5.3: Create ErrorBoundary wrapper
+- [x] Task 5: Create shared layout utilities (AC: #5)
+  - [x] 5.1: Create PageLoading component
+  - [x] 5.2: Create PageError component
+  - [x] 5.3: Create ErrorBoundary wrapper (reusing existing)
 
 ## Dev Notes
 
@@ -485,17 +485,62 @@ function DashboardPage() {
 
 ### Agent Model Used
 
-_To be filled by dev agent_
+Claude (Anthropic)
 
 ### Completion Notes List
 
-_To be filled during implementation_
+- Implemented all layout components as specified in dev notes
+- All layouts are responsive (mobile-first approach with Tailwind breakpoints)
+- OnboardingLayout includes progress stepper with step completion indicators
+- DashboardLayout includes navbar with workspace switcher and user menu
+- AdminLayout includes collapsible sidebar navigation
+- Created PageLoading and PageError utility components for state handling
+- Reused existing ErrorBoundary from common components
+- Added Storybook stories for key components (ProgressStepper, TabNav, WorkspaceSwitcher, PageLoading, PageError)
+- All components pass TypeScript compilation without errors
 
 ### Change Log
 
-_To be filled during implementation_
+- Created `/apps/web/src/components/layout/Logo.tsx` - Reusable logo component with optional link
+- Created `/apps/web/src/components/layout/ProgressStepper.tsx` - Step indicator for onboarding flows
+- Created `/apps/web/src/components/layout/OnboardingLayout.tsx` - Centered card layout with progress stepper
+- Created `/apps/web/src/components/layout/TabNav.tsx` - Horizontal tab navigation
+- Created `/apps/web/src/components/layout/WorkspaceSwitcher.tsx` - Dropdown for switching between workspaces
+- Created `/apps/web/src/components/layout/UserMenu.tsx` - User avatar dropdown with settings and logout
+- Created `/apps/web/src/components/layout/Navbar.tsx` - Top navigation bar for dashboard
+- Created `/apps/web/src/components/layout/DashboardLayout.tsx` - Main authenticated page layout
+- Created `/apps/web/src/components/layout/PublicHeader.tsx` - Minimal header for public pages
+- Created `/apps/web/src/components/layout/Footer.tsx` - Site footer with links
+- Created `/apps/web/src/components/layout/PublicPageLayout.tsx` - Layout for public-facing pages
+- Created `/apps/web/src/components/layout/PageLoading.tsx` - Loading state component
+- Created `/apps/web/src/components/layout/PageError.tsx` - Error state component with retry option
+- Created `/apps/web/src/components/layout/AdminLayout.tsx` - Admin panel layout with sidebar
+- Created `/apps/web/src/components/layout/index.ts` - Barrel export for all layout components
+- Created Storybook stories for ProgressStepper, TabNav, WorkspaceSwitcher, PageLoading, PageError
 
 ### File List
 
-_To be filled after implementation_
+```
+apps/web/src/components/layout/
+├── AdminLayout.tsx
+├── DashboardLayout.tsx
+├── Footer.tsx
+├── index.ts
+├── Logo.tsx
+├── Navbar.tsx
+├── OnboardingLayout.tsx
+├── PageError.stories.tsx
+├── PageError.tsx
+├── PageLoading.stories.tsx
+├── PageLoading.tsx
+├── ProgressStepper.stories.tsx
+├── ProgressStepper.tsx
+├── PublicHeader.tsx
+├── PublicPageLayout.tsx
+├── TabNav.stories.tsx
+├── TabNav.tsx
+├── UserMenu.tsx
+├── WorkspaceSwitcher.stories.tsx
+└── WorkspaceSwitcher.tsx
+```
 

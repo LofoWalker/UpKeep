@@ -43,6 +43,17 @@ public record PayoutRunSummary(
 ) {}
 ```
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Create Page Object Model for admin dashboard (`e2e/pages/admin-dashboard.ts`)
+- [ ] Test: Admin sees list of payout runs
+- [ ] Test: Summary statistics (paid, held, failed counts) display correctly
+- [ ] Test: Run details expand on click
+
+**Test file location:** `apps/web/e2e/admin-payout-dashboard.spec.ts`
+
 ### References
 - [Source: architecture.md#UX-Flows-Screen-Architecture] - Admin screens
 - [Source: epics.md#Story-8.1]

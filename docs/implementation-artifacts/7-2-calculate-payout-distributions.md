@@ -75,6 +75,18 @@ CREATE TABLE payout_line_items (
 );
 ```
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Test: Payout calculation preview shows correct amounts
+- [ ] Test: Unclaimed packages show HELD status
+- [ ] Test: Claimed packages show maintainer and amount
+
+**Test file location:** `apps/web/e2e/payout-preview.spec.ts`
+
+**Note:** This is primarily backend logic; E2E tests focus on UI display.
+
 ### References
 - [Source: epics.md#Story-7.2]
 - FR27: Calculate distributions

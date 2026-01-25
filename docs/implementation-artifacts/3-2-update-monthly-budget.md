@@ -26,6 +26,16 @@ As a **company Owner**, I want to update my company's monthly budget, so that I 
 - Audit event type: `BUDGET_UPDATED`
 - Show warning if newBudget < currentAllocations
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Test: User can update existing budget
+- [ ] Test: Warning dialog shown when reducing below current allocations
+- [ ] Test: User can confirm or cancel budget reduction
+
+**Test file location:** `apps/web/e2e/budget.spec.ts` (extend existing file)
+
 ### References
 - [Source: epics.md#Story-3.2]
 

@@ -48,6 +48,19 @@ public class ClaimVerification {
 3. Check if user has push access to repo via GitHub API
 4. If yes → VERIFIED
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Test: Verification instructions displayed for pending claim
+- [ ] Test: GitHub OAuth flow initiates correctly
+- [ ] Test: Verification success updates claim status to VERIFIED
+- [ ] Test: Verification failure shows error message
+
+**Test file location:** `apps/web/e2e/package-claim.spec.ts` (extend existing file)
+
+**Note:** Mock GitHub API responses for E2E tests.
+
 ### References
 - [Source: epics.md#Story-6.4]
 - FR24, FR40: Claim verification with audit

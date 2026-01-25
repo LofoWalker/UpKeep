@@ -259,6 +259,18 @@ public class TenantIsolationTest {
 
 - Story 2.1: Company and Membership entities
 
+### E2E Testing Requirements
+
+**Required Playwright tests for this story:**
+
+- [ ] Test: User cannot access resources from another company (404 response)
+- [ ] Test: API requests include proper tenant context
+- [ ] Test: Cross-tenant URL manipulation returns 404, not 403
+
+**Test file location:** `apps/web/e2e/tenant-isolation.spec.ts`
+
+**Note:** These tests require multiple test users in different companies.
+
 ### References
 
 - [Source: architecture.md#Authentication-Security] - Tenant isolation
