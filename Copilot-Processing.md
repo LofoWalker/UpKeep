@@ -51,52 +51,63 @@ Successfully implemented a comprehensive design system for the Upkeep applicatio
 - Added Inter (sans) and JetBrains Mono (mono) fonts
 - Defined spacing, radius, and shadow scales
 
-### Layout Components Created
-- **Logo** - Reusable brand logo with optional link
-- **ProgressStepper** - Step indicator for multi-step flows
-- **OnboardingLayout** - Centered card layout with progress tracking
-- **TabNav** - Horizontal tab navigation with icons support
-- **WorkspaceSwitcher** - Dropdown for switching workspaces/companies
-- **UserMenu** - Avatar dropdown with settings and logout
-- **Navbar** - Top navigation bar with mobile menu support
-- **DashboardLayout** - Main authenticated page layout
-- **PublicHeader** - Minimal header for public pages
-- **Footer** - Site footer with links
-- **PublicPageLayout** - Layout for public-facing pages
-- **AdminLayout** - Admin panel with collapsible sidebar
-- **PageLoading** - Loading state component
-- **PageError** - Error state with retry option
+### UI Components (shadcn/ui compatible)
+- **Button** - With variants: default, destructive, outline, secondary, ghost, link
+- **Input** - Base input with focus styles
+- **FormInput** - Input wrapper with label and error support
+- **Card** - With CardHeader, CardTitle, CardDescription, CardContent, CardFooter
+- **Badge** - With variants: default, secondary, destructive, outline, success, warning
+- **Avatar** - With AvatarImage and AvatarFallback
+- **DropdownMenu** - Full dropdown with items, separators, labels, checkboxes
+- **Dialog** - Modal dialog with header, content, footer
+- **Alert** - With variants: default, destructive, success, warning
+- **Toast** - Toast notification system with useToast hook
+- **Label** - Accessible label component
+- **Separator** - Horizontal/vertical divider
 
-### Storybook Stories
-- ProgressStepper.stories.tsx
-- TabNav.stories.tsx
-- WorkspaceSwitcher.stories.tsx
-- PageLoading.stories.tsx
-- PageError.stories.tsx
+### Custom Components
+- **LoadingSpinner** - Animated spinner with size variants and optional message
+- **ErrorBoundary** - React error boundary with fallback UI
 
-### Files Created
-```
-apps/web/src/components/layout/
-├── AdminLayout.tsx
-├── DashboardLayout.tsx
-├── Footer.tsx
-├── index.ts
-├── Logo.tsx
-├── Navbar.tsx
-├── OnboardingLayout.tsx
-├── PageError.stories.tsx
-├── PageError.tsx
-├── PageLoading.stories.tsx
-├── PageLoading.tsx
-├── ProgressStepper.stories.tsx
-├── ProgressStepper.tsx
-├── PublicHeader.tsx
-├── PublicPageLayout.tsx
-├── TabNav.stories.tsx
-├── TabNav.tsx
-├── UserMenu.tsx
-├── WorkspaceSwitcher.stories.tsx
-└── WorkspaceSwitcher.tsx
-```
+### Storybook
+- Configured with react-vite framework
+- Added accessibility addon (@storybook/addon-a11y)
+- Created stories for all components
+- Run with: `npm run storybook`
+
+### Dependencies Added
+- @radix-ui/react-* (avatar, dialog, dropdown-menu, label, separator, slot, toast)
+- class-variance-authority, clsx, tailwind-merge
+- lucide-react (icons)
+- tailwindcss-animate
+- @storybook/* (v8)
 
 **Note:** Please review and remove this file when done.
+12. `callback_whenUnexpectedErrorOccurs_shouldRedirectWithServerError` - Unexpected error handling
+13. `callback_withMaintainerAccountType_shouldCreateMaintainerAccount` - Maintainer creation
+
+**File Created:**
+- `apps/api/src/test/java/com/upkeep/infrastructure/adapter/in/rest/auth/OAuthResourceTest.java`
+
+**Key Test Patterns Used:**
+- `@QuarkusTest` for integration testing
+- `@InjectMock` with `@Named("github")` for mocking the GitHub provider adapter
+- RestAssured for HTTP endpoint testing
+- Redirect following disabled to test 307 responses and cookies
+- `application.properties` - Added `%dev.app.cookie-domain=localhost`
+
+**To test:** Restart the backend server and try the GitHub OAuth flow again.
+
+### Issue 4: INVALID_TOKEN error on /api/auth/me
+**Root cause**: The `validateAccessToken()` method in `JwtTokenService` was throwing `UnsupportedOperationException` - it was never implemented!
+
+**Solution**: 
+- Injected `JWTParser` from SmallRye JWT
+- Implemented `validateAccessToken()` to parse the JWT and extract claims (subject, email, accountType)
+- The method now properly validates and decodes the access token from the cookie
+
+**Files modified:**
+- `JwtTokenService.java` - Added JWTParser injection and implemented token validation
+
+**To test:** Restart the backend server and try the GitHub OAuth flow again.
+
