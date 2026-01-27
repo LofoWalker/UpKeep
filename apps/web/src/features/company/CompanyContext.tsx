@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import {createContext, ReactNode, useCallback, useContext, useEffect, useState} from 'react';
 import {
     CompanyDashboard,

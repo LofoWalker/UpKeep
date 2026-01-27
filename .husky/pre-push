@@ -1,0 +1,44 @@
+#!/bin/sh
+
+echo "🔍 Running pre-push checks..."
+
+# Web checks
+echo "📦 Web: Running lint..."
+cd apps/web && npm run lint
+if [ $? -ne 0 ]; then
+    echo "❌ Web lint failed. Push aborted."
+    exit 1
+fi
+
+echo "🔨 Web: Building..."
+npm run build
+if [ $? -ne 0 ]; then
+    echo "❌ Web build failed. Push aborted."
+    exit 1
+fi
+
+cd ../..
+
+# API checks
+echo "☕ API: Running checkstyle..."
+cd apps/api && ./mvnw checkstyle:check -q
+if [ $? -ne 0 ]; then
+    echo "❌ API checkstyle failed. Push aborted."
+    exit 1
+fi
+
+echo "🧪 API: Running tests..."
+./mvnw test -Dquarkus.test.continuous-testing=disabled -q
+if [ $? -ne 0 ]; then
+    echo "❌ API tests failed. Push aborted."
+    exit 1
+fi
+
+echo "🔨 API: Building..."
+./mvnw package -DskipTests -q
+if [ $? -ne 0 ]; then
+    echo "❌ API build failed. Push aborted."
+    exit 1
+fi
+
+echo "✅ All pre-push checks passed!"
