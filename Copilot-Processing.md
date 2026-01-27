@@ -1,0 +1,234 @@
+# Copilot Processing
+
+## User Request
+Problème d'authentification : après connexion avec un compte classique (non-GitHub), l'utilisateur est redirigé vers "Create company workspace" même s'il fait déjà partie d'un ou plusieurs workspaces. Ce comportement est anormal - si un utilisateur est lié à un workspace, on ne doit pas lui proposer d'en créer un.
+
+## Action Plan
+
+### Phase 1: Analyse du flux d'authentification
+- [x] Examiner le composant de routing/garde d'authentification
+- [x] Identifier la logique de redirection post-connexion
+- [x] Comprendre comment les workspaces de l'utilisateur sont récupérés
+
+### Phase 2: Identification du problème
+- [x] Localiser où la vérification des workspaces existants est effectuée
+- [x] Identifier pourquoi la vérification échoue pour les comptes classiques
+
+**Problème identifié**: Dans `CompanyDashboardPage.tsx`, la redirection vers `/company/create` se faisait quand `!isLoading && companies.length === 0`. Le problème était que `isLoading` pouvait passer à `false` avant que les companies soient réellement chargées, causant une redirection prématurée.
+
+### Phase 3: Correction
+- [x] Corriger la logique de vérification des workspaces
+- [x] S'assurer que la redirection fonctionne correctement
+
+**Changements effectués**:
+1. Ajout d'un nouvel état `hasFetchedCompanies` dans `CompanyContext.tsx` pour suivre si le premier chargement des companies a été effectué
+2. Modification de `refreshCompanies` pour mettre `hasFetchedCompanies` à `true` après le chargement
+3. Modification de `CompanyDashboardPage.tsx` pour utiliser `hasFetchedCompanies` au lieu de `!isLoading` pour la redirection
+4. Correction de la dépendance `currentCompany` dans le callback `refreshCompanies` qui pouvait causer des re-renders inutiles
+
+### Phase 4: Validation
+- [x] Vérifier les erreurs de compilation
+- [x] Résumer les changements effectués
+
+## Summary
+
+Le problème était une race condition dans la logique de redirection. Le `CompanyDashboardPage` vérifiait `!isLoading && companies.length === 0` pour rediriger vers la création de workspace, mais `isLoading` pouvait être `false` pendant un court moment avant que les données des companies soient réellement chargées.
+
+La solution ajoute un état `hasFetchedCompanies` qui est uniquement mis à `true` après que l'appel API pour récupérer les companies soit terminé (avec succès ou erreur). Cela garantit que la redirection ne se produit que si les companies ont réellement été vérifiées côté serveur et qu'il n'y en a aucune.
+
+---
+# Previous Processing - Epic 2: Company Workspace & Team Management
+
+## User Request
+
+Développer et implémenter l'Epic 2 : Company Workspace & Team Management
+
+## Stories à implémenter
+
+| Story | Description | Status |
+|-------|-------------|--------|
+| 2.1 | Create Company Workspace | ✅ Done |
+| 2.2 | Company Dashboard Shell | ✅ Done |
+| 2.3 | Invite User to Company | ✅ Done |
+| 2.4 | Accept Company Invitation | ✅ Done |
+| 2.5 | Manage Team Roles | ✅ Done |
+| 2.6 | Workspace Switcher | ✅ Done (API ready) |
+| 2.7 | Tenant Data Isolation | ✅ Done |
+
+---
+
+## Implementation Summary
+
+### Story 2.1: Create Company Workspace ✅
+**Backend:**
+- Domain models: `Company`, `CompanyId`, `CompanyName`, `CompanySlug`
+- Domain models: `Membership`, `MembershipId`, `Role`
+- Port in: `CreateCompanyUseCase`
+- Port out: `CompanyRepository`, `MembershipRepository`
+- Use case: `CreateCompanyUseCaseImpl`
+- Persistence: `CompanyEntity`, `MembershipEntity`, mappers, JPA repositories
+- REST: `CompanyResource` (POST /api/companies)
+- Migration: V5 - companies and memberships tables
+
+### Story 2.2: Company Dashboard Shell ✅
+**Backend:**
+- Port in: `GetCompanyDashboardUseCase`, `GetUserCompaniesUseCase`
+- Use cases: `GetCompanyDashboardUseCaseImpl`, `GetUserCompaniesUseCaseImpl`
+- REST: GET /api/companies, GET /api/companies/{id}/dashboard
+
+### Story 2.3: Invite User to Company ✅
+**Backend:**
+- Domain models: `Invitation`, `InvitationId`, `InvitationToken`, `InvitationStatus`
+- Exceptions: `InvitationAlreadyExistsException`, `InvitationNotFoundException`, `InvitationExpiredException`
+- Port in: `InviteUserToCompanyUseCase`
+- Port out: `InvitationRepository`
+- Use case: `InviteUserToCompanyUseCaseImpl`
+- Persistence: `InvitationEntity`, mapper, JPA repository
+- REST: POST /api/companies/{id}/invitations
+- Migration: V6 - invitations table
+
+### Story 2.4: Accept Company Invitation ✅
+**Backend:**
+- Port in: `AcceptInvitationUseCase`, `GetInvitationUseCase`
+- Use cases: `AcceptInvitationUseCaseImpl`, `GetInvitationUseCaseImpl`
+- REST: GET /api/invitations/{token}, POST /api/invitations/{token}/accept
+
+### Story 2.5: Manage Team Roles ✅
+**Backend:**
+- Port in: `GetCompanyMembersUseCase`, `UpdateMemberRoleUseCase`
+- Exception: `LastOwnerException`
+- Use cases: `GetCompanyMembersUseCaseImpl`, `UpdateMemberRoleUseCaseImpl`
+- REST: GET /api/companies/{id}/members, PATCH /api/companies/{id}/members/{membershipId}
+
+### Story 2.6: Workspace Switcher ✅
+**Backend:** Already implemented via `GetUserCompaniesUseCase`
+- REST: GET /api/companies (returns all companies for current user)
+
+### Story 2.7: Tenant Data Isolation ✅
+All queries are scoped by company_id via membership verification in use cases.
+
+---
+
+## Final Summary
+
+### Epic 2 Backend Implementation Complete! 🎉
+
+**Files Created (Backend API):**
+
+**Domain Models (11 files):**
+- `domain/model/company/Company.java`
+- `domain/model/company/CompanyId.java`
+- `domain/model/company/CompanyName.java`
+- `domain/model/company/CompanySlug.java`
+- `domain/model/membership/Membership.java`
+- `domain/model/membership/MembershipId.java`
+- `domain/model/membership/Role.java`
+- `domain/model/invitation/Invitation.java`
+- `domain/model/invitation/InvitationId.java`
+- `domain/model/invitation/InvitationToken.java`
+- `domain/model/invitation/InvitationStatus.java`
+
+**Domain Exceptions (7 files):**
+- `CompanySlugAlreadyExistsException.java`
+- `CompanyNotFoundException.java`
+- `MembershipNotFoundException.java`
+- `InvitationAlreadyExistsException.java`
+- `InvitationNotFoundException.java`
+- `InvitationExpiredException.java`
+- `LastOwnerException.java`
+- `UnauthorizedOperationException.java`
+
+**Application Ports (10 files):**
+- `port/in/CreateCompanyUseCase.java`
+- `port/in/GetUserCompaniesUseCase.java`
+- `port/in/GetCompanyDashboardUseCase.java`
+- `port/in/InviteUserToCompanyUseCase.java`
+- `port/in/AcceptInvitationUseCase.java`
+- `port/in/GetInvitationUseCase.java`
+- `port/in/GetCompanyMembersUseCase.java`
+- `port/in/UpdateMemberRoleUseCase.java`
+- `port/out/company/CompanyRepository.java`
+- `port/out/membership/MembershipRepository.java`
+- `port/out/invitation/InvitationRepository.java`
+
+**Use Cases (8 files):**
+- `CreateCompanyUseCaseImpl.java`
+- `GetUserCompaniesUseCaseImpl.java`
+- `GetCompanyDashboardUseCaseImpl.java`
+- `InviteUserToCompanyUseCaseImpl.java`
+- `AcceptInvitationUseCaseImpl.java`
+- `GetInvitationUseCaseImpl.java`
+- `GetCompanyMembersUseCaseImpl.java`
+- `UpdateMemberRoleUseCaseImpl.java`
+
+**Persistence (9 files):**
+- `company/CompanyEntity.java`
+- `company/CompanyMapper.java`
+- `company/CompanyJpaRepository.java`
+- `membership/MembershipEntity.java`
+- `membership/MembershipMapper.java`
+- `membership/MembershipJpaRepository.java`
+- `invitation/InvitationEntity.java`
+- `invitation/InvitationMapper.java`
+- `invitation/InvitationJpaRepository.java`
+
+**REST Endpoints (10 files):**
+- `company/CompanyResource.java` (updated)
+- `company/CreateCompanyRequest.java`
+- `company/CompanyResponse.java`
+- `company/CompanyListResponse.java`
+- `company/CompanyDashboardResponse.java`
+- `company/InviteUserRequest.java`
+- `company/InvitationResponse.java`
+- `company/MemberResponse.java`
+- `company/UpdateMemberRoleRequest.java`
+- `invitation/InvitationResource.java`
+- `invitation/InvitationDetailsResponse.java`
+- `invitation/AcceptInvitationResponse.java`
+
+**Database Migrations:**
+- `V5__create_companies_and_memberships_tables.sql`
+- `V6__create_invitations_table.sql`
+
+**Tests:**
+- `CreateCompanyUseCaseImplTest.java` (5 tests)
+
+**All 125 tests passing!**
+
+---
+
+**Note:** This file can be removed once review is complete.
+
+---
+
+## Frontend Implementation Complete! 🎉
+
+**Files Created (Web Frontend):**
+
+**Features/Company:**
+- `features/company/api.ts` - API client for companies, invitations, members
+- `features/company/CompanyContext.tsx` - React context for company state management
+- `features/company/CreateCompanyForm.tsx` - Company creation form component
+- `features/company/index.ts` - Exports
+
+**Pages:**
+- `pages/CreateCompanyPage.tsx` - Company creation page
+- `pages/CompanyDashboardPage.tsx` - Company dashboard with stats & getting started
+- `pages/TeamSettingsPage.tsx` - Team management page with invite & role change
+- `pages/AcceptInvitationPage.tsx` - Invitation acceptance page
+
+**Components:**
+- `components/ui/select.tsx` - Select component (radix-ui)
+- Updated `components/ui/index.ts` with Select exports
+
+**Routes Added:**
+- `/company/create` - Create new company
+- `/dashboard` - Company dashboard (updated)
+- `/dashboard/settings` - Team settings
+- `/invitations/accept?token=xxx` - Accept invitation
+
+**Dependencies Added:**
+- `@radix-ui/react-select`
+
+**Build: SUCCESS ✅**
+

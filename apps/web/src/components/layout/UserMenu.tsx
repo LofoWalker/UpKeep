@@ -1,18 +1,18 @@
-import { useNavigate } from "react-router-dom";
-import { Settings, LogOut, User as UserIcon } from "lucide-react";
+import {useNavigate} from "react-router-dom";
+import {LogOut, Settings, User as UserIcon} from "lucide-react";
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+    Button,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from "@/components/ui";
-import { useAuth } from "@/features/auth/useAuth";
+import {useAuth} from "@/features/auth/useAuth";
 
 export function UserMenu() {
   const { user, logout } = useAuth();

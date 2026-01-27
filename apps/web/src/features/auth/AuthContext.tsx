@@ -11,17 +11,18 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
     useEffect(() => {
         const initAuth = async () => {
             try {
-                // First try to get user from cookie-based session
                 const currentUser = await getCurrentUser();
                 setUser(currentUser);
                 localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(currentUser));
             } catch {
-                // If that fails, try to restore from localStorage and refresh token
                 const storedUser = localStorage.getItem(USER_STORAGE_KEY);
                 if (storedUser) {
                     try {
                         await refreshToken();
-                        setUser(JSON.parse(storedUser));
+                        // After refresh, get fresh user data from the server
+                        const currentUser = await getCurrentUser();
+                        setUser(currentUser);
+                        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(currentUser));
                     } catch {
                         localStorage.removeItem(USER_STORAGE_KEY);
                     }

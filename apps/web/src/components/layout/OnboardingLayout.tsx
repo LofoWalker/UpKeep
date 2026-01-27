@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
-import { Logo } from "./Logo";
-import { ProgressStepper, Step } from "./ProgressStepper";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui";
+import {Logo} from "./Logo";
+import {ProgressStepper, Step} from "./ProgressStepper";
 
 interface OnboardingLayoutProps {
   children: React.ReactNode;

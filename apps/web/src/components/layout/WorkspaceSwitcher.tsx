@@ -1,11 +1,5 @@
-import { ChevronDown, Check } from "lucide-react";
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui";
+import {Check, ChevronDown} from "lucide-react";
+import {Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui";
 
 export interface Company {
   id: string;

@@ -1,20 +1,20 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import {useState} from "react";
+import {Link, useLocation} from "react-router-dom";
 import {
-  Menu,
-  X,
-  LayoutDashboard,
-  Users,
-  Building2,
-  CreditCard,
-  Settings,
-  ChevronLeft,
-  ChevronRight,
+    Building2,
+    ChevronLeft,
+    ChevronRight,
+    CreditCard,
+    LayoutDashboard,
+    Menu,
+    Settings,
+    Users,
+    X,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui";
-import { Logo } from "./Logo";
-import { UserMenu } from "./UserMenu";
+import {cn} from "@/lib/utils";
+import {Button} from "@/components/ui";
+import {Logo} from "./Logo";
+import {UserMenu} from "./UserMenu";
 
 interface SidebarItem {
   id: string;
