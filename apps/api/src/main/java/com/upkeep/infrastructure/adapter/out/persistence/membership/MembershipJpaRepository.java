@@ -56,6 +56,11 @@ public class MembershipJpaRepository implements MembershipRepository, PanacheRep
     }
 
     @Override
+    public long countByCompanyId(CompanyId companyId) {
+        return count("companyId", companyId.value());
+    }
+
+    @Override
     public long countByCompanyIdAndRole(CompanyId companyId, Role role) {
         return count("companyId = ?1 and role = ?2", companyId.value(), role);
     }

@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useNavigate, useSearchParams} from 'react-router-dom';
+import {useLocation, useNavigate, useSearchParams} from 'react-router-dom';
 import {PublicPageLayout} from '@/components/layout';
 import {useAuth} from '@/features/auth';
 import {acceptInvitation, getInvitationDetails, InvitationDetails, InvitationStatus, Role} from '@/features/company';
@@ -9,6 +9,7 @@ import {ApiError} from '@/lib/api';
 
 export function AcceptInvitationPage() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [searchParams] = useSearchParams();
     const token = searchParams.get('token');
     const { isAuthenticated, isLoading: authLoading } = useAuth();
@@ -48,7 +49,7 @@ export function AcceptInvitationPage() {
         if (!token) return;
 
         if (!isAuthenticated) {
-            navigate(`/login?redirect=/invitations/accept?token=${token}`);
+            navigate('/login', { state: { from: location } });
             return;
         }
 

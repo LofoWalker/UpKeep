@@ -21,6 +21,8 @@ public interface MembershipRepository {
 
     List<Membership> findAllByCompanyId(CompanyId companyId);
 
+    long countByCompanyId(CompanyId companyId);
+
     long countByCompanyIdAndRole(CompanyId companyId, Role role);
 
     boolean existsByCustomerIdAndCompanyId(CustomerId customerId, CompanyId companyId);

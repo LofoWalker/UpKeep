@@ -285,15 +285,20 @@ La PR #13 introduit **140 fichiers modifiés** avec **+4,447 lignes** ajoutées.
 | 6 | `CompanyName` | Exception incorrecte | **HAUTE** | **Corriger** |
 | 7 | `UpdateMemberRoleUseCaseImpl` | Tests manquants | **CRITIQUE** | **BLOQUANT** |
 | 8 | `GetCompanyMembersUseCaseImpl` | Tests manquants | MOYENNE | Optionnel |
-| 9 | `AcceptInvitationPage.tsx` | Bug redirection | **CRITIQUE** | **BLOQUANT** |
+| 9 | `AcceptInvitationPage.tsx` | Bug redirection | ~~CRITIQUE~~ | ✅ **CORRIGÉ** |
 | 10 | `CompanySlug` | Exception incorrecte | **HAUTE** | **Corriger** |
+| - | `GetCompanyDashboardUseCaseImpl` | Performance | **HAUTE** | ✅ **CORRIGÉ** |
 
 ---
 
 ## 🎯 Verdict Final
 
+### ✅ Corrigés dans cette session :
+1. **Bug de redirection login** (#9) - ✅ Corrigé : utilisation de `location.state` au lieu de query param
+2. **Problème de performance** (non signalé) - ✅ Corrigé : ajout de `countByCompanyId()` au lieu de `findAllByCompanyId().size()`
+
 ### Bloquants pour le merge (à corriger obligatoirement) :
-1. **Bug de redirection login** (#9) - Casse le flow d'invitation
+1. ~~**Bug de redirection login** (#9) - Casse le flow d'invitation~~ ✅ CORRIGÉ
 2. **Tests pour `UpdateMemberRoleUseCaseImpl`** (#7) - Règles de sécurité critiques
 
 ### Corrections fortement recommandées :

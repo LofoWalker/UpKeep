@@ -36,10 +36,10 @@ public class GetCompanyDashboardUseCaseImpl implements GetCompanyDashboardUseCas
         Membership membership = membershipRepository.findByCustomerIdAndCompanyId(customerId, companyId)
                 .orElseThrow(() -> new MembershipNotFoundException(query.customerId(), query.companyId()));
 
-        int totalMembers = membershipRepository.findAllByCompanyId(companyId).size();
+        long totalMembers = membershipRepository.countByCompanyId(companyId);
 
         DashboardStats stats = new DashboardStats(
-                totalMembers,
+                (int) totalMembers,
                 false,
                 false,
                 false
