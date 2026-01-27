@@ -15,4 +15,11 @@ public class MockEmailService implements EmailService {
         LOG.infof("📧 [MOCK] Subject: Welcome to Upkeep!");
         LOG.infof("📧 [MOCK] Body: Thank you for creating an account with Upkeep. We're excited to have you!");
     }
+
+    @Override
+    public void sendInvitationEmail(Email email, String invitationToken) {
+        LOG.infof("📧 [MOCK] Sending invitation email to: %s", email.value());
+        LOG.infof("📧 [MOCK] Subject: You've been invited to join a company on Upkeep");
+        LOG.infof("📧 [MOCK] Invitation link: /invitations/accept?token=%s", invitationToken);
+    }
 }

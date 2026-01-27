@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { MemoryRouter } from "react-router-dom";
-import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
+import type {Meta, StoryObj} from "@storybook/react";
+import {MemoryRouter} from "react-router-dom";
+import {WorkspaceSwitcher} from "./WorkspaceSwitcher";
 
 const meta: Meta<typeof WorkspaceSwitcher> = {
   title: "Layout/WorkspaceSwitcher",

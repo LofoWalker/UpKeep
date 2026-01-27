@@ -1,6 +1,6 @@
-import { Navbar } from "./Navbar";
-import { TabNav, TabItem } from "./TabNav";
-import { Company } from "./WorkspaceSwitcher";
+import {Navbar} from "./Navbar";
+import {TabItem, TabNav} from "./TabNav";
+import {Company} from "./WorkspaceSwitcher";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

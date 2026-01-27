@@ -6,13 +6,22 @@ import com.upkeep.application.port.out.customer.CustomerRepository;
 import com.upkeep.application.port.out.notification.EmailService;
 import com.upkeep.domain.exception.CustomerAlreadyExistsException;
 import com.upkeep.domain.exception.DomainValidationException;
-import com.upkeep.domain.model.customer.*;
+import com.upkeep.domain.model.customer.AccountType;
+import com.upkeep.domain.model.customer.Customer;
+import com.upkeep.domain.model.customer.Email;
+import com.upkeep.domain.model.customer.Password;
+import com.upkeep.domain.model.customer.PasswordHash;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class RegisterCustomerUseCaseImplTest {
 

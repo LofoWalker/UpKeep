@@ -1,5 +1,5 @@
-import { AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui";
+import {AlertCircle} from "lucide-react";
+import {Button} from "@/components/ui";
 
 interface PageErrorProps {
   title?: string;

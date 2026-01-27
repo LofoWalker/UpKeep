@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { MemoryRouter } from "react-router-dom";
-import { ProgressStepper } from "./ProgressStepper";
+import type {Meta, StoryObj} from "@storybook/react";
+import {MemoryRouter} from "react-router-dom";
+import {ProgressStepper} from "./ProgressStepper";
 
 const meta: Meta<typeof ProgressStepper> = {
   title: "Layout/ProgressStepper",

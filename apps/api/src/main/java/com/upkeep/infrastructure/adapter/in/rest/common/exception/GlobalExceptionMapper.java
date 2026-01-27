@@ -1,11 +1,20 @@
 package com.upkeep.infrastructure.adapter.in.rest.common.exception;
 
+import com.upkeep.domain.exception.AlreadyMemberException;
+import com.upkeep.domain.exception.CompanyNotFoundException;
+import com.upkeep.domain.exception.CompanySlugAlreadyExistsException;
 import com.upkeep.domain.exception.CustomerAlreadyExistsException;
 import com.upkeep.domain.exception.CustomerNotFoundException;
 import com.upkeep.domain.exception.DomainException;
 import com.upkeep.domain.exception.DomainValidationException;
 import com.upkeep.domain.exception.InvalidCredentialsException;
 import com.upkeep.domain.exception.InvalidRefreshTokenException;
+import com.upkeep.domain.exception.InvitationAlreadyExistsException;
+import com.upkeep.domain.exception.InvitationExpiredException;
+import com.upkeep.domain.exception.InvitationNotFoundException;
+import com.upkeep.domain.exception.LastOwnerException;
+import com.upkeep.domain.exception.MembershipNotFoundException;
+import com.upkeep.domain.exception.UnauthorizedOperationException;
 import com.upkeep.infrastructure.adapter.in.rest.common.response.ApiError;
 import com.upkeep.infrastructure.adapter.in.rest.common.response.ApiResponse;
 import jakarta.annotation.Priority;
@@ -76,6 +85,69 @@ public class GlobalExceptionMapper implements ExceptionMapper<Throwable> {
                     .status(409)
                     .entity(ApiResponse.error(
                             ApiError.of("CUSTOMER_ALREADY_EXISTS", e.getMessage(), traceId)
+                    ))
+                    .build();
+
+            case CompanySlugAlreadyExistsException e -> Response
+                    .status(409)
+                    .entity(ApiResponse.error(
+                            ApiError.of("COMPANY_SLUG_ALREADY_EXISTS", e.getMessage(), traceId)
+                    ))
+                    .build();
+
+            case CompanyNotFoundException e -> Response
+                    .status(404)
+                    .entity(ApiResponse.error(
+                            ApiError.of("COMPANY_NOT_FOUND", e.getMessage(), traceId)
+                    ))
+                    .build();
+
+            case MembershipNotFoundException e -> Response
+                    .status(404)
+                    .entity(ApiResponse.error(
+                            ApiError.of("NOT_A_MEMBER", e.getMessage(), traceId)
+                    ))
+                    .build();
+
+            case InvitationAlreadyExistsException e -> Response
+                    .status(409)
+                    .entity(ApiResponse.error(
+                            ApiError.of("INVITATION_ALREADY_EXISTS", e.getMessage(), traceId)
+                    ))
+                    .build();
+
+            case InvitationNotFoundException e -> Response
+                    .status(404)
+                    .entity(ApiResponse.error(
+                            ApiError.of("INVITATION_NOT_FOUND", e.getMessage(), traceId)
+                    ))
+                    .build();
+
+            case InvitationExpiredException e -> Response
+                    .status(410)
+                    .entity(ApiResponse.error(
+                            ApiError.of("INVITATION_EXPIRED", e.getMessage(), traceId)
+                    ))
+                    .build();
+
+            case UnauthorizedOperationException e -> Response
+                    .status(403)
+                    .entity(ApiResponse.error(
+                            ApiError.of("FORBIDDEN", e.getMessage(), traceId)
+                    ))
+                    .build();
+
+            case LastOwnerException e -> Response
+                    .status(422)
+                    .entity(ApiResponse.error(
+                            ApiError.of("LAST_OWNER", e.getMessage(), traceId)
+                    ))
+                    .build();
+
+            case AlreadyMemberException e -> Response
+                    .status(409)
+                    .entity(ApiResponse.error(
+                            ApiError.of("ALREADY_MEMBER", e.getMessage(), traceId)
                     ))
                     .build();
 

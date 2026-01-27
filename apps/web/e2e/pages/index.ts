@@ -1,4 +1,4 @@
-import { test as base, Page, Locator } from '@playwright/test';
+import {Locator, Page, test as base} from '@playwright/test';
 
 /**
  * Base page object providing common selectors and navigation methods.

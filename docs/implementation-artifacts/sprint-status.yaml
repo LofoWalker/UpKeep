@@ -61,14 +61,14 @@ development_status:
   #       with full tenant isolation.
   # FRs: FR2, FR3, FR4, FR5, FR6, FR7
   # ═══════════════════════════════════════════════════════════════════════════
-  epic-2: backlog
-  2-1-create-company-workspace: ready-for-dev
-  2-2-company-dashboard-shell: ready-for-dev
-  2-3-invite-user-to-company: ready-for-dev
-  2-4-accept-company-invitation: ready-for-dev
-  2-5-manage-team-roles: ready-for-dev
-  2-6-workspace-switcher: ready-for-dev
-  2-7-tenant-data-isolation: ready-for-dev
+  epic-2: done
+  2-1-create-company-workspace: done
+  2-2-company-dashboard-shell: done
+  2-3-invite-user-to-company: done
+  2-4-accept-company-invitation: done
+  2-5-manage-team-roles: done
+  2-6-workspace-switcher: done
+  2-7-tenant-data-isolation: done
   epic-2-retrospective: optional
 
   # ═══════════════════════════════════════════════════════════════════════════

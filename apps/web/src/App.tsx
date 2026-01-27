@@ -2,9 +2,13 @@ import './App.css'
 import {BrowserRouter, Link, Route, Routes} from 'react-router-dom'
 import {RegisterPage} from './pages/RegisterPage'
 import {LoginPage} from './pages/LoginPage'
-import {DashboardPage} from './pages/DashboardPage'
 import {OnboardingPage} from './pages/OnboardingPage'
+import {CreateCompanyPage} from './pages/CreateCompanyPage'
+import {CompanyDashboardPage} from './pages/CompanyDashboardPage'
+import {TeamSettingsPage} from './pages/TeamSettingsPage'
+import {AcceptInvitationPage} from './pages/AcceptInvitationPage'
 import {AuthProvider} from './features/auth/AuthContext'
+import {CompanyProvider} from './features/company'
 import {ProtectedRoute} from './features/auth/ProtectedRoute'
 import {Toaster} from './components/ui'
 
@@ -56,28 +60,47 @@ function App() {
     return (
         <BrowserRouter>
             <AuthProvider>
-                <Routes>
-                    <Route path="/" element={<HomePage/>}/>
-                    <Route path="/login" element={<LoginPage/>}/>
-                    <Route path="/register" element={<RegisterPage/>}/>
-                    <Route
-                        path="/onboarding"
-                        element={
-                            <ProtectedRoute>
-                                <OnboardingPage/>
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/dashboard"
-                        element={
-                            <ProtectedRoute>
-                                <DashboardPage/>
-                            </ProtectedRoute>
-                        }
-                    />
-                </Routes>
-                <Toaster />
+                <CompanyProvider>
+                    <Routes>
+                        <Route path="/" element={<HomePage/>}/>
+                        <Route path="/login" element={<LoginPage/>}/>
+                        <Route path="/register" element={<RegisterPage/>}/>
+                        <Route path="/invitations/accept" element={<AcceptInvitationPage/>}/>
+                        <Route
+                            path="/onboarding"
+                            element={
+                                <ProtectedRoute>
+                                    <OnboardingPage/>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/company/create"
+                            element={
+                                <ProtectedRoute>
+                                    <CreateCompanyPage/>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/dashboard"
+                            element={
+                                <ProtectedRoute>
+                                    <CompanyDashboardPage/>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/dashboard/settings"
+                            element={
+                                <ProtectedRoute>
+                                    <TeamSettingsPage/>
+                                </ProtectedRoute>
+                            }
+                        />
+                    </Routes>
+                    <Toaster />
+                </CompanyProvider>
             </AuthProvider>
         </BrowserRouter>
     )

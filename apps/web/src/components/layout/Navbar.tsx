@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui";
-import { Logo } from "./Logo";
-import { UserMenu } from "./UserMenu";
-import { WorkspaceSwitcher, Company } from "./WorkspaceSwitcher";
-import { cn } from "@/lib/utils";
+import {useState} from "react";
+import {Menu, X} from "lucide-react";
+import {Button} from "@/components/ui";
+import {Logo} from "./Logo";
+import {UserMenu} from "./UserMenu";
+import {Company, WorkspaceSwitcher} from "./WorkspaceSwitcher";
+import {cn} from "@/lib/utils";
 
 interface NavbarProps {
   currentCompany?: Company | null;

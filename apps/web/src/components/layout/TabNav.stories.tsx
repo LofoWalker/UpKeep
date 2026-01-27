@@ -1,12 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { MemoryRouter } from "react-router-dom";
-import { TabNav } from "./TabNav";
-import {
-  LayoutDashboard,
-  Package,
-  DollarSign,
-  Settings,
-} from "lucide-react";
+import type {Meta, StoryObj} from "@storybook/react";
+import {MemoryRouter} from "react-router-dom";
+import {TabNav} from "./TabNav";
+import {DollarSign, LayoutDashboard, Package, Settings,} from "lucide-react";
 
 const meta: Meta<typeof TabNav> = {
   title: "Layout/TabNav",
