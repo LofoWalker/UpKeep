@@ -39,7 +39,9 @@ public class InvitationJpaRepository implements InvitationRepository, PanacheRep
     }
 
     @Override
-    public Optional<Invitation> findByCompanyIdAndEmailAndStatus(CompanyId companyId, Email email, InvitationStatus status) {
+    public Optional<Invitation> findByCompanyIdAndEmailAndStatus(CompanyId companyId,
+                                                                 Email email,
+                                                                 InvitationStatus status) {
         return find("companyId = ?1 and email = ?2 and status = ?3", companyId.value(), email.value(), status)
                 .firstResultOptional()
                 .map(InvitationMapper::toDomain);
@@ -65,6 +67,7 @@ public class InvitationJpaRepository implements InvitationRepository, PanacheRep
 
     @Override
     public boolean existsByCompanyIdAndEmailAndStatus(CompanyId companyId, Email email, InvitationStatus status) {
-        return count("companyId = ?1 and email = ?2 and status = ?3", companyId.value(), email.value(), status) > 0;
+        return count("companyId = ?1 and email = ?2 and status = ?3",
+                companyId.value(), email.value(), status) > 0;
     }
 }

@@ -13,7 +13,6 @@ import com.upkeep.domain.model.customer.Email;
 import com.upkeep.domain.model.invitation.Invitation;
 import com.upkeep.domain.model.invitation.InvitationStatus;
 import com.upkeep.domain.model.membership.Membership;
-import com.upkeep.domain.model.membership.Role;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -48,7 +47,9 @@ public class InviteUserToCompanyUseCaseImpl implements InviteUserToCompanyUseCas
             throw new UnauthorizedOperationException("Only owners can invite members");
         }
 
-        if (invitationRepository.existsByCompanyIdAndEmailAndStatus(companyId, inviteeEmail, InvitationStatus.PENDING)) {
+        boolean pendingInvitationExists = invitationRepository
+                .existsByCompanyIdAndEmailAndStatus(companyId, inviteeEmail, InvitationStatus.PENDING);
+        if (pendingInvitationExists) {
             throw new InvitationAlreadyExistsException(command.email());
         }
 
