@@ -1,5 +1,61 @@
 # Copilot Processing
 
+## Session: Tests d'intégration pour InvitationResource
+
+### User Request
+Ajouter des tests d'intégration pour les endpoints REST d'invitation (récupération des détails et acceptation d'une invitation) afin d'assurer la fiabilité du flux d'invitation et la cohérence avec le contrat API.
+
+### Action Plan
+
+- [x] Identifier les endpoints d'invitation dans InvitationResource
+- [x] Analyser les patterns de tests existants (AuthResourceTest, OAuthResourceTest)
+- [x] Créer InvitationResourceTest avec les scénarios de test suivants:
+  - [x] GET /api/invitations/{token} - Récupération des détails d'invitation
+    - [x] Token valide avec invitation en attente
+    - [x] Token avec invitation expirée
+    - [x] Token invalide (404)
+    - [x] Token avec invitation acceptée
+  - [x] POST /api/invitations/{token}/accept - Acceptation d'invitation
+    - [x] Acceptation réussie avec token d'accès valide
+    - [x] Accès non authentifié (401)
+    - [x] Token d'accès vide (401)
+    - [x] Token d'accès invalide (401)
+    - [x] Token d'invitation inexistant (404)
+    - [x] Invitation expirée (410)
+    - [x] Utilisateur déjà membre (409)
+    - [x] Acceptation avec rôle OWNER
+- [x] Exécuter et valider les tests
+
+### Summary
+
+Créé `InvitationResourceTest.java` avec 12 tests d'intégration Quarkus couvrant:
+
+1. **GET /api/invitations/{token}** (4 tests):
+   - Retourne les détails d'invitation pour un token valide
+   - Retourne les détails pour une invitation expirée (avec isExpired=true)
+   - Retourne 404 pour un token inexistant
+   - Retourne le statut ACCEPTED pour une invitation acceptée
+
+2. **POST /api/invitations/{token}/accept** (8 tests):
+   - Accepte l'invitation avec un token d'authentification valide
+   - Retourne 401 sans token d'accès
+   - Retourne 401 avec token d'accès vide
+   - Retourne 401 avec token d'accès invalide
+   - Retourne 404 pour un token d'invitation inexistant
+   - Retourne 410 pour une invitation expirée
+   - Retourne 409 si l'utilisateur est déjà membre
+   - Accepte l'invitation avec le rôle OWNER
+
+**Fichier créé**: `apps/api/src/test/java/com/upkeep/infrastructure/adapter/in/rest/invitation/InvitationResourceTest.java`
+
+**Tests exécutés**: 245 tests au total, 0 échecs, 0 erreurs
+
+---
+
+## Previous Session
+
+# Copilot Processing
+
 ## User Request
 Problème d'authentification : après connexion avec un compte classique (non-GitHub), l'utilisateur est redirigé vers "Create company workspace" même s'il fait déjà partie d'un ou plusieurs workspaces. Ce comportement est anormal - si un utilisateur est lié à un workspace, on ne doit pas lui proposer d'en créer un.
 
