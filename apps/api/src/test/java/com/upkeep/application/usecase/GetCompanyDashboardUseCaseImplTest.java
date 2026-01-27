@@ -18,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -50,12 +49,11 @@ class GetCompanyDashboardUseCaseImplTest {
     void shouldReturnDashboardSuccessfully() {
         Company company = createTestCompany();
         Membership membership = createTestMembership(Role.OWNER);
-        List<Membership> allMembers = List.of(membership, createTestMembership(Role.MEMBER));
 
         when(companyRepository.findById(any(CompanyId.class))).thenReturn(Optional.of(company));
         when(membershipRepository.findByCustomerIdAndCompanyId(any(CustomerId.class), any(CompanyId.class)))
                 .thenReturn(Optional.of(membership));
-        when(membershipRepository.findAllByCompanyId(any(CompanyId.class))).thenReturn(allMembers);
+        when(membershipRepository.countByCompanyId(any(CompanyId.class))).thenReturn(2L);
 
         GetCompanyDashboardQuery query = new GetCompanyDashboardQuery(CUSTOMER_ID, COMPANY_ID);
 
@@ -107,17 +105,11 @@ class GetCompanyDashboardUseCaseImplTest {
     void shouldReturnCorrectTotalMembers() {
         Company company = createTestCompany();
         Membership membership = createTestMembership(Role.MEMBER);
-        List<Membership> allMembers = List.of(
-                createTestMembership(Role.OWNER),
-                createTestMembership(Role.MEMBER),
-                createTestMembership(Role.MEMBER),
-                createTestMembership(Role.MEMBER)
-        );
 
         when(companyRepository.findById(any(CompanyId.class))).thenReturn(Optional.of(company));
         when(membershipRepository.findByCustomerIdAndCompanyId(any(CustomerId.class), any(CompanyId.class)))
                 .thenReturn(Optional.of(membership));
-        when(membershipRepository.findAllByCompanyId(any(CompanyId.class))).thenReturn(allMembers);
+        when(membershipRepository.countByCompanyId(any(CompanyId.class))).thenReturn(4L);
 
         GetCompanyDashboardQuery query = new GetCompanyDashboardQuery(CUSTOMER_ID, COMPANY_ID);
 
@@ -134,7 +126,7 @@ class GetCompanyDashboardUseCaseImplTest {
         when(companyRepository.findById(any(CompanyId.class))).thenReturn(Optional.of(company));
         when(membershipRepository.findByCustomerIdAndCompanyId(any(CustomerId.class), any(CompanyId.class)))
                 .thenReturn(Optional.of(membership));
-        when(membershipRepository.findAllByCompanyId(any(CompanyId.class))).thenReturn(List.of(membership));
+        when(membershipRepository.countByCompanyId(any(CompanyId.class))).thenReturn(1L);
 
         GetCompanyDashboardQuery query = new GetCompanyDashboardQuery(CUSTOMER_ID, COMPANY_ID);
 
