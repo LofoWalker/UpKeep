@@ -6,6 +6,7 @@ import com.upkeep.application.port.in.CreateCompanyUseCase.CreateCompanyResult;
 import com.upkeep.application.port.out.company.CompanyRepository;
 import com.upkeep.application.port.out.membership.MembershipRepository;
 import com.upkeep.domain.exception.CompanySlugAlreadyExistsException;
+import com.upkeep.domain.exception.DomainValidationException;
 import com.upkeep.domain.model.company.Company;
 import com.upkeep.domain.model.company.CompanySlug;
 import com.upkeep.domain.model.membership.Membership;
@@ -103,7 +104,7 @@ class CreateCompanyUseCaseImplTest {
 
         CreateCompanyCommand command = new CreateCompanyCommand(customerId, companyName, null);
 
-        assertThrows(IllegalArgumentException.class, () -> useCase.execute(command));
+        assertThrows(DomainValidationException.class, () -> useCase.execute(command));
     }
 
     @Test
