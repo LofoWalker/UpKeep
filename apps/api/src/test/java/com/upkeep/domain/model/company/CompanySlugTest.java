@@ -1,5 +1,6 @@
 package com.upkeep.domain.model.company;
 
+import com.upkeep.domain.exception.DomainValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -7,6 +8,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("CompanySlug")
@@ -31,27 +33,33 @@ class CompanySlugTest {
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"   ", "\t", "\n"})
-    @DisplayName("should throw IllegalArgumentException for empty or blank slugs")
+    @DisplayName("should throw DomainValidationException for empty or blank slugs")
     void shouldThrowForEmptyOrBlankSlugs(String value) {
-        assertThrows(IllegalArgumentException.class, () -> new CompanySlug(value));
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
+                () -> new CompanySlug(value)
+        );
+        assertFalse(exception.getFieldErrors().isEmpty());
+        assertEquals("slug", exception.getFieldErrors().get(0).field());
     }
 
     @Test
-    @DisplayName("should throw IllegalArgumentException for slug too short")
+    @DisplayName("should throw DomainValidationException for slug too short")
     void shouldThrowForSlugTooShort() {
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
                 () -> new CompanySlug("a")
         );
         assertEquals("Company slug must be between 2 and 50 characters", exception.getMessage());
+        assertEquals("slug", exception.getFieldErrors().get(0).field());
     }
 
     @Test
-    @DisplayName("should throw IllegalArgumentException for slug too long")
+    @DisplayName("should throw DomainValidationException for slug too long")
     void shouldThrowForSlugTooLong() {
         String longSlug = "a".repeat(51);
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
                 () -> new CompanySlug(longSlug)
         );
         assertEquals("Company slug must be between 2 and 50 characters", exception.getMessage());
@@ -59,9 +67,13 @@ class CompanySlugTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"Acme Inc", "acme_inc", "acme.inc", "acme@inc", "-acme", "acme-", "--acme"})
-    @DisplayName("should throw IllegalArgumentException for invalid slug format")
+    @DisplayName("should throw DomainValidationException for invalid slug format")
     void shouldThrowForInvalidFormat(String value) {
-        assertThrows(IllegalArgumentException.class, () -> new CompanySlug(value));
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
+                () -> new CompanySlug(value)
+        );
+        assertEquals("slug", exception.getFieldErrors().get(0).field());
     }
 
     @Test

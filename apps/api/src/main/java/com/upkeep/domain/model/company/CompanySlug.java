@@ -1,5 +1,9 @@
 package com.upkeep.domain.model.company;
 
+import com.upkeep.domain.exception.DomainValidationException;
+import com.upkeep.domain.exception.FieldError;
+
+import java.util.List;
 import java.util.regex.Pattern;
 
 public record CompanySlug(String value) {
@@ -10,15 +14,23 @@ public record CompanySlug(String value) {
 
     public CompanySlug {
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("Company slug cannot be empty");
+            throw new DomainValidationException("Company slug cannot be empty", List.of(
+                    new FieldError("slug", "Company slug cannot be empty")
+            ));
         }
         if (value.length() < MIN_LENGTH || value.length() > MAX_LENGTH) {
-            throw new IllegalArgumentException(
-                    "Company slug must be between " + MIN_LENGTH + " and " + MAX_LENGTH + " characters");
+            throw new DomainValidationException(
+                    "Company slug must be between " + MIN_LENGTH + " and " + MAX_LENGTH + " characters",
+                    List.of(new FieldError("slug",
+                            "Company slug must be between " + MIN_LENGTH + " and " + MAX_LENGTH + " characters"))
+            );
         }
         if (!SLUG_PATTERN.matcher(value).matches()) {
-            throw new IllegalArgumentException(
-                    "Company slug must contain only lowercase letters, numbers, and hyphens");
+            throw new DomainValidationException(
+                    "Company slug must contain only lowercase letters, numbers, and hyphens",
+                    List.of(new FieldError("slug",
+                            "Company slug must contain only lowercase letters, numbers, and hyphens"))
+            );
         }
     }
 

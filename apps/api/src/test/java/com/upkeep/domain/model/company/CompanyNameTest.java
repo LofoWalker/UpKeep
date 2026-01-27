@@ -1,5 +1,6 @@
 package com.upkeep.domain.model.company;
 
+import com.upkeep.domain.exception.DomainValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -7,6 +8,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("CompanyName")
@@ -31,27 +33,33 @@ class CompanyNameTest {
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"   ", "\t", "\n"})
-    @DisplayName("should throw IllegalArgumentException for empty or blank names")
+    @DisplayName("should throw DomainValidationException for empty or blank names")
     void shouldThrowForEmptyOrBlankNames(String value) {
-        assertThrows(IllegalArgumentException.class, () -> new CompanyName(value));
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
+                () -> new CompanyName(value)
+        );
+        assertFalse(exception.getFieldErrors().isEmpty());
+        assertEquals("name", exception.getFieldErrors().get(0).field());
     }
 
     @Test
-    @DisplayName("should throw IllegalArgumentException for name too short")
+    @DisplayName("should throw DomainValidationException for name too short")
     void shouldThrowForNameTooShort() {
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
                 () -> new CompanyName("A")
         );
         assertEquals("Company name must be between 2 and 100 characters", exception.getMessage());
+        assertEquals("name", exception.getFieldErrors().get(0).field());
     }
 
     @Test
-    @DisplayName("should throw IllegalArgumentException for name too long")
+    @DisplayName("should throw DomainValidationException for name too long")
     void shouldThrowForNameTooLong() {
         String longName = "A".repeat(101);
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        DomainValidationException exception = assertThrows(
+                DomainValidationException.class,
                 () -> new CompanyName(longName)
         );
         assertEquals("Company name must be between 2 and 100 characters", exception.getMessage());
