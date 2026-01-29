@@ -34,7 +34,7 @@ jobs:
 
   web-e2e:
     name: Web - E2E Tests
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     defaults:
       run:
         working-directory: apps/web
