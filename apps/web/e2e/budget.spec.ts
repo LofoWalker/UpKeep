@@ -1,7 +1,7 @@
-import { test, expect } from './fixtures';
+import {expect, test} from './fixtures';
 
 test.describe('Budget Management', () => {
-  test.beforeEach(async ({ page, registerPage, loginPage }) => {
+  test.beforeEach(async ({ page, registerPage }) => {
     const timestamp = Date.now();
     const email = `budget-test-${timestamp}@example.com`;
 

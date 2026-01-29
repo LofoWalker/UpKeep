@@ -2,11 +2,11 @@ package com.upkeep.infrastructure.adapter.in.rest.budget;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
-import io.restassured.http.Cookie;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -17,19 +17,15 @@ import static org.hamcrest.Matchers.nullValue;
 @DisplayName("BudgetResource")
 class BudgetResourceTest {
 
-    private String accessToken;
-    private String companyId;
-
-    @BeforeEach
-    void setUp() {
-        String registerBody = """
+    private String createUserAndGetToken(String email) {
+        String registerBody = String.format("""
                 {
-                    "email": "budgetowner@example.com",
+                    "email": "%s",
                     "password": "SecurePass123",
                     "confirmPassword": "SecurePass123",
                     "accountType": "COMPANY"
                 }
-                """;
+                """, email);
 
         given()
                 .contentType(ContentType.JSON)
@@ -41,42 +37,55 @@ class BudgetResourceTest {
 
         Response loginResponse = given()
                 .contentType(ContentType.JSON)
-                .body("""
+                .body(String.format("""
                         {
-                            "email": "budgetowner@example.com",
+                            "email": "%s",
                             "password": "SecurePass123"
                         }
-                        """)
+                        """, email))
                 .when()
                 .post("/api/auth/login");
 
-        accessToken = loginResponse.getCookie("access_token");
+        return loginResponse.getCookie("access_token");
+    }
 
-        String createCompanyBody = """
+    private String createCompany(String token, String companyName, String companySlug) {
+        String createCompanyBody = String.format("""
                 {
-                    "name": "Budget Test Company",
-                    "slug": "budget-test-company"
+                    "name": "%s",
+                    "slug": "%s"
                 }
-                """;
+                """, companyName, companySlug);
 
-        companyId = given()
+        Response response = given()
                 .contentType(ContentType.JSON)
-                .cookie("access_token", accessToken)
+                .cookie("access_token", token)
                 .body(createCompanyBody)
                 .when()
                 .post("/api/companies")
                 .then()
                 .statusCode(201)
                 .extract()
-                .path("data.companyId");
+                .response();
+
+        String companyId = response.path("data.id");
+        if (companyId == null) {
+            throw new IllegalStateException("Company creation failed: companyId is null. Response: " + response.asString());
+        }
+        return companyId;
     }
 
     @Test
     @DisplayName("should return empty budget summary when no budget set")
     void shouldReturnEmptyBudgetSummary() {
+        String uniqueId = UUID.randomUUID().toString().substring(0, 8);
+        String email = "empty-budget-" + uniqueId + "@example.com";
+        String token = createUserAndGetToken(email);
+        String companyId = createCompany(token, "Empty Budget Company", "empty-budget-" + uniqueId);
+
         given()
                 .contentType(ContentType.JSON)
-                .cookie("access_token", accessToken)
+                .cookie("access_token", token)
                 .when()
                 .get("/api/companies/" + companyId + "/budget")
                 .then()
@@ -91,6 +100,11 @@ class BudgetResourceTest {
     @Test
     @DisplayName("should set monthly budget successfully")
     void shouldSetBudgetSuccessfully() {
+        String uniqueId = UUID.randomUUID().toString().substring(0, 8);
+        String email = "set-budget-" + uniqueId + "@example.com";
+        String token = createUserAndGetToken(email);
+        String companyId = createCompany(token, "Set Budget Company", "set-budget-" + uniqueId);
+
         String requestBody = """
                 {
                     "amountCents": 50000,
@@ -100,7 +114,7 @@ class BudgetResourceTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .cookie("access_token", accessToken)
+                .cookie("access_token", token)
                 .body(requestBody)
                 .when()
                 .post("/api/companies/" + companyId + "/budget")
@@ -114,6 +128,11 @@ class BudgetResourceTest {
     @Test
     @DisplayName("should return budget summary after setting budget")
     void shouldReturnBudgetSummaryAfterSetting() {
+        String uniqueId = UUID.randomUUID().toString().substring(0, 8);
+        String email = "summary-" + uniqueId + "@example.com";
+        String token = createUserAndGetToken(email);
+        String companyId = createCompany(token, "Summary Company", "summary-" + uniqueId);
+
         String requestBody = """
                 {
                     "amountCents": 100000,
@@ -123,7 +142,7 @@ class BudgetResourceTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .cookie("access_token", accessToken)
+                .cookie("access_token", token)
                 .body(requestBody)
                 .when()
                 .post("/api/companies/" + companyId + "/budget")
@@ -132,7 +151,7 @@ class BudgetResourceTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .cookie("access_token", accessToken)
+                .cookie("access_token", token)
                 .when()
                 .get("/api/companies/" + companyId + "/budget")
                 .then()
@@ -148,6 +167,11 @@ class BudgetResourceTest {
     @Test
     @DisplayName("should reject budget with amount below minimum")
     void shouldRejectBudgetBelowMinimum() {
+        String uniqueId = UUID.randomUUID().toString().substring(0, 8);
+        String email = "below-min-" + uniqueId + "@example.com";
+        String token = createUserAndGetToken(email);
+        String companyId = createCompany(token, "Below Min Company", "below-min-" + uniqueId);
+
         String requestBody = """
                 {
                     "amountCents": 50,
@@ -157,7 +181,7 @@ class BudgetResourceTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .cookie("access_token", accessToken)
+                .cookie("access_token", token)
                 .body(requestBody)
                 .when()
                 .post("/api/companies/" + companyId + "/budget")
@@ -169,6 +193,11 @@ class BudgetResourceTest {
     @Test
     @DisplayName("should reject budget with invalid currency")
     void shouldRejectInvalidCurrency() {
+        String uniqueId = UUID.randomUUID().toString().substring(0, 8);
+        String email = "invalid-currency-" + uniqueId + "@example.com";
+        String token = createUserAndGetToken(email);
+        String companyId = createCompany(token, "Invalid Currency Company", "invalid-currency-" + uniqueId);
+
         String requestBody = """
                 {
                     "amountCents": 50000,
@@ -178,7 +207,7 @@ class BudgetResourceTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .cookie("access_token", accessToken)
+                .cookie("access_token", token)
                 .body(requestBody)
                 .when()
                 .post("/api/companies/" + companyId + "/budget")
@@ -190,6 +219,11 @@ class BudgetResourceTest {
     @Test
     @DisplayName("should reject budget request without authentication")
     void shouldRejectUnauthenticatedRequest() {
+        String uniqueId = UUID.randomUUID().toString().substring(0, 8);
+        String email = "unauth-" + uniqueId + "@example.com";
+        String token = createUserAndGetToken(email);
+        String companyId = createCompany(token, "Unauth Company", "unauth-" + uniqueId);
+
         String requestBody = """
                 {
                     "amountCents": 50000,
@@ -213,7 +247,8 @@ class BudgetResourceTest {
         String[] currencies = {"EUR", "USD", "GBP"};
 
         for (String currency : currencies) {
-            String email = "owner-" + currency.toLowerCase() + "@example.com";
+            String uniqueId = UUID.randomUUID().toString().substring(0, 8);
+            String email = "owner-" + currency.toLowerCase() + "-" + uniqueId + "@example.com";
             String registerBody = String.format("""
                     {
                         "email": "%s",
@@ -226,7 +261,9 @@ class BudgetResourceTest {
             given()
                     .contentType(ContentType.JSON)
                     .body(registerBody)
-                    .post("/api/auth/register");
+                    .post("/api/auth/register")
+                    .then()
+                    .statusCode(201);
 
             String loginBody = String.format("""
                     {
@@ -245,9 +282,9 @@ class BudgetResourceTest {
             String createCompanyBody = String.format("""
                     {
                         "name": "Company %s",
-                        "slug": "company-%s"
+                        "slug": "company-%s-%s"
                     }
-                    """, currency, currency.toLowerCase());
+                    """, currency, currency.toLowerCase(), uniqueId);
 
             String testCompanyId = given()
                     .contentType(ContentType.JSON)
@@ -257,7 +294,7 @@ class BudgetResourceTest {
                     .then()
                     .statusCode(201)
                     .extract()
-                    .path("data.companyId");
+                    .path("data.id");
 
             String budgetBody = String.format("""
                     {

@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import {Locator, Page} from '@playwright/test';
 
 export class BudgetPage {
   readonly page: Page;
@@ -21,7 +21,7 @@ export class BudgetPage {
     this.budgetRemaining = page.getByText(/remaining/i);
   }
 
-  async navigate(companyId: string) {
+  async navigate() {
     await this.page.goto(`/dashboard/budget`);
   }
 
