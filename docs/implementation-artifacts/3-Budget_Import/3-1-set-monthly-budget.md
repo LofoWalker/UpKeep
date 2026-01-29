@@ -1,6 +1,6 @@
 # Story 3.1: Set Monthly Budget
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -350,14 +350,115 @@ export function BudgetSetupForm() {
 ## Dev Agent Record
 
 ### Agent Model Used
-_To be filled by dev agent_
+GitHub Copilot (claude-3.5-sonnet)
 
 ### Completion Notes List
-_To be filled during implementation_
+- Successfully implemented all backend layers (Domain, Application, Infrastructure)
+- Created Budget and AuditEvent domain models with proper value objects
+- Implemented use cases with role-based authorization (OWNER only)
+- Created database migrations for budgets and audit_events tables
+- Implemented REST endpoints with proper validation
+- Created frontend components using React Query for state management
+- Added formatCurrency utility function for money display
+- Created BudgetBar component for visual budget representation
+- Integrated budget page into dashboard navigation
+- Both backend and frontend compile successfully
+- Money stored as cents to avoid floating-point issues
+- Audit events track all budget changes (FR37)
+- **Comprehensive test suite created with 33 tests covering all layers**
+- All backend unit tests passing (MoneyTest, BudgetTest, AuditEventTest)
+- All use case tests passing with proper mocking
+- Integration tests verify REST API functionality
+- E2E tests cover complete user workflow including validation and persistence
 
 ### Change Log
-_To be filled during implementation_
+1. Created domain model: Budget, Money, Currency, BudgetId
+2. Created audit model: AuditEvent, AuditEventType, AuditEventId
+3. Implemented SetCompanyBudgetUseCase with owner role check
+4. Implemented GetBudgetSummaryUseCase
+5. Created database migrations V7 and V8
+6. Implemented JPA entities and repositories
+7. Created REST endpoints with DTOs
+8. Added formatCurrency utility function
+9. Created BudgetBar component
+10. Created BudgetSetupForm with validation
+11. Created BudgetSummaryView with empty state
+12. Created BudgetPage with navigation
+13. Integrated budget tab in dashboard
+14. Added @tanstack/react-query dependency
+15. Added QueryClientProvider to App
+16. Created comprehensive test suite with 33 tests
+17. Unit tests for Money (3), Budget (3), AuditEvent (4)
+18. Use case tests with mocking (SetBudget: 4, GetSummary: 3)
+19. Integration tests for REST API (9 scenarios)
+20. E2E tests with Page Object Model (7 scenarios)
+21. Verified all tests passing
 
 ### File List
-_To be filled after implementation_
+
+#### Backend (27 files)
+**Domain:**
+- domain/model/budget/Currency.java
+- domain/model/budget/Money.java
+- domain/model/budget/Budget.java
+- domain/model/budget/BudgetId.java
+- domain/model/audit/AuditEvent.java
+- domain/model/audit/AuditEventId.java
+- domain/model/audit/AuditEventType.java
+
+**Application:**
+- application/port/in/budget/SetCompanyBudgetUseCase.java
+- application/port/in/budget/GetBudgetSummaryUseCase.java
+- application/port/out/budget/BudgetRepository.java
+- application/port/out/audit/AuditEventRepository.java
+- application/usecase/SetCompanyBudgetUseCaseImpl.java
+- application/usecase/GetBudgetSummaryUseCaseImpl.java
+
+**Infrastructure:**
+- resources/db/migration/V7__create_budgets_table.sql
+- resources/db/migration/V8__create_audit_events_table.sql
+- infrastructure/adapter/out/persistence/budget/BudgetEntity.java
+- infrastructure/adapter/out/persistence/budget/BudgetMapper.java
+- infrastructure/adapter/out/persistence/budget/BudgetJpaRepository.java
+- infrastructure/adapter/out/persistence/audit/AuditEventEntity.java
+- infrastructure/adapter/out/persistence/audit/AuditEventMapper.java
+- infrastructure/adapter/out/persistence/audit/AuditEventJpaRepository.java
+- infrastructure/adapter/in/rest/budget/BudgetResource.java
+- infrastructure/adapter/in/rest/budget/SetBudgetRequest.java
+- infrastructure/adapter/in/rest/budget/BudgetResponse.java
+- infrastructure/adapter/in/rest/budget/BudgetSummaryResponse.java
+
+#### Frontend (11 files)
+**Modified:**
+- lib/utils.ts (added formatCurrency)
+- components/common/index.ts (exported BudgetBar)
+- App.tsx (added route and QueryClient)
+- pages/CompanyDashboardPage.tsx (added budget tab and navigation)
+- pages/TeamSettingsPage.tsx (added budget tab)
+- package.json (added @tanstack/react-query)
+
+**New:**
+- components/common/BudgetBar.tsx
+- features/budget/api.ts
+- features/budget/BudgetSetupForm.tsx
+- features/budget/BudgetSummaryView.tsx
+- features/budget/index.ts
+- pages/BudgetPage.tsx
+
+#### Tests (9 files)
+**Backend Tests (6 files):**
+- test/java/.../domain/model/budget/MoneyTest.java (3 tests)
+- test/java/.../domain/model/budget/BudgetTest.java (3 tests)
+- test/java/.../domain/model/audit/AuditEventTest.java (4 tests)
+- test/java/.../application/usecase/SetCompanyBudgetUseCaseImplTest.java (4 tests)
+- test/java/.../application/usecase/GetBudgetSummaryUseCaseImplTest.java (3 tests)
+- test/java/.../infrastructure/.../rest/budget/BudgetResourceTest.java (9 tests)
+
+**Frontend Tests (3 files):**
+- e2e/pages/budget.page.ts (Page Object Model)
+- e2e/budget.spec.ts (7 E2E scenarios)
+- e2e/fixtures/index.ts (updated with BudgetPage fixture)
+
+**Total: 33 tests created and passing**
+
 
