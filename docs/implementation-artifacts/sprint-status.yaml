@@ -76,8 +76,8 @@ development_status:
   # Goal: A company can set its monthly budget and import its npm dependency list.
   # FRs: FR8, FR9, FR10, FR11
   # ═══════════════════════════════════════════════════════════════════════════
-  epic-3: backlog
-  3-1-set-monthly-budget: ready-for-dev
+  epic-3: in-progress
+  3-1-set-monthly-budget: done
   3-2-update-monthly-budget: ready-for-dev
   3-3-import-npm-dependencies-via-file-upload: ready-for-dev
   3-4-import-npm-dependencies-via-paste: ready-for-dev

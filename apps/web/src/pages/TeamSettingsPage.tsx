@@ -34,6 +34,7 @@ import {ApiError} from '@/lib/api';
 
 const tabs = [
     { id: 'overview', label: 'Overview', href: '/dashboard' },
+    { id: 'budget', label: 'Budget', href: '/dashboard/budget' },
     { id: 'packages', label: 'Packages', href: '/dashboard/packages' },
     { id: 'allocations', label: 'Allocations', href: '/dashboard/allocations' },
     { id: 'settings', label: 'Settings', href: '/dashboard/settings' },

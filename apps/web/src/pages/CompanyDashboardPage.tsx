@@ -8,6 +8,7 @@ import {ArrowRight, Building2, DollarSign, Package, Settings, Users} from 'lucid
 
 const tabs = [
     { id: 'overview', label: 'Overview', href: '/dashboard' },
+    { id: 'budget', label: 'Budget', href: '/dashboard/budget' },
     { id: 'packages', label: 'Packages', href: '/dashboard/packages' },
     { id: 'allocations', label: 'Allocations', href: '/dashboard/allocations' },
     { id: 'settings', label: 'Settings', href: '/dashboard/settings' },
@@ -154,7 +155,7 @@ export function CompanyDashboardPage() {
                                         </p>
                                     </div>
                                 </div>
-                                <Button variant="outline" size="sm">
+                                <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/budget')}>
                                     Set Budget
                                     <ArrowRight className="ml-2 h-4 w-4" />
                                 </Button>
