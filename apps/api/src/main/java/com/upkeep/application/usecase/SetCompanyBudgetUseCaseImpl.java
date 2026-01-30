@@ -4,6 +4,7 @@ import com.upkeep.application.port.in.budget.SetCompanyBudgetUseCase;
 import com.upkeep.application.port.out.audit.AuditEventRepository;
 import com.upkeep.application.port.out.budget.BudgetRepository;
 import com.upkeep.application.port.out.membership.MembershipRepository;
+import com.upkeep.domain.exception.BudgetAlreadyExistsException;
 import com.upkeep.domain.exception.MembershipNotFoundException;
 import com.upkeep.domain.exception.UnauthorizedOperationException;
 import com.upkeep.domain.model.audit.AuditEvent;
@@ -15,6 +16,10 @@ import com.upkeep.domain.model.membership.Membership;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+
+import java.time.Instant;
+import java.time.YearMonth;
+import java.time.ZoneOffset;
 
 @ApplicationScoped
 public class SetCompanyBudgetUseCaseImpl implements SetCompanyBudgetUseCase {
@@ -43,6 +48,16 @@ public class SetCompanyBudgetUseCaseImpl implements SetCompanyBudgetUseCase {
 
         if (!membership.isOwner()) {
             throw new UnauthorizedOperationException("Only owners can set the company budget");
+        }
+
+        // Check if a budget already exists for the current month
+        Instant currentMonthStart = YearMonth.now()
+                .atDay(1)
+                .atStartOfDay(ZoneOffset.UTC)
+                .toInstant();
+
+        if (budgetRepository.findByCompanyIdAndEffectiveFrom(companyId, currentMonthStart).isPresent()) {
+            throw new BudgetAlreadyExistsException(command.companyId());
         }
 
         Money amount = new Money(command.amountCents(), command.currency());

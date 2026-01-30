@@ -7,6 +7,7 @@ import com.upkeep.domain.model.company.CompanyId;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,6 +30,13 @@ public class BudgetJpaRepository implements BudgetRepository, PanacheRepositoryB
     @Override
     public Optional<Budget> findByCompanyId(CompanyId companyId) {
         return find("companyId", companyId.value())
+                .firstResultOptional()
+                .map(BudgetMapper::toDomain);
+    }
+
+    @Override
+    public Optional<Budget> findByCompanyIdAndEffectiveFrom(CompanyId companyId, Instant effectiveFrom) {
+        return find("companyId = ?1 AND effectiveFrom = ?2", companyId.value(), effectiveFrom)
                 .firstResultOptional()
                 .map(BudgetMapper::toDomain);
     }

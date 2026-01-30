@@ -9,7 +9,7 @@ on:
 jobs:
   web-lint-test:
     name: Web - Lint & Test
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: apps/web
