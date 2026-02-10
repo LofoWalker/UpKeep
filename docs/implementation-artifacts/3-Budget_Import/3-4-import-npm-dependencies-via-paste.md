@@ -47,15 +47,6 @@ private static final Pattern NPM_PACKAGE_NAME = Pattern.compile(
 </Dialog>
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: User can paste package list and import
-- [ ] Test: Validation for invalid package names
-- [ ] Test: Success message shows count of imported packages
-
-**Test file location:** `apps/web/e2e/package-import.spec.ts` (extend existing file)
 
 ### References
 - [Source: epics.md#Story-3.4]

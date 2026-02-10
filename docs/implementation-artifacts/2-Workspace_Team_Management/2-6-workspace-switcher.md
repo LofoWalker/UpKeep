@@ -177,16 +177,6 @@ export function CompanyProvider({ children }: { children: React.ReactNode }) {
 - Story 2.1: Company entity
 - Story 2.2: Dashboard layout with navbar
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: Workspace switcher dropdown shows all user's companies
-- [ ] Test: Switching workspace updates dashboard context
-- [ ] Test: "Create new workspace" link navigates to company creation
-- [ ] Test: Current workspace is highlighted in dropdown
-
-**Test file location:** `apps/web/e2e/workspace-switcher.spec.ts`
 
 ### References
 

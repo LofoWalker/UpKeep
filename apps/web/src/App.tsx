@@ -3,15 +3,14 @@ import {BrowserRouter, Link, Route, Routes} from 'react-router-dom'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {RegisterPage} from './pages/RegisterPage'
 import {LoginPage} from './pages/LoginPage'
-import {OnboardingPage} from './pages/OnboardingPage'
 import {CreateCompanyPage} from './pages/CreateCompanyPage'
 import {CompanyDashboardPage} from './pages/CompanyDashboardPage'
 import {TeamSettingsPage} from './pages/TeamSettingsPage'
 import {AcceptInvitationPage} from './pages/AcceptInvitationPage'
 import {BudgetPage} from './pages/BudgetPage'
-import {AuthProvider} from './features/auth/AuthContext'
+import {AuthProvider} from '@/features/auth'
 import {CompanyProvider} from './features/company'
-import {ProtectedRoute} from './features/auth/ProtectedRoute'
+import {ProtectedRoute} from '@/features/auth'
 import {Toaster} from './components/ui'
 
 const queryClient = new QueryClient();
@@ -74,7 +73,7 @@ function App() {
                             path="/onboarding"
                             element={
                                 <ProtectedRoute>
-                                    <OnboardingPage/>
+                                    <CreateCompanyPage/>
                                 </ProtectedRoute>
                             }
                         />

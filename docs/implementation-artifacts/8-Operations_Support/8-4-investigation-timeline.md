@@ -62,15 +62,6 @@ export function Timeline({ events }: { events: TimelineEvent[] }) {
 }
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: Timeline displays audit events chronologically
-- [ ] Test: Event details expand on click
-- [ ] Test: Filter events by type works
-
-**Test file location:** `apps/web/e2e/admin-investigation.spec.ts`
 
 ### References
 - [Source: epics.md#Story-8.4]

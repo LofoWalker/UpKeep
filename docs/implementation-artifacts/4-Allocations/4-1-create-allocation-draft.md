@@ -62,16 +62,6 @@ CREATE TABLE allocation_line_items (
 );
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Create Page Object Model for allocations (`e2e/pages/allocations.ts`)
-- [ ] Test: User can create a new allocation draft
-- [ ] Test: Draft appears in allocations list with DRAFT status
-- [ ] Test: User can select packages for allocation
-
-**Test file location:** `apps/web/e2e/allocations.spec.ts`
 
 ### References
 - [Source: epics.md#Story-4.1]

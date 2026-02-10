@@ -37,15 +37,6 @@ public enum EligibilityStatus {
 }
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: Eligible packages show ELIGIBLE status
-- [ ] Test: Unclaimed packages show UNCLAIMED status
-- [ ] Test: Status updates after successful claim verification
-
-**Test file location:** `apps/web/e2e/maintainer-dashboard.spec.ts` (extend existing file)
 
 ### References
 - [Source: epics.md#Story-6.6]

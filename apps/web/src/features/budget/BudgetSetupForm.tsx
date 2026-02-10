@@ -57,6 +57,15 @@ export function BudgetSetupForm({ companyId, onSuccess }: BudgetSetupFormProps) 
       return;
     }
 
+    if (amountValue < 1) {
+      toast({
+        title: 'Invalid amount',
+        description: 'Budget must be at least 1.00',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     const amountCents = Math.round(amountValue * 100);
     mutate({ amountCents, currency });
   };

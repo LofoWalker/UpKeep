@@ -24,15 +24,6 @@ Reuses components from Story 5.2 with additional private data:
 - Monthly trend chart
 - CTA to enable public page if disabled
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: Private view shows detailed per-package amounts
-- [ ] Test: Historical chart displays correctly
-- [ ] Test: CTA to enable public page shown when disabled
-
-**Test file location:** `apps/web/e2e/sponsorship-dashboard.spec.ts`
 
 ### References
 - [Source: epics.md#Story-5.3]

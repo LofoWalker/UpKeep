@@ -40,18 +40,6 @@ public class MaintainerPayoutMethod {
 4. Stripe webhook notifies account ready
 5. Backend updates status to ACTIVE
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Create Page Object Model for payout settings (`e2e/pages/payout-settings.ts`)
-- [ ] Test: "Connect with Stripe" button initiates OAuth flow
-- [ ] Test: Payout method status displays correctly (PENDING, ACTIVE)
-- [ ] Test: Connected account shows Stripe account info
-
-**Test file location:** `apps/web/e2e/payout-settings.spec.ts`
-
-**Note:** Mock Stripe API for E2E tests.
 
 ### References
 - [Source: architecture.md#Additional-Requirements] - Stripe Connect

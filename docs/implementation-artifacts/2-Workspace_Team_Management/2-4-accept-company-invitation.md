@@ -221,17 +221,6 @@ export function InvitationPage() {
 
 - Story 2.3: Invitation entity and creation
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Create Page Object Model for invitation acceptance (`e2e/pages/invitation.ts`)
-- [ ] Test: New user can accept invitation and create account
-- [ ] Test: Existing user can accept invitation and join company
-- [ ] Test: Error shown for expired invitation link
-- [ ] Test: Error shown for already used invitation
-
-**Test file location:** `apps/web/e2e/invitation-acceptance.spec.ts`
 
 ### References
 
