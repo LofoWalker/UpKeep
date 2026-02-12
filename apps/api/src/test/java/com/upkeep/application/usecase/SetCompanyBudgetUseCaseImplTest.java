@@ -6,6 +6,7 @@ import com.upkeep.application.port.in.budget.SetCompanyBudgetUseCase.SetBudgetRe
 import com.upkeep.application.port.out.audit.AuditEventRepository;
 import com.upkeep.application.port.out.budget.BudgetRepository;
 import com.upkeep.application.port.out.membership.MembershipRepository;
+import com.upkeep.domain.exception.BudgetAlreadyExistsException;
 import com.upkeep.domain.exception.MembershipNotFoundException;
 import com.upkeep.domain.exception.UnauthorizedOperationException;
 import com.upkeep.domain.model.audit.AuditEvent;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -135,6 +137,33 @@ class SetCompanyBudgetUseCaseImplTest {
 
         assertEquals("USD", result.currency());
         assertEquals(100000L, result.amountCents());
+    }
+
+    @Test
+    @DisplayName("should throw exception when budget already exists for current month")
+    void shouldThrowExceptionWhenBudgetAlreadyExists() {
+        String companyId = UUID.randomUUID().toString();
+        String userId = UUID.randomUUID().toString();
+
+        Membership ownerMembership = createOwnerMembership(userId, companyId);
+        when(membershipRepository.findByCustomerIdAndCompanyId(
+            any(CustomerId.class),
+            any(CompanyId.class)
+        )).thenReturn(Optional.of(ownerMembership));
+
+        // Mock that a budget already exists for the current month
+        Budget existingBudget = mock(Budget.class);
+        when(budgetRepository.findByCompanyIdAndEffectiveFrom(
+            any(CompanyId.class),
+            any(Instant.class)
+        )).thenReturn(Optional.of(existingBudget));
+
+        SetBudgetCommand command = new SetBudgetCommand(companyId, userId, 50000L, Currency.EUR);
+
+        assertThrows(BudgetAlreadyExistsException.class, () -> useCase.execute(command));
+
+        verify(budgetRepository, never()).save(any(Budget.class));
+        verify(auditEventRepository, never()).save(any(AuditEvent.class));
     }
 
     private Membership createOwnerMembership(String userId, String companyId) {
