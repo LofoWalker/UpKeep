@@ -313,4 +313,41 @@ class BudgetResourceTest {
                     .body("data.currency", equalTo(currency));
         }
     }
+
+    @Test
+    @DisplayName("should reject duplicate budget for same month")
+    void shouldRejectDuplicateBudgetForSameMonth() {
+        String uniqueId = UUID.randomUUID().toString().substring(0, 8);
+        String email = "duplicate-budget-" + uniqueId + "@example.com";
+        String token = createUserAndGetToken(email);
+        String companyId = createCompany(token, "Duplicate Budget Company", "duplicate-budget-" + uniqueId);
+
+        String requestBody = """
+                {
+                    "amountCents": 50000,
+                    "currency": "EUR"
+                }
+                """;
+
+        // First budget should succeed
+        given()
+                .contentType(ContentType.JSON)
+                .cookie("access_token", token)
+                .body(requestBody)
+                .when()
+                .post("/api/companies/" + companyId + "/budget")
+                .then()
+                .statusCode(201);
+
+        // Second budget for the same month should fail
+        given()
+                .contentType(ContentType.JSON)
+                .cookie("access_token", token)
+                .body(requestBody)
+                .when()
+                .post("/api/companies/" + companyId + "/budget")
+                .then()
+                .statusCode(409)
+                .body("error.code", equalTo("BUDGET_ALREADY_EXISTS"));
+    }
 }

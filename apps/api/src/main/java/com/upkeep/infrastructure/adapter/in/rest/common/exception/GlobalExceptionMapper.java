@@ -1,6 +1,7 @@
 package com.upkeep.infrastructure.adapter.in.rest.common.exception;
 
 import com.upkeep.domain.exception.AlreadyMemberException;
+import com.upkeep.domain.exception.BudgetAlreadyExistsException;
 import com.upkeep.domain.exception.CompanyNotFoundException;
 import com.upkeep.domain.exception.CompanySlugAlreadyExistsException;
 import com.upkeep.domain.exception.CustomerAlreadyExistsException;
@@ -148,6 +149,13 @@ public class GlobalExceptionMapper implements ExceptionMapper<Throwable> {
                     .status(409)
                     .entity(ApiResponse.error(
                             ApiError.of("ALREADY_MEMBER", e.getMessage(), traceId)
+                    ))
+                    .build();
+
+            case BudgetAlreadyExistsException e -> Response
+                    .status(409)
+                    .entity(ApiResponse.error(
+                            ApiError.of("BUDGET_ALREADY_EXISTS", e.getMessage(), traceId)
                     ))
                     .build();
 
