@@ -46,15 +46,6 @@ export function MonthNavigator({ currentMonth, onChange, availableMonths }: Mont
 }
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: Allocation history displays finalized allocations
-- [ ] Test: Month navigation works correctly
-- [ ] Test: Clicking on allocation shows detail view
-
-**Test file location:** `apps/web/e2e/allocation-history.spec.ts`
 
 ### References
 - [Source: epics.md#Story-4.4]

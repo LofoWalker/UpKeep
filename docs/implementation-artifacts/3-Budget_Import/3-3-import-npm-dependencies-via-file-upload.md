@@ -70,17 +70,6 @@ export function FileDropzone({ onFileAccepted }: Props) {
 }
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Create Page Object Model for package import (`e2e/pages/package-import.ts`)
-- [ ] Test: User can upload package-lock.json via drag-and-drop
-- [ ] Test: User can upload package-lock.json via file picker
-- [ ] Test: Progress indicator shows during import
-- [ ] Test: Error shown for invalid file format
-
-**Test file location:** `apps/web/e2e/package-import.spec.ts`
 
 ### References
 - [Source: epics.md#Story-3.3]

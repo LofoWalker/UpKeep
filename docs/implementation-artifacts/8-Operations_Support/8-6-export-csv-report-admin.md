@@ -42,14 +42,6 @@ public Response exportPayoutRun(@PathParam("runId") String runId) {
 }
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: Export CSV button triggers file download
-- [ ] Test: CSV file contains expected columns
-
-**Test file location:** `apps/web/e2e/admin-export.spec.ts`
 
 ### References
 - [Source: epics.md#Story-8.6]

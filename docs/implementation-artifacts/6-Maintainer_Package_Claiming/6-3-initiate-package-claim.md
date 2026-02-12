@@ -64,16 +64,6 @@ CREATE INDEX idx_package_claims__maintainer ON package_claims(maintainer_id);
 CREATE UNIQUE INDEX idx_package_claims__verified ON package_claims(package_name) WHERE status = 'VERIFIED';
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Create Page Object Model for package claim (`e2e/pages/package-claim.ts`)
-- [ ] Test: Maintainer can initiate claim for a package
-- [ ] Test: Search for unclaimed packages works
-- [ ] Test: Claim status shows as PENDING after initiation
-
-**Test file location:** `apps/web/e2e/package-claim.spec.ts`
 
 ### References
 - [Source: epics.md#Story-6.3]

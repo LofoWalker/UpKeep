@@ -37,16 +37,6 @@ public record PackageSearchResult(
 ) {}
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: Admin can search by company name
-- [ ] Test: Admin can search by package name
-- [ ] Test: Search results display relevant company/package details
-- [ ] Test: Empty search results message displayed
-
-**Test file location:** `apps/web/e2e/admin-search.spec.ts`
 
 ### References
 - [Source: epics.md#Story-8.3]

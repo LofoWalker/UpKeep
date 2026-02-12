@@ -36,15 +36,6 @@ public record AllocationWithPayoutStatus(
 // PAID: "Paid to @maintainer"
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: Company dashboard shows payout outcomes per allocation
-- [ ] Test: Status explanations display correctly
-- [ ] Test: Filtering/sorting payouts works
-
-**Test file location:** `apps/web/e2e/company-payouts.spec.ts`
 
 ### References
 - [Source: epics.md#Story-7.5]

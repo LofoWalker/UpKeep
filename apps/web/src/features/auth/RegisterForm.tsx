@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
@@ -7,6 +8,7 @@ import {Button} from '@/components/ui/button';
 import {Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
 import {AlertCircle, CheckCircle2, Loader2} from 'lucide-react';
 import {AccountType, registerCustomer} from './api';
+import {useAuth} from './useAuth';
 import {ApiError} from '@/lib/api';
 import {OAuthButtons} from './OAuthButtons';
 
@@ -29,6 +31,8 @@ export const RegisterForm: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
+    const navigate = useNavigate();
+    const {login} = useAuth();
 
     const {register, handleSubmit, formState: {errors}, setError: setFieldError, watch} = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema),
@@ -45,10 +49,14 @@ export const RegisterForm: React.FC = () => {
         setSuccess(false);
 
         try {
-            const result = await registerCustomer(data);
+            await registerCustomer(data);
             setSuccess(true);
-            console.log('Registration successful:', result);
-            // TODO: Redirect to onboarding flow
+
+            // Log in the user automatically after registration
+            await login(data.email, data.password);
+
+            // Redirect to onboarding flow
+            navigate('/onboarding');
         } catch (err) {
             if (err instanceof ApiError) {
                 setError(err.message);

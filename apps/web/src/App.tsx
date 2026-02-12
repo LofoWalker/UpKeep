@@ -1,17 +1,19 @@
 import './App.css'
 import {BrowserRouter, Link, Route, Routes} from 'react-router-dom'
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {RegisterPage} from './pages/RegisterPage'
 import {LoginPage} from './pages/LoginPage'
-import {OnboardingPage} from './pages/OnboardingPage'
 import {CreateCompanyPage} from './pages/CreateCompanyPage'
 import {CompanyDashboardPage} from './pages/CompanyDashboardPage'
 import {TeamSettingsPage} from './pages/TeamSettingsPage'
 import {AcceptInvitationPage} from './pages/AcceptInvitationPage'
-import {AuthProvider} from './features/auth/AuthContext'
+import {BudgetPage} from './pages/BudgetPage'
+import {AuthProvider} from '@/features/auth'
 import {CompanyProvider} from './features/company'
-import {ProtectedRoute} from './features/auth/ProtectedRoute'
+import {ProtectedRoute} from '@/features/auth'
 import {Toaster} from './components/ui'
 
+const queryClient = new QueryClient();
 function HomePage() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -58,19 +60,20 @@ function HomePage() {
 
 function App() {
     return (
-        <BrowserRouter>
-            <AuthProvider>
-                <CompanyProvider>
-                    <Routes>
-                        <Route path="/" element={<HomePage/>}/>
-                        <Route path="/login" element={<LoginPage/>}/>
-                        <Route path="/register" element={<RegisterPage/>}/>
+        <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+                <AuthProvider>
+                    <CompanyProvider>
+                        <Routes>
+                            <Route path="/" element={<HomePage/>}/>
+                            <Route path="/login" element={<LoginPage/>}/>
+                            <Route path="/register" element={<RegisterPage/>}/>
                         <Route path="/invitations/accept" element={<AcceptInvitationPage/>}/>
                         <Route
                             path="/onboarding"
                             element={
                                 <ProtectedRoute>
-                                    <OnboardingPage/>
+                                    <CreateCompanyPage/>
                                 </ProtectedRoute>
                             }
                         />
@@ -91,6 +94,14 @@ function App() {
                             }
                         />
                         <Route
+                            path="/dashboard/budget"
+                            element={
+                                <ProtectedRoute>
+                                    <BudgetPage/>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
                             path="/dashboard/settings"
                             element={
                                 <ProtectedRoute>
@@ -103,6 +114,7 @@ function App() {
                 </CompanyProvider>
             </AuthProvider>
         </BrowserRouter>
+        </QueryClientProvider>
     )
 }
 

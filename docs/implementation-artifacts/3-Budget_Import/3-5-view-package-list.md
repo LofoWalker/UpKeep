@@ -54,17 +54,6 @@ export function PackageCard({ name, allocationCents, claimStatus, currency }: Pa
 }
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Create Page Object Model for package list (`e2e/pages/packages.ts`)
-- [ ] Test: Package list displays all imported packages
-- [ ] Test: Pagination works correctly for large lists
-- [ ] Test: Search/filter functionality works
-- [ ] Test: Package card shows correct status (claimed/unclaimed)
-
-**Test file location:** `apps/web/e2e/packages.spec.ts`
 
 ### References
 - [Source: epics.md#Story-3.5]

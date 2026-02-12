@@ -47,17 +47,6 @@ CREATE TABLE maintainer_profiles (
 );
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Create Page Object Model for maintainer profile (`e2e/pages/maintainer-profile.ts`)
-- [ ] Test: Maintainer can set up profile with display name
-- [ ] Test: GitHub username linking works
-- [ ] Test: Profile picture upload works
-- [ ] Test: Profile validation errors display correctly
-
-**Test file location:** `apps/web/e2e/maintainer-profile.spec.ts`
 
 ### References
 - [Source: epics.md#Story-6.2]

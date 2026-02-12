@@ -48,14 +48,6 @@ public Response exportAllocations(
 }
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: Export button triggers CSV download
-- [ ] Test: Date range picker filters export data
-
-**Test file location:** `apps/web/e2e/allocation-history.spec.ts` (extend existing file)
 
 ### References
 - [Source: epics.md#Story-4.5]

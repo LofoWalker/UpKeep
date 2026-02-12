@@ -373,17 +373,6 @@ export function TeamSettingsPage() {
 - Story 2.1: Company and Membership entities
 - Story 2.2: Dashboard shell for settings navigation
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Create Page Object Model for team settings (`e2e/pages/team-settings.ts`)
-- [ ] Test: Owner can open invite dialog and send invitation
-- [ ] Test: Error shown when inviting already pending email
-- [ ] Test: Member cannot access invite feature (hidden or error)
-- [ ] Test: Pending invitations list displays correctly
-
-**Test file location:** `apps/web/e2e/team-invitation.spec.ts`
 
 ### References
 

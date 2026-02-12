@@ -34,15 +34,6 @@ public record PayoutDetail(
 ) {}
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: Maintainer sees payout history with amounts
-- [ ] Test: Contributing companies count shown (not individual amounts)
-- [ ] Test: Historical data loads correctly with pagination
-
-**Test file location:** `apps/web/e2e/maintainer-payouts.spec.ts`
 
 ### References
 - [Source: epics.md#Story-7.6]

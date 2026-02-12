@@ -28,15 +28,6 @@ As a **company Owner**, I want to enable/disable my public sponsorship page, so 
 ALTER TABLE companies ADD COLUMN is_public_page_enabled BOOLEAN NOT NULL DEFAULT FALSE;
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: Owner can toggle public sponsorship page on/off
-- [ ] Test: Public page accessible when enabled
-- [ ] Test: Public page returns 404 when disabled
-
-**Test file location:** `apps/web/e2e/sponsorship-settings.spec.ts`
 
 ### References
 - [Source: epics.md#Story-5.1]

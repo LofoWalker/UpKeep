@@ -38,15 +38,6 @@ public HeldFundsExplanation explain(String packageName, PayoutLineItem item) {
 }
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: Held funds explanation card displays correctly
-- [ ] Test: Explanation shows pending claims count
-- [ ] Test: Suggested actions displayed
-
-**Test file location:** `apps/web/e2e/admin-investigation.spec.ts` (extend existing file)
 
 ### References
 - [Source: epics.md#Story-8.5]

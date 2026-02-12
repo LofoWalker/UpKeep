@@ -335,21 +335,10 @@ function RequireCompany({ children }: { children?: React.ReactNode }) {
 ```
 
 ### Dependencies on Previous Stories
+### Dependencies on Previous Stories
 
-- Story 1.9: DashboardLayout
 - Story 2.1: Company creation
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Create Page Object Model for dashboard (`e2e/pages/dashboard.ts`)
-- [ ] Test: Authenticated user with company sees dashboard with navigation tabs
-- [ ] Test: User without company is redirected to onboarding
-- [ ] Test: Overview tab displays placeholder KPI cards
-- [ ] Test: Navigation between dashboard tabs works correctly
-
-**Test file location:** `apps/web/e2e/dashboard.spec.ts`
 
 ### References
 

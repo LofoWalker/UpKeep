@@ -74,16 +74,6 @@ export function GuardrailBadge({ rule, satisfied }: GuardrailBadgeProps) {
 }
 ```
 
-### E2E Testing Requirements
-
-**Required Playwright tests for this story:**
-
-- [ ] Test: User can edit allocation amounts for packages
-- [ ] Test: Real-time validation shows when total exceeds budget
-- [ ] Test: Guardrail indicators update as amounts change
-- [ ] Test: Auto-save functionality works correctly
-
-**Test file location:** `apps/web/e2e/allocations.spec.ts` (extend existing file)
 
 ### References
 - [Source: architecture.md#Communication-State-Machine-Patterns] - Guardrails
