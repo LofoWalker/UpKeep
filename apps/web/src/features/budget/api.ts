@@ -20,6 +20,19 @@ export interface BudgetResult {
   currency: string;
 }
 
+export interface UpdateBudgetRequest {
+  amountCents: number;
+  currency: string;
+}
+
+export interface UpdateBudgetResult {
+  budgetId: string;
+  amountCents: number;
+  currency: string;
+  isLowerThanAllocations: boolean;
+  currentAllocationsCents: number;
+}
+
 export async function getBudgetSummary(companyId: string): Promise<BudgetSummary> {
   return apiRequest<BudgetSummary>(`/api/companies/${companyId}/budget`);
 }
@@ -33,3 +46,14 @@ export async function setBudget(
     body: JSON.stringify(request),
   });
 }
+
+export async function updateBudget(
+  companyId: string,
+  request: UpdateBudgetRequest
+): Promise<UpdateBudgetResult> {
+  return apiRequest<UpdateBudgetResult>(`/api/companies/${companyId}/budget`, {
+    method: 'PATCH',
+    body: JSON.stringify(request),
+  });
+}
+
