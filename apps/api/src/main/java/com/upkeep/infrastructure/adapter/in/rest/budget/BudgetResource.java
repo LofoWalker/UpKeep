@@ -5,6 +5,9 @@ import com.upkeep.application.port.in.budget.GetBudgetSummaryUseCase.BudgetSumma
 import com.upkeep.application.port.in.budget.SetCompanyBudgetUseCase;
 import com.upkeep.application.port.in.budget.SetCompanyBudgetUseCase.SetBudgetCommand;
 import com.upkeep.application.port.in.budget.SetCompanyBudgetUseCase.SetBudgetResult;
+import com.upkeep.application.port.in.budget.UpdateCompanyBudgetUseCase;
+import com.upkeep.application.port.in.budget.UpdateCompanyBudgetUseCase.UpdateBudgetCommand;
+import com.upkeep.application.port.in.budget.UpdateCompanyBudgetUseCase.UpdateBudgetResult;
 import com.upkeep.application.port.out.auth.TokenService;
 import com.upkeep.application.port.out.auth.TokenService.TokenClaims;
 import com.upkeep.domain.model.budget.Currency;
@@ -14,6 +17,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -29,13 +33,16 @@ public class BudgetResource {
     private static final String ACCESS_TOKEN_COOKIE = "access_token";
 
     private final SetCompanyBudgetUseCase setCompanyBudgetUseCase;
+    private final UpdateCompanyBudgetUseCase updateCompanyBudgetUseCase;
     private final GetBudgetSummaryUseCase getBudgetSummaryUseCase;
     private final TokenService tokenService;
 
     public BudgetResource(SetCompanyBudgetUseCase setCompanyBudgetUseCase,
+                          UpdateCompanyBudgetUseCase updateCompanyBudgetUseCase,
                           GetBudgetSummaryUseCase getBudgetSummaryUseCase,
                           TokenService tokenService) {
         this.setCompanyBudgetUseCase = setCompanyBudgetUseCase;
+        this.updateCompanyBudgetUseCase = updateCompanyBudgetUseCase;
         this.getBudgetSummaryUseCase = getBudgetSummaryUseCase;
         this.tokenService = tokenService;
     }
@@ -89,6 +96,38 @@ public class BudgetResource {
         return Response.status(201)
                 .entity(ApiResponse.success(response))
                 .build();
+    }
+
+    @PATCH
+    public Response updateBudget(@CookieParam(ACCESS_TOKEN_COOKIE) String accessToken,
+                                 @PathParam("companyId") String companyId,
+                                 @Valid UpdateBudgetRequest request) {
+        TokenClaims claims = validateToken(accessToken);
+
+        if (claims == null) {
+            return unauthorizedResponse();
+        }
+
+        Currency currency = Currency.valueOf(request.currency());
+
+        UpdateBudgetResult result = updateCompanyBudgetUseCase.execute(
+                new UpdateBudgetCommand(
+                        companyId,
+                        claims.userId(),
+                        request.amountCents(),
+                        currency
+                )
+        );
+
+        UpdateBudgetResponse response = new UpdateBudgetResponse(
+                result.budgetId(),
+                result.amountCents(),
+                result.currency(),
+                result.isLowerThanAllocations(),
+                result.currentAllocationsCents()
+        );
+
+        return Response.ok(ApiResponse.success(response)).build();
     }
 
     private TokenClaims validateToken(String accessToken) {

@@ -17,7 +17,15 @@ public class BudgetJpaRepository implements BudgetRepository, PanacheRepositoryB
     @Override
     public void save(Budget budget) {
         BudgetEntity entity = BudgetMapper.toEntity(budget);
-        persist(entity);
+        BudgetEntity existingEntity = findById(budget.getId().value());
+
+        if (existingEntity != null) {
+            existingEntity.amountCents = entity.amountCents;
+            existingEntity.currency = entity.currency;
+            existingEntity.updatedAt = entity.updatedAt;
+        } else {
+            persist(entity);
+        }
     }
 
     @Override

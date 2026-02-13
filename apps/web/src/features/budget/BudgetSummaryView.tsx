@@ -1,15 +1,21 @@
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getBudgetSummary } from './api';
 import { BudgetBar } from '@/components/common/BudgetBar';
 import { BudgetSetupForm } from './BudgetSetupForm';
+import { BudgetEditForm } from './BudgetEditForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/common';
+import { Pencil } from 'lucide-react';
 
 interface BudgetSummaryViewProps {
   companyId: string;
 }
 
 export function BudgetSummaryView({ companyId }: BudgetSummaryViewProps) {
+  const [isEditing, setIsEditing] = useState(false);
+
   const { data: budget, isLoading } = useQuery({
     queryKey: ['budget', companyId],
     queryFn: () => getBudgetSummary(companyId),
@@ -38,17 +44,41 @@ export function BudgetSummaryView({ companyId }: BudgetSummaryViewProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Monthly Budget</CardTitle>
-        <CardDescription>
-          Track your open-source sponsorship budget allocation
-        </CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>Monthly Budget</CardTitle>
+            <CardDescription>
+              Track your open-source sponsorship budget allocation
+            </CardDescription>
+          </div>
+          {!isEditing && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsEditing(true)}
+            >
+              <Pencil className="h-4 w-4 mr-2" />
+              Edit Budget
+            </Button>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
-        <BudgetBar
-          totalCents={budget.totalCents}
-          allocatedCents={budget.allocatedCents}
-          currency={budget.currency}
-        />
+        {isEditing ? (
+          <BudgetEditForm
+            companyId={companyId}
+            currentAmountCents={budget.totalCents}
+            currentCurrency={budget.currency}
+            onSuccess={() => setIsEditing(false)}
+            onCancel={() => setIsEditing(false)}
+          />
+        ) : (
+          <BudgetBar
+            totalCents={budget.totalCents}
+            allocatedCents={budget.allocatedCents}
+            currency={budget.currency}
+          />
+        )}
       </CardContent>
     </Card>
   );
