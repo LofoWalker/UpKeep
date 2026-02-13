@@ -81,16 +81,7 @@ export function BudgetEditForm({
     e.preventDefault();
 
     const amountValue = parseFloat(amount);
-    if (isNaN(amountValue) || amountValue <= 0) {
-      toast({
-        title: 'Invalid amount',
-        description: 'Please enter a valid amount greater than 0',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    if (amountValue < 1) {
+    if (isNaN(amountValue) || amountValue < 1) {
       toast({
         title: 'Invalid amount',
         description: 'Budget must be at least 1.00',
