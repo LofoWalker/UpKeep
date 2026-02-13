@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -172,8 +171,8 @@ class UpdateCompanyBudgetUseCaseImplTest {
     }
 
     @Test
-    @DisplayName("should indicate when new budget is lower than allocations")
-    void shouldIndicateWhenBudgetLowerThanAllocations() {
+    @DisplayName("should not flag warning when budget is lower than previous but allocations are zero")
+    void shouldNotFlagWarningWhenAllocationsAreZero() {
         String companyId = UUID.randomUUID().toString();
         String userId = UUID.randomUUID().toString();
         long newAmountCents = 10000L;
@@ -201,8 +200,52 @@ class UpdateCompanyBudgetUseCaseImplTest {
         UpdateBudgetResult result = useCase.execute(command);
 
         assertNotNull(result);
+        assertEquals(0L, result.currentAllocationsCents());
         assertFalse(result.isLowerThanAllocations());
     }
+
+    @Test
+    @DisplayName("should return false for isLowerThanAllocations when new budget exceeds allocations")
+    void shouldNotFlagWarningWhenBudgetExceedsAllocations() {
+        String companyId = UUID.randomUUID().toString();
+        String userId = UUID.randomUUID().toString();
+        long newAmountCents = 100000L;
+
+        Membership ownerMembership = createOwnerMembership(userId, companyId);
+        when(membershipRepository.findByCustomerIdAndCompanyId(
+                any(CustomerId.class),
+                any(CompanyId.class)
+        )).thenReturn(Optional.of(ownerMembership));
+
+        Budget existingBudget = Budget.create(
+                CompanyId.from(companyId),
+                new Money(50000L, Currency.EUR)
+        );
+        when(budgetRepository.findByCompanyId(any(CompanyId.class)))
+                .thenReturn(Optional.of(existingBudget));
+
+        UpdateBudgetCommand command = new UpdateBudgetCommand(
+                companyId,
+                userId,
+                newAmountCents,
+                Currency.EUR
+        );
+
+        UpdateBudgetResult result = useCase.execute(command);
+
+        assertNotNull(result);
+        assertEquals(newAmountCents, result.amountCents());
+        assertFalse(result.isLowerThanAllocations());
+        assertEquals(0L, result.currentAllocationsCents());
+    }
+
+    // TODO: Add test for actual warning flag behavior when allocations are implemented (Story 4.x)
+    // This test should verify that isLowerThanAllocations is true when:
+    // - newAmountCents < calculateCurrentAllocations(companyId)
+    // Example scenario:
+    // - Current allocations: 30000L cents (300 EUR)
+    // - New budget: 20000L cents (200 EUR)
+    // - Expected: isLowerThanAllocations = true, currentAllocationsCents = 30000L
 
     private Membership createOwnerMembership(String userId, String companyId) {
         return Membership.create(

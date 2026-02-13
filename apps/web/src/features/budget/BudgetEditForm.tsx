@@ -165,9 +165,9 @@ export function BudgetEditForm({
       <Dialog open={showWarning} onOpenChange={setShowWarning}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Budget Lower Than Allocations</DialogTitle>
+            <DialogTitle>Confirm Budget Reduction</DialogTitle>
             <DialogDescription>
-              You are setting the budget lower than the current amount.
+              You are reducing the budget from {formatCurrency(currentAmountCents, currentCurrency)} to {formatCurrency(pendingUpdate?.amountCents ?? 0, currency)}.
               This may affect your ability to maintain current allocations.
               Do you want to proceed?
             </DialogDescription>
