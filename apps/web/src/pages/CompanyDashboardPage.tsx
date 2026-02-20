@@ -4,7 +4,7 @@ import {DashboardLayout} from '@/components/layout';
 import {Role, useCompany} from '@/features/company';
 import {useAuth} from '@/features/auth';
 import {Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui';
-import {ArrowRight, Building2, DollarSign, Package, Settings, Users} from 'lucide-react';
+import {ArrowRight, Building2, Check, DollarSign, Package, Settings, Users} from 'lucide-react';
 
 const tabs = [
     { id: 'overview', label: 'Overview', href: '/dashboard' },
@@ -134,7 +134,7 @@ export function CompanyDashboardPage() {
                     </Card>
                 </div>
 
-                {!dashboard.stats.hasBudget && !dashboard.stats.hasPackages && (
+                {(!dashboard.stats.hasBudget || !dashboard.stats.hasPackages || !dashboard.stats.hasAllocations) && (
                     <Card>
                         <CardHeader>
                             <CardTitle>Get Started</CardTitle>
@@ -143,45 +143,65 @@ export function CompanyDashboardPage() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <div className="flex items-center justify-between p-4 border rounded-lg">
+                            <div className={`flex items-center justify-between p-4 border rounded-lg ${dashboard.stats.hasBudget ? 'bg-muted/50' : ''}`}>
                                 <div className="flex items-center gap-4">
-                                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-medium">
-                                        1
-                                    </div>
+                                    {dashboard.stats.hasBudget ? (
+                                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-600 text-white text-sm font-medium">
+                                            <Check className="h-4 w-4" />
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-medium">
+                                            1
+                                        </div>
+                                    )}
                                     <div>
-                                        <p className="font-medium">Set your monthly budget</p>
+                                        <p className={`font-medium ${dashboard.stats.hasBudget ? 'line-through text-muted-foreground' : ''}`}>
+                                            Set your monthly budget
+                                        </p>
                                         <p className="text-sm text-muted-foreground">
                                             Define how much you want to allocate to open-source each month
                                         </p>
                                     </div>
                                 </div>
-                                <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/budget')}>
-                                    Set Budget
-                                    <ArrowRight className="ml-2 h-4 w-4" />
-                                </Button>
+                                {!dashboard.stats.hasBudget && (
+                                    <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/budget')}>
+                                        Set Budget
+                                        <ArrowRight className="ml-2 h-4 w-4" />
+                                    </Button>
+                                )}
                             </div>
 
-                            <div className="flex items-center justify-between p-4 border rounded-lg">
+                            <div className={`flex items-center justify-between p-4 border rounded-lg ${dashboard.stats.hasPackages ? 'bg-muted/50' : ''}`}>
                                 <div className="flex items-center gap-4">
-                                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-muted-foreground text-sm font-medium">
-                                        2
-                                    </div>
+                                    {dashboard.stats.hasPackages ? (
+                                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-600 text-white text-sm font-medium">
+                                            <Check className="h-4 w-4" />
+                                        </div>
+                                    ) : (
+                                        <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${dashboard.stats.hasBudget ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
+                                            2
+                                        </div>
+                                    )}
                                     <div>
-                                        <p className="font-medium">Import your packages</p>
+                                        <p className={`font-medium ${dashboard.stats.hasPackages ? 'line-through text-muted-foreground' : ''}`}>
+                                            Import your packages
+                                        </p>
                                         <p className="text-sm text-muted-foreground">
-                                            Upload your package.json or package-lock.json file
+                                            Upload your package-lock.json or yarn.lock file
                                         </p>
                                     </div>
                                 </div>
-                                <Button variant="outline" size="sm" disabled>
-                                    Import
-                                    <ArrowRight className="ml-2 h-4 w-4" />
-                                </Button>
+                                {!dashboard.stats.hasPackages && (
+                                    <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/packages')} disabled={!dashboard.stats.hasBudget}>
+                                        Import
+                                        <ArrowRight className="ml-2 h-4 w-4" />
+                                    </Button>
+                                )}
                             </div>
 
                             <div className="flex items-center justify-between p-4 border rounded-lg">
                                 <div className="flex items-center gap-4">
-                                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-muted-foreground text-sm font-medium">
+                                    <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${dashboard.stats.hasPackages && dashboard.stats.hasBudget ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
                                         3
                                     </div>
                                     <div>
@@ -191,7 +211,7 @@ export function CompanyDashboardPage() {
                                         </p>
                                     </div>
                                 </div>
-                                <Button variant="outline" size="sm" disabled>
+                                <Button variant="outline" size="sm" disabled={!dashboard.stats.hasBudget || !dashboard.stats.hasPackages}>
                                     Allocate
                                     <ArrowRight className="ml-2 h-4 w-4" />
                                 </Button>

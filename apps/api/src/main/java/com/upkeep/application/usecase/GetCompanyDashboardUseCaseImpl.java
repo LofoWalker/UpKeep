@@ -1,8 +1,10 @@
 package com.upkeep.application.usecase;
 
 import com.upkeep.application.port.in.GetCompanyDashboardUseCase;
+import com.upkeep.application.port.out.budget.BudgetRepository;
 import com.upkeep.application.port.out.company.CompanyRepository;
 import com.upkeep.application.port.out.membership.MembershipRepository;
+import com.upkeep.application.port.out.pkg.PackageRepository;
 import com.upkeep.domain.exception.CompanyNotFoundException;
 import com.upkeep.domain.exception.MembershipNotFoundException;
 import com.upkeep.domain.model.company.Company;
@@ -17,12 +19,18 @@ public class GetCompanyDashboardUseCaseImpl implements GetCompanyDashboardUseCas
 
     private final CompanyRepository companyRepository;
     private final MembershipRepository membershipRepository;
+    private final BudgetRepository budgetRepository;
+    private final PackageRepository packageRepository;
 
     @Inject
     public GetCompanyDashboardUseCaseImpl(CompanyRepository companyRepository,
-                                          MembershipRepository membershipRepository) {
+                                          MembershipRepository membershipRepository,
+                                          BudgetRepository budgetRepository,
+                                          PackageRepository packageRepository) {
         this.companyRepository = companyRepository;
         this.membershipRepository = membershipRepository;
+        this.budgetRepository = budgetRepository;
+        this.packageRepository = packageRepository;
     }
 
     @Override
@@ -37,11 +45,13 @@ public class GetCompanyDashboardUseCaseImpl implements GetCompanyDashboardUseCas
                 .orElseThrow(() -> new MembershipNotFoundException(query.customerId(), query.companyId()));
 
         long totalMembers = membershipRepository.countByCompanyId(companyId);
+        boolean hasBudget = budgetRepository.existsByCompanyId(companyId);
+        boolean hasPackages = packageRepository.countByCompanyId(companyId) > 0;
 
         DashboardStats stats = new DashboardStats(
                 (int) totalMembers,
-                false,
-                false,
+                hasBudget,
+                hasPackages,
                 false
         );
 
