@@ -2,8 +2,10 @@ package com.upkeep.application.usecase;
 
 import com.upkeep.application.port.in.GetCompanyDashboardUseCase.CompanyDashboard;
 import com.upkeep.application.port.in.GetCompanyDashboardUseCase.GetCompanyDashboardQuery;
+import com.upkeep.application.port.out.budget.BudgetRepository;
 import com.upkeep.application.port.out.company.CompanyRepository;
 import com.upkeep.application.port.out.membership.MembershipRepository;
+import com.upkeep.application.port.out.pkg.PackageRepository;
 import com.upkeep.domain.exception.CompanyNotFoundException;
 import com.upkeep.domain.exception.MembershipNotFoundException;
 import com.upkeep.domain.model.company.Company;
@@ -25,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -33,6 +36,8 @@ class GetCompanyDashboardUseCaseImplTest {
 
     private CompanyRepository companyRepository;
     private MembershipRepository membershipRepository;
+    private BudgetRepository budgetRepository;
+    private PackageRepository packageRepository;
     private GetCompanyDashboardUseCaseImpl useCase;
 
     private static final String CUSTOMER_ID = UUID.randomUUID().toString();
@@ -42,7 +47,9 @@ class GetCompanyDashboardUseCaseImplTest {
     void setUp() {
         companyRepository = mock(CompanyRepository.class);
         membershipRepository = mock(MembershipRepository.class);
-        useCase = new GetCompanyDashboardUseCaseImpl(companyRepository, membershipRepository);
+        budgetRepository = mock(BudgetRepository.class);
+        packageRepository = mock(PackageRepository.class);
+        useCase = new GetCompanyDashboardUseCaseImpl(companyRepository, membershipRepository, budgetRepository, packageRepository);
     }
 
     @Test
@@ -54,6 +61,7 @@ class GetCompanyDashboardUseCaseImplTest {
         when(membershipRepository.findByCustomerIdAndCompanyId(any(CustomerId.class), any(CompanyId.class)))
                 .thenReturn(Optional.of(membership));
         when(membershipRepository.countByCompanyId(any(CompanyId.class))).thenReturn(2L);
+        when(budgetRepository.existsByCompanyId(any(CompanyId.class))).thenReturn(false);
 
         GetCompanyDashboardQuery query = new GetCompanyDashboardQuery(CUSTOMER_ID, COMPANY_ID);
 
@@ -110,6 +118,7 @@ class GetCompanyDashboardUseCaseImplTest {
         when(membershipRepository.findByCustomerIdAndCompanyId(any(CustomerId.class), any(CompanyId.class)))
                 .thenReturn(Optional.of(membership));
         when(membershipRepository.countByCompanyId(any(CompanyId.class))).thenReturn(4L);
+        when(budgetRepository.existsByCompanyId(any(CompanyId.class))).thenReturn(false);
 
         GetCompanyDashboardQuery query = new GetCompanyDashboardQuery(CUSTOMER_ID, COMPANY_ID);
 
@@ -127,12 +136,31 @@ class GetCompanyDashboardUseCaseImplTest {
         when(membershipRepository.findByCustomerIdAndCompanyId(any(CustomerId.class), any(CompanyId.class)))
                 .thenReturn(Optional.of(membership));
         when(membershipRepository.countByCompanyId(any(CompanyId.class))).thenReturn(1L);
+        when(budgetRepository.existsByCompanyId(any(CompanyId.class))).thenReturn(false);
 
         GetCompanyDashboardQuery query = new GetCompanyDashboardQuery(CUSTOMER_ID, COMPANY_ID);
 
         CompanyDashboard result = useCase.execute(query);
 
         assertEquals(Role.MEMBER, result.userRole());
+    }
+
+    @Test
+    void shouldReturnHasBudgetTrueWhenBudgetExists() {
+        Company company = createTestCompany();
+        Membership membership = createTestMembership(Role.OWNER);
+
+        when(companyRepository.findById(any(CompanyId.class))).thenReturn(Optional.of(company));
+        when(membershipRepository.findByCustomerIdAndCompanyId(any(CustomerId.class), any(CompanyId.class)))
+                .thenReturn(Optional.of(membership));
+        when(membershipRepository.countByCompanyId(any(CompanyId.class))).thenReturn(1L);
+        when(budgetRepository.existsByCompanyId(any(CompanyId.class))).thenReturn(true);
+
+        GetCompanyDashboardQuery query = new GetCompanyDashboardQuery(CUSTOMER_ID, COMPANY_ID);
+
+        CompanyDashboard result = useCase.execute(query);
+
+        assertTrue(result.stats().hasBudget());
     }
 
     private Company createTestCompany() {

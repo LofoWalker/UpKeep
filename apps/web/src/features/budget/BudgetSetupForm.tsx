@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { useCompany } from '@/features/company';
 
 interface BudgetSetupFormProps {
   companyId: string;
@@ -23,11 +24,13 @@ export function BudgetSetupForm({ companyId, onSuccess }: BudgetSetupFormProps) 
   const [currency, setCurrency] = useState('EUR');
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { refreshDashboard } = useCompany();
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: SetBudgetRequest) => setBudget(companyId, data),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['budget', companyId] });
+      await refreshDashboard();
       toast({
         title: 'Success',
         description: 'Budget set successfully!',

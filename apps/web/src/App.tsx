@@ -8,6 +8,7 @@ import {CompanyDashboardPage} from './pages/CompanyDashboardPage'
 import {TeamSettingsPage} from './pages/TeamSettingsPage'
 import {AcceptInvitationPage} from './pages/AcceptInvitationPage'
 import {BudgetPage} from './pages/BudgetPage'
+import {PackagesPage} from './pages/PackagesPage'
 import {AuthProvider} from '@/features/auth'
 import {CompanyProvider} from './features/company'
 import {ProtectedRoute} from '@/features/auth'
@@ -98,6 +99,14 @@ function App() {
                             element={
                                 <ProtectedRoute>
                                     <BudgetPage/>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/dashboard/packages"
+                            element={
+                                <ProtectedRoute>
+                                    <PackagesPage/>
                                 </ProtectedRoute>
                             }
                         />
