@@ -9,18 +9,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @ApplicationScoped
 public class LockfileParserAdapter implements LockfileParser {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    // yarn.lock: matches lines like "lodash@^4.17.21:"  or  "@types/node@^18.0.0:"
-    private static final Pattern YARN_PACKAGE_PATTERN = Pattern.compile(
-            "^\"?(@?[^@\"]+)@[^:]+\":?\\s*$"
-    );
 
     @Override
     public List<String> parse(String content, String filename) {
@@ -103,19 +97,47 @@ public class LockfileParserAdapter implements LockfileParser {
         String[] lines = content.split("\n");
 
         for (String line : lines) {
-            if (line.startsWith("#") || line.isBlank()) {
+            if (line.startsWith("#") || line.isBlank() || line.startsWith(" ") || line.startsWith("\t")) {
                 continue;
             }
-            Matcher matcher = YARN_PACKAGE_PATTERN.matcher(line);
-            if (matcher.matches()) {
-                String name = matcher.group(1).trim();
-                if (!name.isEmpty() && !packageNames.contains(name)) {
-                    packageNames.add(name);
-                }
+
+            // Yarn.lock top-level entries end with ":"
+            // Formats: `lodash@^4.17.21:` or `"@types/node@^18.0.0":`
+            String trimmed = line.trim();
+            if (!trimmed.endsWith(":")) {
+                continue;
+            }
+            trimmed = trimmed.substring(0, trimmed.length() - 1);
+
+            // Remove surrounding quotes if present
+            if (trimmed.startsWith("\"") && trimmed.endsWith("\"")) {
+                trimmed = trimmed.substring(1, trimmed.length() - 1);
+            }
+
+            // Extract package name: everything before the last `@` that separates name from version
+            // For scoped: @types/node@^18.0.0 → name=@types/node
+            // For regular: lodash@^4.17.21 → name=lodash
+            String name = extractPackageNameFromYarnEntry(trimmed);
+            if (name != null && !name.isEmpty() && !packageNames.contains(name)) {
+                packageNames.add(name);
             }
         }
 
         return packageNames;
+    }
+
+    private String extractPackageNameFromYarnEntry(String entry) {
+        // Scoped packages start with @, so the version separator is the SECOND @
+        int atIndex;
+        if (entry.startsWith("@")) {
+            atIndex = entry.indexOf('@', 1);
+        } else {
+            atIndex = entry.indexOf('@');
+        }
+        if (atIndex <= 0) {
+            return null;
+        }
+        return entry.substring(0, atIndex);
     }
 }
 
